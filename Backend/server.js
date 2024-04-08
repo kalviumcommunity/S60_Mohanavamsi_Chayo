@@ -6,3 +6,9 @@ const app=express()
 const server=http.createServer(app)
 const io=socketio(server,{cors:{origin:"*"}})
 const jwt=require("jsonwebtoken")
+const {connect}=require("./db/connect")
+const PORT=process.env.PORT || 6000
+app.listen(PORT,()=>{
+    connect()
+    console.log(`server running in ${PORT}`)
+})
