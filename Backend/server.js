@@ -8,6 +8,9 @@ const io=socketio(server,{cors:{origin:"*"}})
 const jwt=require("jsonwebtoken")
 const {connect}=require("./db/connect")
 const PORT=process.env.PORT || 6000
+app.get("/",(req,res)=>{
+    res.send("Welcome to chayo")
+})
 app.listen(PORT,()=>{
     connect()
     console.log(`server running in ${PORT}`)
