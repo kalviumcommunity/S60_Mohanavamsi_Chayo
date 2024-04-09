@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chayo: A Simple Chat App</title>
-</head>
-<body>
+
 <h1>Chayo: A Simple Chat App</h1>
 
 <h2>Getting Started</h2>
@@ -44,7 +37,5 @@ git commit -m "Added feature X"</code></pre>
 <h2><b>Backend:</b>[Backend](https://s60-mohanavamsi-chayo.onrender.com)</h2>
 <h2><b>Frontend:</b>[Frontend](https://chayoo.netlify.app/)</h2>
 <h2>Contact</h2>
-<b>Email:</b><i>mohanavamsi14@gmail.com</i>
+<b>mailto:</b>[mohanavamsi14@gmail.com](mailto:mohanavamsi14@gmail.com)</h2>
 <p>For any questions or feedback, please create an issue on this repository.</p>
-</body>
-</html>
