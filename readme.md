@@ -19,6 +19,11 @@
 <pre><code>git clone https://github.com/kalviumcommunity/S60_Mohanavamsi_Chayo.git</code></pre>
 </li>
 <li>(Instructions on dependency installation and running the server)</li>
+  <code>cd backend</code>
+  <code>npm install</code>
+  <code>cd..</code>
+  <code>npm install</code>
+  <code>npm run dev</code>
 <li>Make changes and test them thoroughly.</li>
 <li>Commit Your Changes (Replace "Added feature X" with your message):
 <pre><code>git add .
