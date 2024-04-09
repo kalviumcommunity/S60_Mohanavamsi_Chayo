@@ -34,8 +34,8 @@ git commit -m "Added feature X"</code></pre>
 <h2>Tech Stack</h2>
 <p>MERN:Mongodb,Express,Reactjs,Nodejs</p>
 
-<h2><b>Backend:</b>[Backend](https://s60-mohanavamsi-chayo.onrender.com)</h2>
-<h2><b>Frontend:</b>[Frontend](https://chayoo.netlify.app/)</h2>
+<h2><b>Backend:</b>(https://s60-mohanavamsi-chayo.onrender.com)</h2>
+<h2><b>Frontend:</b>(https://chayoo.netlify.app/)</h2>
 <h2>Contact</h2>
-<h2><b>mailto:</b>[mohanavamsi14@gmail.com](mailto:mohanavamsi14@gmail.com)</h2>
+<h2><b>mailto:</b>mohanavamsi14@gmail.com</h2>
 <p>For any questions or feedback, please create an issue on this repository.</p>
