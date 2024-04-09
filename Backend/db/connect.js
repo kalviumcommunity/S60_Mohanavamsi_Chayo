@@ -6,8 +6,8 @@ async function connect() {
     await mongoose.connect(process.env.URI)
     console.log("connected")
     }
-    catch{
-        console.log("error")
+    catch(er){
+        console.log("error",er)
     }
 }
 module.exports={connect:connect};
