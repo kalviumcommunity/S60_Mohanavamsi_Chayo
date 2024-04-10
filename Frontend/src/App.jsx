@@ -3,7 +3,7 @@ import axios from "axios"
 import {Form, Route, Routes} from "react-router-dom"
 import {io} from "socket.io-client"
 function App() {
-  const socket=io("http://localhost:8000")
+  let socket=io("http://localhost:8000")
   const [email,setmail]=useState("")
   const [name,setname]=useState("name will change click the test button")
   function test() {
