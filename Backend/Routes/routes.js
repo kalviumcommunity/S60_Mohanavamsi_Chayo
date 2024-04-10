@@ -6,15 +6,17 @@ const server=http.createServer(app)
 const messanger=require("../Model/chat")
 const user=require("../Model/user")
 const nodemailer=require("nodemailer")
+const env=require("dotenv")
 const jwt=require("jsonwebtoken")
 const cors=require("cors")
+env.config()
 app.use(express.json())
 app.use(cors())
 const transpoter=nodemailer.createTransport({
     service:"outlook",
      auth: {
         user: "mohanavamsi16@outlook.com",
-        pass: "fmyeynjakqxqxtsm",
+        pass: process.env.PASS,
       }
     })
 app.post("/testmail",async (req,res)=>{
