@@ -17,18 +17,18 @@ const transpoter=nodemailer.createTransport({
         pass: "fmyeynjakqxqxtsm",
       }
     })
-// app.post("/testmail",async (req,res)=>{
-//     console.log(req.body)
-//     var welcome = {
-//         from: "mohanavamsi16@outlook.com",
-//         to: req.body.mail,
-//         subject: 'Welcome',
-//         html: '<h1>Hey welcome to chayo</h1>'
-//       };
-//       await transpoter.sendMail(welcome)
-//     //   console.log("send")
-//       res.send("done")
-// })
+app.post("/testmail",async (req,res)=>{
+    console.log(req.body)
+    var welcome = {
+        from: "mohanavamsi16@outlook.com",
+        to: req.body.mail,
+        subject: 'Welcome',
+        html: '<h1>Hey welcome to chayo</h1>'
+      };
+      await transpoter.sendMail(welcome)
+    //   console.log("send")
+      res.send("done")
+})
 
 app.get("/data/:roomid",async (req,res)=>{
     const roomdata=await messanger.find({roomid:req.params.roomid})
