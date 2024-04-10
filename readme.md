@@ -6,7 +6,7 @@
 <p>There are two ways to get started with Chayo:</p>
 
 <ul>
-<li>Using the Pre-built Application (Instructions to be added later)</li>
+<li>Using the Pre-built Application</li>
 <ul>
 <li>Go to the official website</li>
 <li>Create an account or sign in</li>
@@ -15,7 +15,7 @@
 <li>Contributing to the Codebase</li>
 <ul>
 <li>Fork the Repository on GitHub</li>
-<li>Clone Your Forked Repository (Replace <username> with yours):
+<li>Clone Your Forked Repository :
 <pre><code>git clone https://github.com/kalviumcommunity/S60_Mohanavamsi_Chayo.git</code></pre>
 </li>
 <li>(Instructions on dependency installation and running the server)</li>
