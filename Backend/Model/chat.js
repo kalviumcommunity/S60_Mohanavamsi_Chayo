@@ -1,6 +1,6 @@
 const mongoose=require("mongoose")
 const schema=mongoose.Schema({
-    roomid:{type:String},
+    roomid:String,
     messages:[
         {
             user:String,
