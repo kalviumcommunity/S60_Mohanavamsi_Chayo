@@ -20,7 +20,6 @@ const transpoter=nodemailer.createTransport({
       }
     })
 app.post("/testmail",async (req,res)=>{
-    console.log(req.body)
     var welcome = {
         from: "mohanavamsi16@outlook.com",
         to: req.body.mail,
