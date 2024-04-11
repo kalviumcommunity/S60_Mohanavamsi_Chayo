@@ -2,13 +2,6 @@ import axios from "axios";
 import { useState } from "react";
 import {   useParams } from "react-router";
 import { io } from "socket.io-client";
-
-const socket = io("https://chat-test-cpoo.onrender.com");
-// function getCookie(name) {
-//   let cookieArray = document.cookie.split('; ')
-//   let cookie = cookieArray.find((row) => row.startsWith(name + '='))
-//   return cookie ? cookie.split('=')[1] :""
-// }
 function Chat() {
   const {roomid}=useParams()
   console.log(roomid)
