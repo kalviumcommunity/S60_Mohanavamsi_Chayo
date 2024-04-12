@@ -1,7 +1,4 @@
-import { useState } from "react"
 import {Route, Routes} from "react-router-dom"
-import {io} from "socket.io-client"
-import axios from "axios"
 import Home from "./components/Home"
 import Chat from "./components/chat"
 import Sigin from "./components/sign"

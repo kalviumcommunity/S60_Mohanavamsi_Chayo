@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Chayo",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
