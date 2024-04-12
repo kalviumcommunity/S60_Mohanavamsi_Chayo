@@ -1,10 +1,10 @@
 import {Link} from "react-router-dom"
+export  function getCookie(name) {
+    let cookieArray = document.cookie.split('; ')
+    let cookie = cookieArray.find((row) => row.startsWith(name + '='))
+    return cookie ? cookie.split('=')[1] :""
+}
 function Nav() {
-    function getCookie(name) {
-        let cookieArray = document.cookie.split('; ')
-        let cookie = cookieArray.find((row) => row.startsWith(name + '='))
-        return cookie ? cookie.split('=')[1] :""
-    }
     function delcookies() {
         var allCookies = document.cookie.split(';');
         for (var i = 0; i < allCookies.length; i++) 

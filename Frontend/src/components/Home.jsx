@@ -1,14 +1,14 @@
 import { useState } from "react";
 import {useNavigate} from "react-router-dom"
 import {io} from "socket.io-client"
-import Nav from "./nav";
+import Nav, { getCookie } from "./nav";
 function Home() {
     const [room,setroom]=useState({})
     const socket=io("https://s60-mohanavamsi-chayo.onrender.com")
     const nav=useNavigate()
     function roteCreator() {
         if (Object.keys(room).length==1){
-        socket.emit("route",room.route)
+        socket.emit("route",room.route,getCookie("username")||" anomenas")
         nav(`/chat/${room.route}`,{state:room})
         }
         else{

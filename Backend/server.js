@@ -6,6 +6,8 @@ const app=express()
 const server=http.createServer(app)
 const io=socketio(server,{cors:{origin:"*"}})
 const jwt=require("jsonwebtoken")
+const messanger=require("./Model/chat")
+const user=require("./Model/user")
 const route=require("./Routes/routes")
 const {connect}=require("./db/connect")
 const PORT=process.env.PORT || 8000
@@ -17,6 +19,23 @@ io.on("connection",(socket)=>{
     socket.on("test",(name)=>{
         console.log("vamsi")
         socket.emit("rev",name)
+    })
+    socket.on("route",async (route,user)=>{
+        const check=await messanger.findOne({roomid:route})
+        if (check){
+            console.log("user entering room:",route)
+        }
+        else{
+            await messanger.create({
+                roomid: route,
+                messages: [{
+                    user: user,
+                    message: user + " joined",
+                    time: Date.now()
+                }]
+            });
+            console.log("new room created",route)
+        }
     })
 })
 server.listen(PORT,()=>{
