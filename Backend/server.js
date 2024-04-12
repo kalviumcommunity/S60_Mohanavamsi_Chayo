@@ -7,7 +7,6 @@ const server=http.createServer(app)
 const io=socketio(server,{cors:{origin:"*"}})
 const jwt=require("jsonwebtoken")
 const messanger=require("./Model/chat")
-const user=require("./Model/user")
 const route=require("./Routes/routes")
 const {connect}=require("./db/connect")
 const PORT=process.env.PORT || 8000
