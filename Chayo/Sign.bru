@@ -1,0 +1,19 @@
+meta {
+  name: Sign
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8000/sign
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "mohana vamsi",
+    "email": "mohanavamsi14@gmail.com",
+    "password": "Vamsi0614!"
+  }
+}
