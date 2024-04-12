@@ -53,7 +53,7 @@ app.post("/sign",async(req,res)=>{
     res.json({message:signvalid.validate(req.body).error.message})
   }
   else{
-  const token=jwt.sign(req.body,process.env.PASS)
+  const token=jwt.sign(req.body,process.env.JWT)
   await user.create({
     name:username,
     email:email,
