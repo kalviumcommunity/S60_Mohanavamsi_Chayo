@@ -103,6 +103,9 @@ app.put("/update/:id",async (req,res)=>{
 app.delete("/delete/:id",async(req,res)=>{
     res.send("route to delete")
 })
-
+app.get("/users",async(req,res)=>{
+  const users=await user.find({})
+  res.status(200).json(users)
+})
 // Post request will  be done in socket connection
 module.exports=app
