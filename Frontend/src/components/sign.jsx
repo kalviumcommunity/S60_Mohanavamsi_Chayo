@@ -15,6 +15,7 @@ function Sigin() {
     function submit() {
         console.log(data)
         console.log((Object.keys(data)))
+        setload(true)
         if (Object.keys(data).length==3){
         axios.post("https://s60-mohanavamsi-chayo.onrender.com/sign",data).then(
             (res)=>{
@@ -22,15 +23,22 @@ function Sigin() {
                 console.log(response)
                 switch (response.data.message){
                     case "\"email\" must be a valid email":
+                        setload(false)
                         seterror({...error,email:"give the mail proprerly"})
                         break
                     case "User in database please login.":
+                        setload(false)
+
                         seterror({...error,login:"you are already in having an account please login"})
                         break
                     case '"password" is not allowed to be empty':
+                        setload(false)
+
                         seterror({...error,password:"give the password"})
                         break
                     case '"name" is not allowed to be empty':
+                        setload(false)
+
                         seterror({...error,name:"enter the name"})  
                         break 
                     case "User Created!!":

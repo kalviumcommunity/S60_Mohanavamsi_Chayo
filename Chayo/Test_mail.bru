@@ -1,0 +1,15 @@
+meta {
+  name: Test_mail
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8000/sign
+  body: json
+  auth: none
+}
+
+body:json {
+  {"email":"mohanavamsi14@gmail.com","username":"vamsi0614","password":"Vamsi0614!"}
+}
