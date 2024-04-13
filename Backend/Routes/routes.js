@@ -57,7 +57,7 @@ app.post("/sign",async(req,res)=>{
     token:token
  });
  var welcome = {
-  from: "mohanavamsi16@outlook.com",
+  from: process.env.  MAIL,
   to: email,
   subject: 'Welcome to Chayo 💬',
   html:wlecome_page
