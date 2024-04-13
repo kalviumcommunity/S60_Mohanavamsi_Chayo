@@ -10,6 +10,9 @@ const env=require("dotenv")
 const jwt=require("jsonwebtoken")
 const cors=require("cors")
 const Joi=require("joi")
+const fs=require("fs")
+const path=require("path")
+const wlecome_page=fs.readFileSync(path.join("index.html"),"utf8")
 const signvalid=Joi.object({
   username:Joi.string().required(),
   email:Joi.string().email(),
@@ -30,14 +33,7 @@ const transpoter=nodemailer.createTransport({
       }
     })
 app.post("/testmail",async (req,res)=>{
-    var welcome = {
-        from: "mohanavamsi16@outlook.com",
-        to: req.body.mail,
-        subject: 'Welcome',
-        html: '<h1>Hey welcome to chayo</h1>'
-      };
-      await transpoter.sendMail(welcome)
-      res.send("done")
+   
 })
 app.post("/sign",async(req,res)=>{
   const {email,password,username}=req.body
@@ -60,6 +56,13 @@ app.post("/sign",async(req,res)=>{
     password:password,
     token:token
  });
+ var welcome = {
+  from: "mohanavamsi16@outlook.com",
+  to: email,
+  subject: 'Welcome to Chayo 💬',
+  html:wlecome_page
+};
+await transpoter.sendMail(welcome)
   res.status(201).json({ message:"User Created!!",token:token,username:username });
 }})
 
