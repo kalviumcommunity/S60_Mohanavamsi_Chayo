@@ -12,6 +12,12 @@ const cors=require("cors")
 const Joi=require("joi")
 const fs=require("fs")
 const path=require("path")
+const crypto=require("crypto")
+function hash(password) {
+  const hash = crypto.createHash('sha256');
+  hash.update(password);
+  return hash.digest("hex");
+}
 const wlecome_page=fs.readFileSync(path.join("index.html"),"utf8")
 const signvalid=Joi.object({
   username:Joi.string().required(),
@@ -53,11 +59,11 @@ app.post("/sign",async(req,res)=>{
   await user.create({
     name:username,
     email:email,
-    password:password,
+    password:hash(password),
     token:token
  });
  var welcome = {
-  from: process.env.  MAIL,
+  from: process.env.MAIL,
   to: email,
   subject: 'Welcome to Chayo 💬',
   html:wlecome_page
@@ -71,7 +77,7 @@ app.post("/login",async(req,res)=>{
   const check=await user.findOne({email:email})
   if(!loginvalid.validate(req.body).error){
   if (check){
-    if (password==check.password){
+    if (hash(password)==check.password){
       res.json({token:check.token,username:check.name,message:"ok"})
     }
     else{
