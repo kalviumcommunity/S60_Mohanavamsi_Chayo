@@ -31,6 +31,9 @@ function Sigin() {
 
                         seterror({...error,login:"you are already in having an account please login"})
                         break
+                    case "username already taken.":
+                        seterror({...error,login:"username already taken choice other"})
+                        break
                     case '"password" is not allowed to be empty':
                         setload(false)
 
