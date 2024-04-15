@@ -100,7 +100,6 @@ app.post("/check",async(req,res)=>{
   const {email}=req.body
   const check= await user.findOne({email:email})
   if(check){
-    console.log("ewkj")
     res.send({username:check.name,token:check.token,message:"login"})
   }
   else{
@@ -109,7 +108,6 @@ app.post("/check",async(req,res)=>{
 })
 app.post("/firebase",async (req,res)=>{
   const {username,password,email,photo}=req.body
-  console.log(req.body)
   const check=await user.findOne({name:username})
     if (check){
       res.send("username taken")
@@ -134,7 +132,6 @@ app.post("/firebase",async (req,res)=>{
   }}
 )
 app.put("/update/:id",async (req,res)=>{
-    console.log(req.body)
     res.send("route to update")
 })
 app.delete("/delete/:id",async(req,res)=>{
