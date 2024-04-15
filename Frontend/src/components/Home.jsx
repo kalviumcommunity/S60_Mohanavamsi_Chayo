@@ -11,7 +11,7 @@ function Home() {
     const nav = useNavigate();
 
     useEffect(() => {
-        axios.get("http://localhost:8000/users")
+        axios.get("https://s60-mohanavamsi-chayo.onrender.com/users")
             .then((res) => {
                 setUsers(res.data);
             })
@@ -64,7 +64,7 @@ function Home() {
                 </button>
             </div>
             <h1 className="text-5xl mt-8">Users</h1>
-            <div className="flex flex-col items-center mt-4  overflow-scroll">
+            <div className="flex flex-col items-center mt-4  overflow-scrolli">
                 {users.map((user, index) => (
                     <div key={index} className="w-56 border border-white shadow-md shadow-white p-2 mt-4 cursor-pointer">
                         <h1 className="text-3xl" onClick={() => handleUserClick(user.name)}>{user.name}</h1>

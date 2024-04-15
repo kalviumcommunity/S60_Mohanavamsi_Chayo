@@ -4,7 +4,9 @@
   padding: 2rem;
   text-align: center;
 }
-
+#rc-anchor-container{
+  width: 10px;
+}
 .logo {
   height: 6em;
   padding: 1.5em;

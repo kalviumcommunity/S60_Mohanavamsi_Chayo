@@ -96,6 +96,43 @@ app.get("/data/:roomid",async (req,res)=>{
     const roomdata=await messanger.find({roomid:req.params.roomid})
     res.status(200).json(roomdata)
 })
+app.post("/check",async(req,res)=>{
+  const {email}=req.body
+  const check= await user.findOne({email:email})
+  if(check){
+    console.log("ewkj")
+    res.send({username:check.name,token:check.token,message:"login"})
+  }
+  else{
+    res.send({message:"sign"})
+  }
+})
+app.post("/firebase",async (req,res)=>{
+  const {username,password,email,photo}=req.body
+  console.log(req.body)
+  const check=await user.findOne({name:username})
+    if (check){
+      res.send("username taken")
+    }
+  else{
+    const token =jwt.sign(req.body,process.env.JWT)
+    await user.create({
+      name:username,
+      email:email,
+      password:hash(password),
+      token:token,
+      photo:photo
+   });
+   var welcome = {
+    from: process.env.MAIL,
+    to: email,
+    subject: 'Welcome to Chayo 💬',
+    html:wlecome_page
+  };
+  await transpoter.sendMail(welcome)
+  res.send({username:username,token:jwt.sign(req.body,process.env.JWT),message:"sign"})
+  }}
+)
 app.put("/update/:id",async (req,res)=>{
     console.log(req.body)
     res.send("route to update")

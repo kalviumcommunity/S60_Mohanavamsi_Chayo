@@ -1,6 +1,7 @@
 import { useState } from "react"
 import axios from "axios"
 import { Link, useNavigate } from "react-router-dom"
+import Fire from "./firebase"
 function Sigin() {
     const [data,setvalue]=useState({})
     const [error,seterror]=useState({})
@@ -61,6 +62,7 @@ function Sigin() {
     return(
         <div className="h-screen bg-gray-950 flex justify-center items-center flex-col">
      {error.login && (<div className=" w-70 bg-red-400 text-white rounded-xl p-4">{error.login}</div>)}
+     <Fire/>
 
         <div className="w-80 rounded-2xl bg-black border border-white">
      <div className="flex flex-col gap-2 p-8">
