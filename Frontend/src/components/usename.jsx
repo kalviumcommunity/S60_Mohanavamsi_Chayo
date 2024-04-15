@@ -11,7 +11,7 @@ function Username(){
         setuser(e)
     }
     function login(){
-        axios.post("http://localhost:8000/firebase",{...data,username:user}).then(
+        axios.post("https://s60-mohanavamsi-chayo.onrender.com/firebase",{...data,username:user}).then(
             (res)=>{
                 if(res.data=="username taken"){
                     alert("username taken !!")
