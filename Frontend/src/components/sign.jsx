@@ -70,7 +70,7 @@ function Sigin() {
             {error.login && (
                 <div className="w-70 bg-red-400 text-white rounded-xl p-4">{error.login}</div>
             )}
-            <Fire/>
+            <div onClick={()=>{setload(true)}}><Fire/></div>
             <div className="w-80 rounded-2xl bg-black border-white">
                 <div className="flex flex-col gap-2 p-8">
                     <p className="text-center text-3xl text-gray-300 mb-4">Sign</p>
@@ -117,8 +117,20 @@ function Sigin() {
                         onClick={submit}
                         disabled={!valid}
                     >
-                        {load ? "Loading" : "Sign"}
+                        Sign
                     </button>
+                    {load && (<div class="w-full gap-x-2 flex justify-center items-center">
+  <div
+    class="w-5 bg-[#d991c2] animate-pulse h-5 rounded-full animate-bounce"
+  ></div>
+  <div
+    class="w-5 animate-pulse h-5 bg-[#9869b8] rounded-full animate-bounce"
+  ></div>
+  <div
+    class="w-5 h-5 animate-pulse bg-[#6756cc] rounded-full animate-bounce"
+  ></div>
+</div>
+)}
                     <Link className="text-purple-600 text-center" to={"/login"}>
                         Login
                     </Link>

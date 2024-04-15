@@ -62,8 +62,7 @@ function Sigin() {
     return(
         <div className="h-screen bg-gray-950 flex justify-center items-center flex-col">
      {error.login && (<div className=" w-70 bg-red-400 text-white rounded-xl p-4">{error.login}</div>)}
-     <Fire/>
-
+     <div onClick={()=>{setload(true)}}><Fire/></div>
         <div className="w-80 rounded-2xl bg-black border border-white">
      <div className="flex flex-col gap-2 p-8">
      <p className="text-center text-3xl text-gray-300 mb-4">Login</p>
@@ -85,8 +84,19 @@ function Sigin() {
    border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px]
    active:border-b-[2px] active:brightness-90 active:translate-y-[2px] hover:shadow-xl hover:shadow-green-300 shadow-green-300 active:shadow-none"
    onClick={submit}>
-    {load ? "Loading" : "login"}
+    login
    </button>
+   {load && (<div class="w-full gap-x-2 flex justify-center items-center">
+  <div
+    class="w-5 bg-[#d991c2] animate-pulse h-5 rounded-full animate-bounce"
+  ></div>
+  <div
+    class="w-5 animate-pulse h-5 bg-[#9869b8] rounded-full animate-bounce"
+  ></div>
+  <div
+    class="w-5 h-5 animate-pulse bg-[#6756cc] rounded-full animate-bounce"
+  ></div>
+</div>)}
    <Link className=" text-purple-600 text-center" to={"/sign"}>not  having an account ? sigin!</Link>
      </div>
    </div>
