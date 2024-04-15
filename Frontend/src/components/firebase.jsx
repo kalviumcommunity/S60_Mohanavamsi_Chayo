@@ -25,7 +25,7 @@ function Fire() {
       .then((result) => {
         const user = result.user;
         console.log(user);
-        axios.post("http://localhost:8000/check",{email:user.email}).then(
+        axios.post("https://s60-mohanavamsi-chayo.onrender.com/check",{email:user.email}).then(
             (res)=>{
               console.log(res)
               if(res.data.message=="login"){
