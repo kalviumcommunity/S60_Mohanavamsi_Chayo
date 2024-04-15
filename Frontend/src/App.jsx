@@ -4,6 +4,8 @@ import Chat from "./components/chat"
 import Sigin from "./components/sign"
 import Login from "./components/Login"
 import Forget from "./components/Forget"
+import Fire from "./components/firebase"
+import Username from "./components/usename"
 function App() {
   return (
     <>
@@ -13,6 +15,8 @@ function App() {
       <Route path="/sign" element={<Sigin/>}/>{/* Sign */}
       <Route path="/login" element={<Login/>}/>{/* Login */}
       <Route path="/reset" element={<Forget/>}/>{/* Reset */}
+      <Route path="/firebase" element={<Fire/>}/>
+      <Route path="/username" element={<Username/>}/>
     </Routes>
     </>
   )
