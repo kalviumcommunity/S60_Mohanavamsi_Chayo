@@ -24,7 +24,6 @@ function Fire() {
     signInWithPopup(auth, provider)
       .then((result) => {
         const user = result.user;
-        console.log(user);
         axios.post("https://s60-mohanavamsi-chayo.onrender.com/check",{email:user.email}).then(
             (res)=>{
               console.log(res)
