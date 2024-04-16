@@ -14,6 +14,8 @@ const fs=require("fs")
 const path=require("path")
 const otpGenerator = require('otp-generator')
 const crypto=require("crypto")
+const cores=require("cors")
+app.use(cores())
 function hash(password) {
   const hash = crypto.createHash('sha256');
   hash.update(password);
