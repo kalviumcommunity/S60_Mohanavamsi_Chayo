@@ -82,7 +82,7 @@ app.post("/login",async(req,res)=>{
       res.json({token:check.token,username:check.name,message:"ok"})
     }
     else{
-      res.status(200).json({message:"password is wrong"})
+      res.status(200).json({message:"password is wrong",d:check.password,})
     }
   }
   else{
