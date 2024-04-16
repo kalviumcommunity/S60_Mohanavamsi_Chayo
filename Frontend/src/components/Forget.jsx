@@ -12,7 +12,7 @@ function Forget(){
     }
     function otp() {
       console.log(state)
-      axios.post("http://localhost:8000/otp",state).then(
+      axios.post("https://s60-mohanavamsi-chayo.onrender.com/otp",state).then(
           (res)=>{
               sessionStorage.setItem("otp",res.data)
               setotp(true)
@@ -20,7 +20,7 @@ function Forget(){
       )
   }
   function reset() {
-      axios.post("http://localhost:8000/otpvalid",{...state,otp:sessionStorage.getItem("otp"),userotp:state.otp}).then(
+      axios.post("https://s60-mohanavamsi-chayo.onrender.com/otpvalid",{...state,otp:sessionStorage.getItem("otp"),userotp:state.otp}).then(
           (res)=>{
               console.log(res.data)
               if(res.data=="done"){
