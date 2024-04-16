@@ -17,7 +17,7 @@ function Sigin() {
         console.log(data)
         console.log((Object.keys(data)))
         if (Object.keys(data).length==2){
-        axios.post("https://s60-mohanavamsi-chayo.onrender.com/login",data).then(
+        axios.post("http://localhost:8000/login",data).then(
             (res)=>{
               setload(true)
                 const response=res
@@ -86,15 +86,15 @@ function Sigin() {
    onClick={submit}>
     login
    </button>
-   {load && (<div class="w-full gap-x-2 flex justify-center items-center">
+   {load && (<div className="w-full gap-x-2 flex justify-center items-center">
   <div
-    class="w-5 bg-[#d991c2] animate-pulse h-5 rounded-full animate-bounce"
+    className="w-5 bg-[#d991c2] animate-pulse h-5 rounded-full animate-bounce"
   ></div>
   <div
-    class="w-5 animate-pulse h-5 bg-[#9869b8] rounded-full animate-bounce"
+    className="w-5 animate-pulse h-5 bg-[#9869b8] rounded-full animate-bounce"
   ></div>
   <div
-    class="w-5 h-5 animate-pulse bg-[#6756cc] rounded-full animate-bounce"
+    className="w-5 h-5 animate-pulse bg-[#6756cc] rounded-full animate-bounce"
   ></div>
 </div>)}
    <Link className=" text-purple-600 text-center" to={"/sign"}>not  having an account ? sigin!</Link>
