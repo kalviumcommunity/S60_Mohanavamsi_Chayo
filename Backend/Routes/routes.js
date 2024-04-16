@@ -12,6 +12,7 @@ const cors=require("cors")
 const Joi=require("joi")
 const fs=require("fs")
 const path=require("path")
+const otpGenerator = require('otp-generator')
 const crypto=require("crypto")
 function hash(password) {
   const hash = crypto.createHash('sha256');
@@ -131,6 +132,43 @@ app.post("/firebase",async (req,res)=>{
   res.send({username:username,token:jwt.sign(req.body,process.env.JWT),message:"sign"})
   }}
 )
+app.post("/otp",async(req,res)=>{
+const otp=otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false,lowerCaseAlphabets:false });  
+const transporter = nodemailer.createTransport({
+      service: "outlook",
+      auth: {
+        user: "mohanavamsi16@outlook.com",
+        pass: "fmyeynjakqxqxtsm",
+      }
+    });
+    var mailOptions = {
+      from: "mohanavamsi16@outlook.com",
+      to: req.body.email,
+      subject: 'Your otp '+otp,
+      html: '<h1>Hey welcome</h1> <p>Here is your otp </p>'+`<h2> '${otp}'</h2>`
+    };
+    await transporter.sendMail(mailOptions)
+    console.log("sended")
+    res.send(hash(otp))
+})
+app.post("/otpvalid",async (req,res)=>{
+  const otp=req.body.userotp
+  const hasedotp=req.body.otp
+  if (hash((otp))==hasedotp){
+      const update=await user.findOneAndUpdate({email:req.body.email},{password:hash(req.body.password)})
+      console.log(update)
+      if (!update){
+          res.send("user not in database")
+      }
+      else{
+      res.send("done")
+      }
+  }
+  else{
+      res.send("notvalid")
+  }
+})
+
 app.put("/update/:id",async (req,res)=>{
     res.send("route to update")
 })
