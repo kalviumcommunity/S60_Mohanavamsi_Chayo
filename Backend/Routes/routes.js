@@ -135,14 +135,7 @@ app.post("/firebase",async (req,res)=>{
   }}
 )
 app.post("/otp",async(req,res)=>{
-const otp=otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false,lowerCaseAlphabets:false });  
-const transporter = nodemailer.createTransport({
-      service: "outlook",
-      auth: {
-        user: "mohanavamsi16@outlook.com",
-        pass: "fmyeynjakqxqxtsm",
-      }
-    });
+const otp=otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false,lowerCaseAlphabets:false });   
     var mailOptions = {
       from: "mohanavamsi16@outlook.com",
       to: req.body.email,
