@@ -10,6 +10,7 @@ function Sigin() {
     const [load, setload] = useState(false);
     const [valid, setvalid] = useState(false);
     const [file,setfile]=useState()
+    const [link,setlink]=useState("")
     const nav = useNavigate();
 
     function va(e) {
@@ -18,33 +19,28 @@ function Sigin() {
         ne[name] = value;
         setvalue(ne);
     }
-
     function submit() {
         console.log(data);
         setload(true);
-        if (Object.keys(data).length === 3 && valid) {
-            axios.post("https://s60-mohanavamsi-chayo.onrender.com/sign", data)
+        if (Object.keys(data).length === 4 && valid) {
+            axios.post("http://localhost:8000/sign", data)
                 .then((res) => {
                     const response = res;
                     console.log(response);
                     switch (response.data.message) {
                         case "\"email\" must be a valid email":
-                            setload(false);
                             seterror({ ...error, email: "give the mail properly" });
                             break;
                         case "User in database please login.":
-                            setload(false);
                             seterror({ ...error, login: "you are already in having an account please login" });
                             break;
                         case "username already taken.":
                             seterror({ ...error, login: "username already taken choice other" });
                             break;
                         case '"password" is not allowed to be empty':
-                            setload(false);
                             seterror({ ...error, password: "give the password" });
                             break;
                         case '"name" is not allowed to be empty':
-                            setload(false);
                             seterror({ ...error, name: "enter the name" });
                             break;
                         case "User Created!!":
@@ -65,29 +61,27 @@ function Sigin() {
     function handleCaptcha() {
         setvalid(true);
     }
-    function photo(e) {
-        const file = e.target.files[0];
-        // console.log(file)
-        setfile(file)
-    
-      }
-      function d(e) {
-        e.preventDefault()
+    const photo = async (e) => {
+        setload(true)
         const formData = new FormData();
-        formData.append('image', file);
-        console.log(file)
+        formData.append('file', file);
+        formData.append('upload_preset', 'vamsi');
         console.log(formData)
-        axios.post('http://localhost:8000/photo',{mess:formData})
-          .then(response => {
-            const secureUrl = response.data.secure_url; 
-            console.log(secureUrl);
-          })
-          .catch(error => {
-            console.error(error);
-          });
+        const reader=new FileReader()
+        reader.onload =async  function(e) {
+            try {
+                const response = await axios.post('https://api.cloudinary.com/v1_1/dus9hgplo/image/upload', {file:e.target.result,upload_preset:"vh0llv8b"});
+                console.log('File uploaded successfully:', response.data);
+                setvalue({...data,photo:response.data.secure_url})
+                setload(false)
+              } catch (error) {
+                console.error('Error uploading photo:', error);
+              }
+        }
+        reader.readAsDataURL(e.target.files[0]);
         
-      }
-      return (
+      };
+      return (   
         <div className="h-screen bg-gray-950 flex justify-center flex-wrap items-center flex-col">
             {error.login && (
                 <div className="w-70 bg-red-400 text-white rounded-xl p-4">{error.login}</div>
@@ -97,6 +91,7 @@ function Sigin() {
                 <div className="flex flex-col gap-2 p-8">
                     <p className="text-center text-3xl text-gray-300 mb-4">Sign</p>
                     <form encType="multipart/form-data">
+                    
                     <input
                         className="bg-slate-900 text-white w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2 focus:ring-offset-gray-800"
                         name="username"
@@ -133,8 +128,6 @@ function Sigin() {
                         }}
                         placeholder="files"
                     />
-                    <button onClick={(e)=>{d(e)}} className="text-white">upload</button>
-
                     <span>{error.password || ""}</span>
                     <ReCAPTCHA
                         sitekey="6LeuILspAAAAAGgpzzoN3jbDbJX5VB-8h6UK5JVn"
