@@ -9,6 +9,7 @@ function Sigin() {
     const [error, seterror] = useState({});
     const [load, setload] = useState(false);
     const [valid, setvalid] = useState(false);
+    const [file,setfile]=useState()
     const nav = useNavigate();
 
     function va(e) {
@@ -64,9 +65,30 @@ function Sigin() {
     function handleCaptcha() {
         setvalid(true);
     }
-
-    return (
-        <div className="h-screen bg-gray-950 flex justify-center items-center flex-col">
+    function photo(e) {
+        const file = e.target.files[0];
+        // console.log(file)
+        setfile(file)
+    
+      }
+      function d(e) {
+        e.preventDefault()
+        const formData = new FormData();
+        formData.append('image', file);
+        console.log(file)
+        console.log(formData)
+        axios.post('http://localhost:8000/photo',{mess:formData})
+          .then(response => {
+            const secureUrl = response.data.secure_url; 
+            console.log(secureUrl);
+          })
+          .catch(error => {
+            console.error(error);
+          });
+        
+      }
+      return (
+        <div className="h-screen bg-gray-950 flex justify-center flex-wrap items-center flex-col">
             {error.login && (
                 <div className="w-70 bg-red-400 text-white rounded-xl p-4">{error.login}</div>
             )}
@@ -74,6 +96,7 @@ function Sigin() {
             <div className="w-80 rounded-2xl bg-black border-white">
                 <div className="flex flex-col gap-2 p-8">
                     <p className="text-center text-3xl text-gray-300 mb-4">Sign</p>
+                    <form encType="multipart/form-data">
                     <input
                         className="bg-slate-900 text-white w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2 focus:ring-offset-gray-800"
                         name="username"
@@ -101,13 +124,25 @@ function Sigin() {
                         }}
                         placeholder="Password"
                     />
+                    <input
+                        className="bg-slate-900 text-white w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2 focus:ring-offset-gray-800"
+                        name="file"
+                        type="file"
+                        onChange={(e) => {
+                            photo(e);
+                        }}
+                        placeholder="files"
+                    />
+                    <button onClick={(e)=>{d(e)}} className="text-white">upload</button>
+
                     <span>{error.password || ""}</span>
                     <ReCAPTCHA
                         sitekey="6LeuILspAAAAAGgpzzoN3jbDbJX5VB-8h6UK5JVn"
                         onChange={handleCaptcha}
-                        className=" relative right-4"
+                        className=" relative right-5"
                         
                     />
+                    </form>
                     <button
                         className={`cursor-pointer transition-all 
                             bg-gray-700 text-white px-6 py-2 rounded-lg
