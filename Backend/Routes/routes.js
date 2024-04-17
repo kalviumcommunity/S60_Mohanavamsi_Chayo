@@ -10,12 +10,21 @@ const env=require("dotenv")
 const jwt=require("jsonwebtoken")
 const cors=require("cors")
 const Joi=require("joi")
+const multer=require("multer")
 const fs=require("fs")
 const path=require("path")
+const photo=path.join("krish.jpeg")
 const otpGenerator = require('otp-generator')
 const crypto=require("crypto")
+const cloudinary=require("cloudinary").v2
 const cores=require("cors")
-app.use(cores())
+app.use(cores())     
+const upload=multer({dest:"image"})     
+cloudinary.config({ 
+  cloud_name: 'dus9hgplo', 
+  api_key: '394642134156157', 
+  api_secret: 'vTLVdGZzebmXL6ASL3lxJRpTrgQ' 
+});
 function hash(password) {
   const hash = crypto.createHash('sha256');
   hash.update(password);
@@ -31,6 +40,7 @@ const loginvalid=Joi.object({
   email:Joi.string().email(),
   password:Joi.string().required()
 })
+
 env.config()
 app.use(express.json())
 app.use(cors())
@@ -42,7 +52,7 @@ const transpoter=nodemailer.createTransport({
       }
     })
 app.post("/testmail",async (req,res)=>{
-   
+   f(req.body)
 })
 app.post("/sign",async(req,res)=>{
   const {email,password,username}=req.body
@@ -74,7 +84,22 @@ app.post("/sign",async(req,res)=>{
 await transpoter.sendMail(welcome)
   res.status(201).json({ message:"User Created!!",token:token,username:username });
 }})
-
+app.post("/photo",upload.single('image'), async (req, res) => {
+  try {
+    console.log(req.body)
+      const fileName = req.file.filename;
+      const filePath = req.file.path;
+      const mimetype = req.file.mimetype;
+      console.log('Uploaded file details:', { fileName, filePath, mimetype });
+    console.log(photo)
+    const result = await cloudinary.uploader.upload(photo);
+    console.log("Uploaded photo:", result);
+    res.json({ url: result.secure_url });
+  } catch (error) {
+    console.error("Error uploading photo:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 app.post("/login",async(req,res)=>{
   const {email,password}=req.body
   const check=await user.findOne({email:email})
@@ -131,7 +156,7 @@ app.post("/firebase",async (req,res)=>{
     html:wlecome_page
   };
   await transpoter.sendMail(welcome)
-  res.send({username:username,token:jwt.sign(req.body,process.env.JWT),message:"sign"})
+  res.json({username:username,token:jwt.sign(req.body,process.env.JWT),message:"sign"})
   }}
 )
 app.post("/otp",async(req,res)=>{

@@ -40,11 +40,8 @@ function Fire() {
         )
       })
       .catch((error) => {
-        const errorCode = error.code;
         const errorMessage = error.message;
-        const email = error.email;
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        console.error(errorCode, errorMessage, email, credential);
+        console.log(errorMessage);
       });
   };
 
