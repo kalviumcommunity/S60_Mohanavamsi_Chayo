@@ -33,8 +33,9 @@ function hash(password) {
 const wlecome_page=fs.readFileSync(path.join("index.html"),"utf8")
 const signvalid=Joi.object({
   username:Joi.string().required(),
-  email:Joi.string().email(),
-  password:Joi.string().required()
+  email:Joi.string().email().required(),
+  password:Joi.string().required(),
+  photo:Joi.string()
 })
 const loginvalid=Joi.object({
   email:Joi.string().email(),
@@ -51,11 +52,9 @@ const transpoter=nodemailer.createTransport({
         pass: process.env.PASS,
       }
     })
-app.post("/testmail",async (req,res)=>{
-   f(req.body)
-})
+
 app.post("/sign",async(req,res)=>{
-  const {email,password,username}=req.body
+  const {email,password,username,photo}=req.body
   const check=await user.findOne({email:email})
   const check2=await user.findOne({name:username})
   if(check){
@@ -73,7 +72,8 @@ app.post("/sign",async(req,res)=>{
     name:username,
     email:email,
     password:hash(password),
-    token:token
+    token:token,
+    photo:photo
  });
  var welcome = {
   from: process.env.MAIL,
@@ -84,22 +84,7 @@ app.post("/sign",async(req,res)=>{
 await transpoter.sendMail(welcome)
   res.status(201).json({ message:"User Created!!",token:token,username:username });
 }})
-app.post("/photo",upload.single('image'), async (req, res) => {
-  try {
-    console.log(req.body)
-      const fileName = req.file.filename;
-      const filePath = req.file.path;
-      const mimetype = req.file.mimetype;
-      console.log('Uploaded file details:', { fileName, filePath, mimetype });
-    console.log(photo)
-    const result = await cloudinary.uploader.upload(photo);
-    console.log("Uploaded photo:", result);
-    res.json({ url: result.secure_url });
-  } catch (error) {
-    console.error("Error uploading photo:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+
 app.post("/login",async(req,res)=>{
   const {email,password}=req.body
   const check=await user.findOne({email:email})
