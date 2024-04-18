@@ -23,7 +23,7 @@ function Sigin() {
         console.log(data);
         setload(true);
         if (Object.keys(data).length === 4 && valid) {
-            axios.post("https://s60-mohanavamsi-chayo.onrender.com/sign", data)
+            axios.post("http://localhost:8000/sign", data)
                 .then((res) => {
                     const response = res;
                     console.log(response);
@@ -36,7 +36,7 @@ function Sigin() {
                             seterror({ ...error, login: "you are already in having an account please login" });
                             setload(false)
                             break;
-                        case "username already taken.":
+                        case "Username already taken.":
                             seterror({ ...error, login: "username already taken choice other" });
                            setload(false)
                             break;
