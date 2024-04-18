@@ -13,7 +13,7 @@ function Username(){
     }
     function login(){
         if (value){
-        axios.post("https://s60-mohanavamsi-chayo.onrender.com/firebase",{...data,username:user,photo:value}).then(
+        axios.post("http://localhost:8000/firebase",{...data,username:user,photo:value}).then(
             (res)=>{
                 if(res.data=="username taken"){
                     alert("username taken !!")
@@ -37,7 +37,7 @@ function Username(){
             try {
                 const response = await axios.post('https://api.cloudinary.com/v1_1/dus9hgplo/image/upload', {file:e.target.result,upload_preset:"vh0llv8b"});
                 console.log('File uploaded successfully:', response.data);
-                setvalue({...data,photo:response.data.secure_url})
+                setvalue(response.data.secure_url)
               } catch (error) {
                 console.error('Error uploading photo:', error);
               }
