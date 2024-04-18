@@ -23,25 +23,30 @@ function Sigin() {
         console.log(data);
         setload(true);
         if (Object.keys(data).length === 4 && valid) {
-            axios.post("http://localhost:8000/sign", data)
+            axios.post("https://s60-mohanavamsi-chayo.onrender.com/sign", data)
                 .then((res) => {
                     const response = res;
                     console.log(response);
                     switch (response.data.message) {
                         case "\"email\" must be a valid email":
                             seterror({ ...error, email: "give the mail properly" });
+                            setload(false)
                             break;
                         case "User in database please login.":
                             seterror({ ...error, login: "you are already in having an account please login" });
+                            setload(false)
                             break;
                         case "username already taken.":
                             seterror({ ...error, login: "username already taken choice other" });
+                           setload(false)
                             break;
                         case '"password" is not allowed to be empty':
                             seterror({ ...error, password: "give the password" });
+                            setload(false)
                             break;
                         case '"name" is not allowed to be empty':
                             seterror({ ...error, name: "enter the name" });
+                           setload(false)
                             break;
                         case "User Created!!":
                             document.cookie = `username=${response.data.username}`;
@@ -90,7 +95,6 @@ function Sigin() {
             <div className="w-80 rounded-2xl bg-black border-white">
                 <div className="flex flex-col gap-2 p-8">
                     <p className="text-center text-3xl text-gray-300 mb-4">Sign</p>
-                    <form encType="multipart/form-data">
                     
                     <input
                         className="bg-slate-900 text-white w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2 focus:ring-offset-gray-800"
@@ -135,7 +139,6 @@ function Sigin() {
                         className=" relative right-5"
                         
                     />
-                    </form>
                     <button
                         className={`cursor-pointer transition-all 
                             bg-gray-700 text-white px-6 py-2 rounded-lg
