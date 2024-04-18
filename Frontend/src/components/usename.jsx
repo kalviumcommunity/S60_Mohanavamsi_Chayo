@@ -37,6 +37,7 @@ function Username(){
             try {
                 const response = await axios.post('https://api.cloudinary.com/v1_1/dus9hgplo/image/upload', {file:e.target.result,upload_preset:"vh0llv8b"});
                 console.log('File uploaded successfully:', response.data);
+                document.cookie=`photo=${response.data.secure_url}`
                 setvalue(response.data.secure_url)
               } catch (error) {
                 console.error('Error uploading photo:', error);

@@ -77,6 +77,7 @@ function Sigin() {
             try {
                 const response = await axios.post('https://api.cloudinary.com/v1_1/dus9hgplo/image/upload', {file:e.target.result,upload_preset:"vh0llv8b"});
                 console.log('File uploaded successfully:', response.data);
+                document.cookie=`photo=${response.data.secure_url}`
                 setvalue({...data,photo:response.data.secure_url})
                 setload(false)
               } catch (error) {
