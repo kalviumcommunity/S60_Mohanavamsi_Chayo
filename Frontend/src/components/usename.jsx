@@ -13,7 +13,7 @@ function Username(){
     }
     function login(){
         if (value){
-        axios.post("http://localhost:8000/firebase",{...data,username:user,photo:value}).then(
+        axios.post("https://s60-mohanavamsi-chayo.onrender.com/firebase",{...data,username:user,photo:value}).then(
             (res)=>{
                 if(res.data=="username taken"){
                     alert("username taken !!")
