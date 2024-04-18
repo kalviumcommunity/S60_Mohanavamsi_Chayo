@@ -14,6 +14,7 @@ app.use("/",route)
 app.get("/",(req,res)=>{
     res.send("Welcome to chayo")
 })
+app.use(cors())
 io.on("connection",(socket)=>{
     socket.on("test",(name)=>{
         console.log("vamsi")

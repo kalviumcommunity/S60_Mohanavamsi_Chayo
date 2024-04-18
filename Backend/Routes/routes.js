@@ -35,8 +35,9 @@ const signvalid=Joi.object({
   username:Joi.string().required(),
   email:Joi.string().email().required(),
   password:Joi.string().required(),
-  photo:Joi.string()
+  photo:Joi.string().required()
 })
+
 const loginvalid=Joi.object({
   email:Joi.string().email(),
   password:Joi.string().required()
@@ -121,6 +122,7 @@ app.post("/check",async(req,res)=>{
 })
 app.post("/firebase",async (req,res)=>{
   const {username,password,email,photo}=req.body
+  
   const check=await user.findOne({name:username})
     if (check){
       res.send("username taken")
