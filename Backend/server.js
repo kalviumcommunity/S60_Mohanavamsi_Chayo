@@ -16,10 +16,7 @@ app.get("/",(req,res)=>{
 })
 app.use(cors())
 io.on("connection",(socket)=>{
-    socket.on("test",(name)=>{
-        console.log("vamsi")
-        socket.emit("rev",name)
-    })
+    try{
     socket.on("route",async (route,user)=>{
         const check=await messanger.findOne({roomid:route})
         if (check){
@@ -37,7 +34,30 @@ io.on("connection",(socket)=>{
             console.log("new room created",route)
         }
     })
-})
+    socket.on("connecting_room", (route) => {
+        socket.join(route);
+        console.log("User joined room:", route);
+    });
+    socket.on("message", async (message, route, user, photo) => {
+        console.log(message)
+        io.to(route).emit("show", message, user, photo);
+        await messanger.findOneAndUpdate({ roomid: route }, {
+            $push: {
+                messages: {
+                    user: user,
+                    message: message,
+                    time: Date.now(),
+                    message_id: 9
+                }
+            }
+        });
+    });
+
+}
+catch(er){
+    console.log(er)
+}}
+)
 server.listen(PORT,()=>{
     connect()
     console.log(`server running in ${PORT}`)

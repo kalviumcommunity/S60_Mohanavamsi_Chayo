@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import { io } from "socket.io-client";
@@ -8,12 +7,13 @@ const socket = io("https://s60-mohanavamsi-chayo.onrender.com");
 
 function Chat() {
   const { roomid } = useParams()
+  console.log(roomid)
   const chatContainerRef = useRef()
   const [messages, setMessages] = useState([])
   const [newMessage, setNewMessage] = useState("")
   useEffect(() => {
     socket.emit("connecting_room", roomid)
-  }, [roomid])
+  }, [])
 
   useEffect(() => {
     scrollToBottom()
@@ -24,13 +24,13 @@ function Chat() {
   });
 
   function sendMessage() {
-    if (newMessage){
-    socket.emit("message", newMessage, roomid, getCookie("username") || "anonymous")
+    if (newMessage != ""){
+    socket.emit("message", newMessage, roomid, getCookie("username"),getCookie("photo"))
     setNewMessage("")
     }
   }
 function enter(e){
-  if (e=="Enter"){
+  if (e==="Enter"){
     sendMessage()
   }
 }
