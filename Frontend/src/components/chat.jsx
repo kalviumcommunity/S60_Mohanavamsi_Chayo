@@ -16,7 +16,6 @@ function Chat() {
 
   useEffect(() => {
     scrollToBottom()
-    socket.off("show")
   }, [messages])
 
   socket.on("show", (message, user, photo) => {
