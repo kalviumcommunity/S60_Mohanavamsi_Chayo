@@ -3,11 +3,10 @@ import { useParams } from "react-router";
 import { io } from "socket.io-client";
 import { getCookie } from "./nav";
 
-const socket = io("https://s60-mohanavamsi-chayo.onrender.com");
+const socket = io("http://localhost:8000");
 
 function Chat() {
   const { roomid } = useParams()
-  console.log(roomid)
   const chatContainerRef = useRef()
   const [messages, setMessages] = useState([])
   const [newMessage, setNewMessage] = useState("")
@@ -17,14 +16,14 @@ function Chat() {
 
   useEffect(() => {
     scrollToBottom()
+    socket.off("show")
   }, [messages])
 
   socket.on("show", (message, user, photo) => {
     setMessages([...messages, { user: user, message: message, photo: photo }])
   });
-
   function sendMessage() {
-    if (newMessage != ""){
+    if (newMessage.trim() != ""){
     socket.emit("message", newMessage, roomid, getCookie("username"),getCookie("photo"))
     setNewMessage("")
     }
@@ -45,7 +44,7 @@ function enter(e){
 
   return (
     <div className="h-screen bg-gray-950 p-2 flex flex-col justify-center items-center">
-      <div className="overflow-y-scroll h-5/6 w-96 relative bottom-4 bg-black rounded-2xl pt-2" ref={chatContainerRef}>
+      <div className="overflow-y-scroll h-5/6 w-10/12 relative bottom-4 bg-black rounded-2xl pt-2" ref={chatContainerRef}>
         {messages.map((message, index) => (
           <div key={index} className={`border border-gray-800 m-2 bg-gray-800 ${isCurrentUser(message.user) ? 'ml-2' : 'ml-32'} text-white w-56 relative p-3 rounded-xl shadow-xl`}>
             <div className="flex items-center">
