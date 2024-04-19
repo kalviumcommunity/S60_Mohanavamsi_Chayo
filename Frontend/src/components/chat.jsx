@@ -16,7 +16,6 @@ function Chat() {
 
   useEffect(() => {
     scrollToBottom()
-    socket.off("show")
   }, [messages])
 
   socket.on("show", (message, user, photo) => {
@@ -37,7 +36,6 @@ function enter(e){
     chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
   }
 
-  // Function to check if a message is from the current user
   const isCurrentUser = (username) => {
     return username === getCookie("username");
   };
