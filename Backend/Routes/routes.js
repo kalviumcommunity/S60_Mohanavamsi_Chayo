@@ -230,23 +230,14 @@ app.post("/otpvalid", async (req, res) => {
   }
 });
 
-app.put("/update/:id", async (req, res) => {
-  try {
-    res.send("Route to update");
-  } catch (error) {
-    console.error("Error updating user:", error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-});
-
-app.delete("/delete/:id", async (req, res) => {
-  try {
-    res.send("Route to delete");
-  } catch (error) {
-    console.error("Error deleting user:", error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-});
+app.delete("/delete/:id",async(req,res)=>{
+  const data=await messanger.findOne({roomid:req.body.roomid})
+  console.log(data)
+  const bata=data.messages.filter((i)=>{return i._id != req.params.id})
+  data.messages=bata
+await messanger.findOneAndUpdate({roomid:req.body.roomid},data)
+  res.json(data)
+})
 
 app.get("/users", async (req, res) => {
   try {
@@ -257,7 +248,5 @@ app.get("/users", async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
-
-// Post request will be done in socket connection
 
 module.exports = app;
