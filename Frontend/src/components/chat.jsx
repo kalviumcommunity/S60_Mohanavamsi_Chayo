@@ -13,7 +13,7 @@ function Chat() {
   useEffect(() => {
     socket.emit("connecting_room", roomid)
   }, [])
-
+  
   useEffect(() => {
     scrollToBottom()
   }, [messages])

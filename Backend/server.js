@@ -2,6 +2,7 @@ const express = require("express");
 const http = require("http");
 const cors = require("cors");
 const socketio = require("socket.io");
+const bad=require("bad-words")
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server, { cors: { origin: "*" } });
@@ -9,6 +10,8 @@ const messanger = require("./Model/chat");
 const route = require("./Routes/routes");
 const { connect } = require("./db/connect");
 const PORT = process.env.PORT || 8000;
+const filter=new bad({placeHolder:"😇"})
+filter.removeWords(["hells","saddist"])
 
 app.use("/", route);
 
@@ -52,14 +55,13 @@ io.on("connection", (socket) => {
         socket.on("message", async (message, route, user, photo) => {
             try {
                 console.log(message);
-                io.to(route).emit("show", message, user, photo);
+                io.to(route).emit("show", filter.clean(message), user, photo);
                 await messanger.findOneAndUpdate({ roomid: route }, {
                     $push: {
                         messages: {
                             user: user,
                             message: message,
-                            time: Date.now(),
-                            message_id: 9
+                            time: Date.now()
                         }
                     }
                 });
