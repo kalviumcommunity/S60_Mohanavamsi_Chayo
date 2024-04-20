@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import { io } from "socket.io-client";
 import { getCookie } from "./nav";
+import axios from "axios";
 
-const socket = io("http://localhost:8000");
+const socket = io("https://s60-mohanavamsi-chayo.onrender.com");
 
 function Chat() {
   const { roomid } = useParams()
@@ -13,7 +14,14 @@ function Chat() {
   useEffect(() => {
     socket.emit("connecting_room", roomid)
   }, [])
-  
+  useEffect(()=>{
+    axios.get(`http://localhost:8000/data/${roomid}`).then(
+      (res)=>{
+        console.log(res.data[0].messages)
+        setMessages(res.data[0].messages)
+      }
+    )
+  },[])
   useEffect(() => {
     scrollToBottom()
   }, [messages])
@@ -39,12 +47,25 @@ function enter(e){
   const isCurrentUser = (username) => {
     return username === getCookie("username");
   };
-
+function deletemess(id){
+  console.log(id)
+  if(confirm("want to delete")==true){
+    console.log(roomid)
+  axios.post(`http://localhost:8000/delete/${id}`,{roomid:roomid}).then(
+    (res)=>{
+      console.log(res.data)
+      location.reload()
+    }
+  )
+}
+}
   return (
     <div className="h-screen bg-gray-950 p-2 flex flex-col justify-center items-center">
-      <div className="overflow-y-scroll h-5/6 w-10/12 relative bottom-4 bg-black rounded-2xl pt-2" ref={chatContainerRef}>
+      <div className="overflow-y-scroll h-5/6 w-6/12 relative bottom-4 bg-black rounded-2xl pt-2 pl-2" ref={chatContainerRef}>
         {messages.map((message, index) => (
-          <div key={index} className={`border border-gray-800 m-2 bg-gray-800 ${isCurrentUser(message.user) ? 'ml-2' : 'ml-32'} text-white w-56 relative p-3 rounded-xl shadow-xl`}>
+          <div key={index} className={`border border-gray-800 m-2 bg-gray-800 ${isCurrentUser(message.user) ? 'ml-2' : 'ml-96'} text-white w-56 relative p-3 rounded-xl shadow-xl`}
+          onDoubleClick={()=>{deletemess(message)}}
+          >
             <div className="flex items-center">
               <img src={message.photo} alt="User" className="h-6 w-6 rounded-full mr-2" />
               <h1 className="font-semibold">{message.user}</h1>
