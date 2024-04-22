@@ -6,14 +6,24 @@ import axios from "axios";
 
 function Single(){ 
     
-    const socket = io("https://s60-mohanavamsi-chayo.onrender.com");
+    const socket = io("http://localhost:8000");
      const { roomid } = useParams()
     const chatContainerRef = useRef()
-    const [messages, setMessages] = useState([])
+    const [messages, setMessages] = useState([{user:"vami"}])
       const [newMessage, setNewMessage] = useState("")
       useEffect(() => {
+        socket.on("connection", null);
+        socket.on("shows", (message, user, photo) => {
+          console.log(message)
+          setMessages(prevMessages => [...prevMessages, { user, message, photo }]);
+      });
+        return function cleanup() {
+          socket.removeListener("shows");
+        };
+      }, []);
+      useEffect(() => {
         socket.emit("connect_room", roomid.split("&")[0]+roomid.split("&")[1], roomid.split("&")[1]+roomid.split("&")[0])
-      }, [roomid,socket])
+      }, [])
       useEffect(()=>{
         axios.get(`https://s60-mohanavamsi-chayo.onrender.com/data/${roomid}`).then(
           (res)=>{
@@ -25,16 +35,14 @@ function Single(){
         scrollToBottom()
       }, [messages])
     
-      socket.on("show", (message, user, photo) => {
-        console.log("jh")
-        setMessages([...messages, { user: user, message: message, photo: photo }])
-      });
-      function sendMessage() {
+    //   socket.on("shows", (message, user, photo) => {
+    //     console.log(message)
+    //     setMessages(prevMessages => [...prevMessages, { user, message, photo }]);
+    // });
+     function sendMessage() {
           let room=roomid.split("&")
           let route1=room[0]+room[1]
           let route2=room[1]+room[0]
-          console.log(route1)
-          console.log(route2)
           socket.emit("singleMessage",newMessage ,getCookie("username"),route1,route2,getCookie("photo"))
           setNewMessage("")
         }

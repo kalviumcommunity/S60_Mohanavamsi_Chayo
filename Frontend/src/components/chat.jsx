@@ -30,18 +30,11 @@ function Chat() {
     setMessages([...messages, { user: user, message: message, photo: photo }])
   });
   function sendMessage() {
-    if(roomid.includes("single")){
-      let room=roomid.split("&")
-      let route1=room[0]+room[1]
-      let route2=room[1]+room[0]
-      socket.emit("singleMessage",newMessage ,getCookie("username"),route1,route2,getCookie("photo"))
-      setNewMessage("")
-    }
-    else{
+  
     if (newMessage.trim() != ""){
     socket.emit("message", newMessage, roomid, getCookie("username"),getCookie("photo"))
     setNewMessage("")
-    }
+    
   }}
 function enter(e){
   if (e==="Enter"){

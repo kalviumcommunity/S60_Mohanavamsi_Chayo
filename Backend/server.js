@@ -43,56 +43,40 @@ io.on("connection", (socket) => {
             }
         });
 
-        socket.on("connecting_room", (route) => {
+        socket.on("connecting_room", async(route) => {
+            try {
+                socket.join(route);
+                const check = await messanger.findOne({ roomid: route });
+                if (check) {
+                    console.log("user entering room:", route);
+                } else {
+                    await messanger.create({
+                        roomid: route,
+                        messages: [{
+                            user: user,
+                            message: user + " joined",
+                            time: Date.now()
+                        }]
+                    });
+                    console.log("new room created", route);
+                }
+            } catch (error) {
+                console.log("Error in connecting_room:", error);
+            }
+        });
+        socket.on("connect_room", (route) => {
             try {
                 socket.join(route);
             } catch (error) {
                 console.log("Error in connecting_room:", error);
             }
         });
-        socket.on("connect_room",async (route1,route2)=>{
-            try {
-                const check1 = await messanger.findOne({ roomid: route1 });
-                if (check1) {
-                    console.log("user entering room:", route2);
-                } else {
-                    await messanger.create({
-                        roomid: route1,
-                        messages: [{
-                            user: "chayoo",
-                            message: "chayoo" + " joined",
-                            time: Date.now()
-                        }]
-                    });
-                    console.log("new room created", route1);
-                }
-                const check2 = await messanger.findOne({ roomid: route2 });
-                if (check2) {
-                    console.log("user entering room:", route2);
-                } else {
-                    await messanger.create({
-                        roomid: route2,
-                        messages: [{
-                            user: "chayoo",
-                            message: "chayoo" + " joined",
-                            time: Date.now()
-                        }]
-                    });
-                    console.log("new room created", route2);
-                }
-            }
-            catch (error) {
-                console.error("Error in route:", error);
-            }
-            socket.join(route1)
-            socket.join(route2)
-        })
         socket.on("singleMessage",async (message ,user,route1,route2,photo)=>{
             try {
                 let filteredmessage=filter.clean(message)
-                console.log(message);
-                io.to(route1).emit("show", filteredmessage, user, photo);
-                io.to(route2).emit("show", filteredmessage, user, photo);
+                console.log(filteredmessage)
+                io.to(route1).emit("shows", filteredmessage, user, photo);
+                io.to(route2).emit("shows", filteredmessage, user, photo);
                 await messanger.findOneAndUpdate({ roomid: route1 }, {
                     $push: {
                         messages: {
