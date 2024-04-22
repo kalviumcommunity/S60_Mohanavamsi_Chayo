@@ -6,7 +6,7 @@ Chayoo is a real-time chat application that allows users to engage in 1:1 intera
 
 - **1:1 Interaction:** Users can have private conversations with individuals.
 - **Room Creation:** Users can create chat rooms for group discussions on specific topics.
-- **Real-time Messaging:** Messages are delivered instantly, providing a real-time chatting experience.
+- **Real-time Messaging:** Messages are delivered, providing a real-time chatting experience.
 - **User Authentication:** Secure user authentication ensures only authorized users can access the app.
 
 ## Tech Stack
@@ -20,7 +20,7 @@ Chayoo is a real-time chat application that allows users to engage in 1:1 intera
   - Node.js
   - Express.js
   - MongoDB (for database management)
-  - socket.io
+  - Socket.io
 
 ## Deployment
 
@@ -40,11 +40,17 @@ To use Chayoo locally, follow these steps:
 
 ```bash
 git clone https://github.com/your-username/chayoo.git
+
 cd chayoo
-cd sever
+
+cd backend
+
 npm install
+
 npm run dev
+
 cd frontend
+
 npm run dev
 ```
 
