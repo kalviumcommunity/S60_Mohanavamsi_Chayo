@@ -6,7 +6,7 @@ import axios from "axios";
 
 function Single(){ 
     
-    const socket = io("http://localhost:8000");
+    const socket = io("https://s60-mohanavamsi-chayo.onrender.com");
      const { roomid } = useParams()
     const chatContainerRef = useRef()
     const [messages, setMessages] = useState([{user:"vami"}])
@@ -25,8 +25,9 @@ function Single(){
         socket.emit("connect_room", roomid.split("&")[0]+roomid.split("&")[1], roomid.split("&")[1]+roomid.split("&")[0])
       }, [])
       useEffect(()=>{
-        axios.get(`https://s60-mohanavamsi-chayo.onrender.com/data/${roomid}`).then(
+        axios.get(`https://s60-mohanavamsi-chayo.onrender.com/data/${roomid.split("&").join("")}`).then(
           (res)=>{
+            console.log(res.data[0])
             setMessages(res.data[0].messages)
           }
         )
@@ -64,7 +65,7 @@ function Single(){
         <div className="h-screen bg-gray-950 p-2 flex flex-col justify-center items-center">
           <div className="overflow-y-scroll h-5/6 w-6/12 relative bottom-4 bg-black rounded-2xl pt-2 pl-2" ref={chatContainerRef}>
             {messages.map((message, index) => (
-              <div key={index} className={`border border-gray-800 m-2 bg-gray-800 ${isCurrentUser(message.user) ? 'ml-2' : 'ml-96'} text-white w-56 relative p-3 rounded-xl shadow-xl`}
+              <div key={index} className={`border border-gray-800 m-2 bg-gray-800 ${isCurrentUser(message.user) ? 'ml-96' : 'ml-2'} text-white w-56 relative p-3 rounded-xl shadow-xl`}
               >
                 <div className="flex items-center">
                   <img src={message.photo} alt="User" className="h-6 w-6 rounded-full mr-2" />

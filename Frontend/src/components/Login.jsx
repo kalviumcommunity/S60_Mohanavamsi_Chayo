@@ -11,6 +11,7 @@ function Sigin() {
         const {name,value}=e.target
         const ne={...data}
         ne[name]=value
+        seterror({})
         setvalue(ne)
     }
     function submit() {
@@ -27,7 +28,7 @@ function Sigin() {
                         seterror({...error,email:"give the mail proprerly"})
                         setload(false)
                         break
-                    case "user not in database":
+                    case "User not in database":
                         seterror({...error,login:"you are not  having an account please sign"})
                         setload(false)
 
@@ -37,7 +38,7 @@ function Sigin() {
                         setload(false)
 
                         break
-                    case "password is wrong":
+                    case "Password is wrong":
                       seterror({...error,password:"password is wrong"})
                       setload(false)
 
@@ -70,13 +71,13 @@ function Sigin() {
        name="email"
        onChange={(e)=>{va(e)}}
        placeholder="Email"/>
-       <span>{error.email || ""}</span>
+       <span className=" text-red-500">{error.email || ""}</span>
        <input className="bg-slate-900 text-white w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2 focus:ring-offset-gray-800" 
        name="password"
        type="password"
        onChange={(e)=>{va(e)}}
        placeholder="Password"/>
-       <span>{error.password || ""}</span>
+       <span className=" text-red-500">{error.password || ""}</span>
        <Link className=" text-purple-600" to={"/reset"}>Forget Password!</Link>
        <button className="cursor-pointer transition-all 
    bg-gray-700 text-white px-6 py-2 rounded-lg

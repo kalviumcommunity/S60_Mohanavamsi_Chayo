@@ -114,7 +114,7 @@ function Sigin() {
                         }}
                         placeholder="Email"
                     />
-                    <span>{error.email || ""}</span>
+                    <span className=" text-red-500">{error.email || ""}</span>
                     <input
                         className="bg-slate-900 text-white w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2 focus:ring-offset-gray-800"
                         name="password"
@@ -133,7 +133,7 @@ function Sigin() {
                         }}
                         placeholder="files"
                     />
-                    <span>{error.password || ""}</span>
+                    <span className=" text-red-500">{error.password || ""}</span>
                     <ReCAPTCHA
                         sitekey="6LeuILspAAAAAGgpzzoN3jbDbJX5VB-8h6UK5JVn"
                         onChange={handleCaptcha}
