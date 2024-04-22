@@ -1,46 +1,69 @@
+# Chayoo Chat App
 
-<h1>Chayo: A Simple Chat App</h1>
+Chayoo is a real-time chat application that allows users to engage in 1:1 interactions as well as create chat rooms for group discussions. Built using the MERN (MongoDB, Express.js, React.js, Node.js) stack, Chayoo provides a seamless and responsive chatting experience.
 
-<h2>Getting Started</h2>
+## Features
 
-<p>There are two ways to get started with Chayo:</p>
+- **1:1 Interaction:** Users can have private conversations with individuals.
+- **Room Creation:** Users can create chat rooms for group discussions on specific topics.
+- **Real-time Messaging:** Messages are delivered instantly, providing a real-time chatting experience.
+- **User Authentication:** Secure user authentication ensures only authorized users can access the app.
+- **Responsive Design:** Chayoo is designed to work seamlessly across various devices and screen sizes.
 
-<ul>
-<li>Using the Pre-built Application</li>
-<ul>
-<li>Go to the official website</li>
-<li>Create an account or sign in</li>
-<li>Start chatting with your friends!</li>
-</ul>
-<li>Contributing to the Codebase</li>
-<ul>
-<li>Fork the Repository on GitHub</li>
-<li>Clone Your Forked Repository :
-<pre><code>git clone https://github.com/kalviumcommunity/S60_Mohanavamsi_Chayo.git</code></pre>
-</li>
-<li>(Instructions on dependency installation and running the server)</li>
- <pre><code>cd backend</code></pre>
-  <pre><code>npm install</code></pre>
-  <pre><code>cd..</code></pre>
-  <pre><code>npm install</code></pre>
-  <pre><code>npm run dev</code></pre>
-<li>Make changes and test them thoroughly.</li>
-<li>Commit Your Changes (Replace "Added feature X" with your message):
-<pre><code>git add .
-git commit -m "Added feature X"</code></pre>
-</li>
-<li>Push to Your Fork (on GitHub):
-<pre><code>git push origin main</code></pre>
-</li>
-<li>Create a Pull Request on GitHub.</li>
-</ul>
-</ul>
+## Tech Stack
 
-<h2>Tech Stack</h2>
-<p>MERN:Mongodb,Express,Reactjs,Nodejs</p>
+- **Frontend:**
+  - React.js
+  - HTML/CSS
+  - JavaScript
 
-<h2><b>Backend:</b>(https://s60-mohanavamsi-chayo.onrender.com)</h2>
-<h2><b>Frontend:</b>(https://chayoo.netlify.app/)</h2>
-<h2>Contact</h2>
-<h2><b>mailto:</b>mohanavamsi14@gmail.com</h2>
-<p>For any questions or feedback, please create an issue on this repository.</p>
+- **Backend:**
+  - Node.js
+  - Express.js
+  - MongoDB (for database management)
+
+## Deployment
+
+Chayoo is deployed using the following services:
+
+- **Netlify:** Frontend deployment for hosting static assets and handling client-side routing.
+- **Render:** Backend deployment for hosting Node.js server and managing API requests.
+
+## Usage
+
+To use Chayoo locally, follow these steps:
+
+1. Clone this repository to your local machine.
+2. Navigate to the project directory.
+3. Install dependencies using npm or yarn.
+4. Start the development server.
+
+```bash
+# Clone the repository
+git clone https://github.com/your-username/chayoo.git
+
+# Navigate to project directory
+cd chayoo
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm start
+```
+
+Once the server is running, you can access the Chayoo app in your browser.
+
+## Contributing
+
+Contributions are welcome! If you'd like to contribute to Chayoo, please follow these steps:
+
+1. Fork the repository.
+2. Create your feature branch (`git checkout -b feature/your-feature-name`).
+3. Commit your changes (`git commit -am 'Add some feature'`).
+4. Push to the branch (`git push origin feature/your-feature-name`).
+5. Create a new Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
