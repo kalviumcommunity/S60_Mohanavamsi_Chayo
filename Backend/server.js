@@ -59,8 +59,8 @@ io.on("connection", (socket) => {
                     await messanger.create({
                         roomid: route1,
                         messages: [{
-                            user: user,
-                            message: user + " joined",
+                            user: "chayoo",
+                            message: "chayoo" + " joined",
                             time: Date.now()
                         }]
                     });
@@ -73,8 +73,8 @@ io.on("connection", (socket) => {
                     await messanger.create({
                         roomid: route2,
                         messages: [{
-                            user: user,
-                            message: user + " joined",
+                            user: "chayoo",
+                            message: "chayoo" + " joined",
                             time: Date.now()
                         }]
                     });
