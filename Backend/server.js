@@ -64,7 +64,7 @@ io.on("connection", (socket) => {
                             time: Date.now()
                         }]
                     });
-                    console.log("new room created", route);
+                    console.log("new room created", route1);
                 }
                 const check2 = await messanger.findOne({ roomid: route2 });
                 if (check2) {
@@ -78,7 +78,7 @@ io.on("connection", (socket) => {
                             time: Date.now()
                         }]
                     });
-                    console.log("new room created", route);
+                    console.log("new room created", route2);
                 }
             }
             catch (error) {
