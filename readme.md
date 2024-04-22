@@ -39,17 +39,13 @@ To use Chayoo locally, follow these steps:
 4. Start the development server.
 
 ```bash
-# Clone the repository
 git clone https://github.com/your-username/chayoo.git
-
-# Navigate to project directory
 cd chayoo
-
-# Install dependencies
+cd sever
 npm install
-
-# Start the development server
-npm start
+npm run dev
+cd frontend
+npm run dev
 ```
 
 Once the server is running, you can access the Chayoo app in your browser.
@@ -64,6 +60,3 @@ Contributions are welcome! If you'd like to contribute to Chayoo, please follow 
 4. Push to the branch (`git push origin feature/your-feature-name`).
 5. Create a new Pull Request.
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
