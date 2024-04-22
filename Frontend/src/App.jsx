@@ -6,6 +6,7 @@ import Login from "./components/Login"
 import Forget from "./components/Forget"
 import Fire from "./components/firebase"
 import Username from "./components/usename"
+import Single from "./components/Single"
 function App() {
   return (
     <>
@@ -17,6 +18,7 @@ function App() {
       <Route path="/reset" element={<Forget/>}/>{/* Reset */}
       <Route path="/firebase" element={<Fire/>}/>
       <Route path="/username" element={<Username/>}/>
+      <Route path="/single/:roomid" element={<Single/>}/>
     </Routes>
     </>
   )

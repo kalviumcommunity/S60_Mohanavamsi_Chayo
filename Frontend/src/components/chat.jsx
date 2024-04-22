@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
 import { io } from "socket.io-client";
 import { getCookie } from "./nav";
 import axios from "axios";
@@ -15,7 +15,7 @@ function Chat() {
     socket.emit("connecting_room", roomid)
   }, [])
   useEffect(()=>{
-    axios.get(`http://localhost:8000/data/${roomid}`).then(
+    axios.get(`https://s60-mohanavamsi-chayo.onrender.com/data/${roomid}`).then(
       (res)=>{
         console.log(res.data[0].messages)
         setMessages(res.data[0].messages)
@@ -30,11 +30,19 @@ function Chat() {
     setMessages([...messages, { user: user, message: message, photo: photo }])
   });
   function sendMessage() {
+    if(roomid.includes("single")){
+      let room=roomid.split("&")
+      let route1=room[0]+room[1]
+      let route2=room[1]+room[0]
+      socket.emit("singleMessage",newMessage ,getCookie("username"),route1,route2,getCookie("photo"))
+      setNewMessage("")
+    }
+    else{
     if (newMessage.trim() != ""){
     socket.emit("message", newMessage, roomid, getCookie("username"),getCookie("photo"))
     setNewMessage("")
     }
-  }
+  }}
 function enter(e){
   if (e==="Enter"){
     sendMessage()
@@ -47,24 +55,12 @@ function enter(e){
   const isCurrentUser = (username) => {
     return username === getCookie("username");
   };
-function deletemess(id){
-  console.log(id)
-  if(confirm("want to delete")==true){
-    console.log(roomid)
-  axios.post(`http://localhost:8000/delete/${id}`,{roomid:roomid}).then(
-    (res)=>{
-      console.log(res.data)
-      location.reload()
-    }
-  )
-}
-}
+
   return (
     <div className="h-screen bg-gray-950 p-2 flex flex-col justify-center items-center">
       <div className="overflow-y-scroll h-5/6 w-6/12 relative bottom-4 bg-black rounded-2xl pt-2 pl-2" ref={chatContainerRef}>
         {messages.map((message, index) => (
           <div key={index} className={`border border-gray-800 m-2 bg-gray-800 ${isCurrentUser(message.user) ? 'ml-2' : 'ml-96'} text-white w-56 relative p-3 rounded-xl shadow-xl`}
-          onDoubleClick={()=>{deletemess(message)}}
           >
             <div className="flex items-center">
               <img src={message.photo} alt="User" className="h-6 w-6 rounded-full mr-2" />

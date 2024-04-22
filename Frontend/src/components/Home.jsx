@@ -7,6 +7,7 @@ import axios from "axios";
 function Home() {
     const [room, setRoom] = useState("");
     const [users, setUsers] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
     const socket = io("https://s60-mohanavamsi-chayo.onrender.com");
     const nav = useNavigate();
 
@@ -23,7 +24,7 @@ function Home() {
     function routeCreator() {
         if (room.trim() !== "") {
             socket.emit("route", room, getCookie("username") || "anonymous");
-            nav(`/chat/${room}`, { state: { room } });
+            nav(`/chat/${room}`);
         } else {
             alert("Please enter the room ID.");
         }
@@ -38,9 +39,13 @@ function Home() {
         if (name === getCookie("username")) {
             alert("You can't chat with yourself!");
         } else if (getCookie("username")) {
-            nav(`/chat/${name + getCookie("username")}`);
+            nav(`/single/${name}&${getCookie("username")}`, { state: { status: "single" } });
         }
     }
+
+    const filteredUsers = users.filter((user) =>
+        user.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     return (
         <div className="bg-gray-950 h-screen text-white flex justify-center items-center">
@@ -49,8 +54,15 @@ function Home() {
             </div>
             <div className="overflow-y-scroll absolute left-2 h-screen">
                 <h1 className="text-5xl mt-8 text-center">Users</h1>
+                <input
+                    type="text"
+                    placeholder="Search users..."
+                    className="m-6 p-2 h-10 rounded-xl focus:bg-black focus:text-white text-black"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
                 <div className="flex flex-col items-center mt-4 p-3">
-                    {users.map((user, index) => (
+                    {filteredUsers.map((user, index) => (
                         <div
                             key={index}
                             className="flex items-center w-80 border border-white shadow-md shadow-white p-2 mt-4 cursor-pointer transition duration-300 ease-in-out hover:bg-white hover:text-black rounded-xl"
