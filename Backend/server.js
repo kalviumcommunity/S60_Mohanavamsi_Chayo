@@ -53,9 +53,9 @@ io.on("connection", (socket) => {
 
         socket.on("message", async (message, route, user, photo) => {
             try {
-                let message=filter.clean(message)
+                let filteredmessage=filter.clean(message)
                 console.log(message);
-                io.to(route).emit("show", message, user, photo);
+                io.to(route).emit("show", filteredmessage, user, photo);
                 await messanger.findOneAndUpdate({ roomid: route }, {
                     $push: {
                         messages: {
