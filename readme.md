@@ -56,6 +56,11 @@ npm run dev
 
 Once the server is running, you can access the Chayoo app in your browser.
 
+## Deploys
+
+-Frontend: https://chayoo.netlify.app
+-Backend: https://s60-mohanavamsi-chayo.onrender.com
+
 ## Contributing
 
 Contributions are welcome! If you'd like to contribute to Chayoo, please follow these steps:
