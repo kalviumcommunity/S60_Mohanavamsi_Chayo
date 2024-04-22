@@ -64,9 +64,23 @@ io.on("connection", (socket) => {
                 console.log("Error in connecting_room:", error);
             }
         });
-        socket.on("connect_room", (route) => {
+        socket.on("connect_room", async (route) => {
             try {
                 socket.join(route);
+                const check = await messanger.findOne({ roomid: route });
+                if (check) {
+                    console.log("user entering room:", route);
+                } else {
+                    await messanger.create({
+                        roomid: route,
+                        messages: [{
+                            user: user,
+                            message: user + " joined",
+                            time: Date.now()
+                        }]
+                    });
+                    console.log("new room created", route);
+                }
             } catch (error) {
                 console.log("Error in connecting_room:", error);
             }
