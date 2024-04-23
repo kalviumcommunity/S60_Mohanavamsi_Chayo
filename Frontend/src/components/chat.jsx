@@ -1,13 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation, useParams } from "react-router";
+import { useLocation, useParams, useNavigate } from "react-router"; // Import useNavigate hook
 import { io } from "socket.io-client";
 import { getCookie } from "./nav";
 import axios from "axios";
+import { FaArrowLeft } from 'react-icons/fa'; // Import the left arrow icon from FontAwesome
 
 const socket = io("https://s60-mohanavamsi-chayo.onrender.com");
 
 function Chat() {
   const { roomid } = useParams()
+  const navigate = useNavigate(); // Initialize useNavigate hook
   const chatContainerRef = useRef()
   const [messages, setMessages] = useState([])
   const [newMessage, setNewMessage] = useState("")
@@ -36,11 +38,11 @@ function Chat() {
     setNewMessage("")
     
   }}
-function enter(e){
-  if (e==="Enter"){
-    sendMessage()
+  function enter(e){
+    if (e==="Enter"){
+      sendMessage()
+    }
   }
-}
   function scrollToBottom(){
     chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
   }
@@ -75,6 +77,9 @@ function enter(e){
           Send
         </button>
       </div>
+      <button onClick={() => navigate("/")} className="absolute top-4 left-4 rounded-full broder border-white hover:bg-white hover:text-black text-white p-2 flex items-center">
+        <FaArrowLeft className=" size-5" />
+      </button>
     </div>
   );
 }
