@@ -97,6 +97,7 @@ io.on("connection", (socket) => {
                         messages: {
                             user: user,
                             message: message,
+                            photo:photo,
                             time: Date.now()
                         }
                     }
@@ -106,6 +107,7 @@ io.on("connection", (socket) => {
                         messages: {
                             user: user,
                             message: message,
+                            photo:photo,
                             time: Date.now()
                         }
                     }
@@ -124,6 +126,7 @@ io.on("connection", (socket) => {
                         messages: {
                             user: user,
                             message: message,
+                            photo:photo,
                             time: Date.now()
                         }
                     }

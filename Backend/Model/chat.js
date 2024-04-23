@@ -6,6 +6,7 @@ const schema=mongoose.Schema({
             user:String,
             message:String,
             time:Date,
+            photo:String,
             user_id:String
         }
     ]
