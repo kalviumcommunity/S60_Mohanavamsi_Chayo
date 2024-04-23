@@ -28,8 +28,10 @@ function Fire() {
             (res)=>{
               console.log(res)
               if(res.data.message=="login"){
+                console.log(res.data)
                 document.cookie=`username=${res.data.username}`
                 document.cookie=`token=${res.data.token}`
+                document.cookie=`photo=${res.data.photo}`
                 nav("/")
               }
               else{

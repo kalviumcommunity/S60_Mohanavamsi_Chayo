@@ -15,12 +15,10 @@ function Nav() {
     }
     return (
         <div className=" flex justify-evenly w-96 h-16 items-center absolute  text-xl bg-white bg-opacity-10 border-4 border-white text-white rounded-3xl p-4">
-        {/* <img/> */}
         <div><Link to="/">Home</Link></div>
         <div><Link to="/">About</Link></div>
 
         <div className={getCookie("token") ? " hidden" : "w-24 flex"}>
-
             <div>
             <Link to={"/sign"}><button className=" p-2 m-1 hover:bg-green-600 hover:bg-opacity-5">Sign</button></Link>
             </div>

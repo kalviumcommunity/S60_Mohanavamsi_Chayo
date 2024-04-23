@@ -6,6 +6,7 @@ function Username(){
     const data=useLocation().state
     const [user,setuser]=useState("")
     const [value,setvalue]=useState("")
+    const [load,setload]=useState(false)
     const nav=useNavigate()
     function va(e) {
         console.log(e)
@@ -13,6 +14,7 @@ function Username(){
     }
     function login(){
         if (value){
+            setload(true)
         axios.post("https://s60-mohanavamsi-chayo.onrender.com/firebase",{...data,username:user,photo:value}).then(
             (res)=>{
                 if(res.data=="username taken"){
@@ -33,10 +35,12 @@ function Username(){
   
     const photo = async (e) => {
         const reader=new FileReader()
+        setload(true)
         reader.onload =async  function(e) {
             try {
                 const response = await axios.post('https://api.cloudinary.com/v1_1/dus9hgplo/image/upload', {file:e.target.result,upload_preset:"vh0llv8b"});
                 console.log('File uploaded successfully:', response.data);
+                setload(false)
                 document.cookie=`photo=${response.data.secure_url}`
                 setvalue(response.data.secure_url)
               } catch (error) {
@@ -62,7 +66,20 @@ function Username(){
                         placeholder="files"
                     />
        <button className=" w-48 mt-3 h-12 border hover:bg-white hover:text-black border-white text-white" onClick={login}>Submit</button>
+       {load && (<div className="w-full gap-x-2 flex justify-center items-center">
+  <div
+    className="w-5 bg-[#d991c2]  h-5 rounded-full animate-bounce"
+  ></div>
+  <div
+    className="w-5  h-5 bg-[#9869b8] rounded-full animate-bounce"
+  ></div>
+  <div
+    className="w-5 h-5  bg-[#6756cc] rounded-full animate-bounce"
+  ></div>
+</div>
+)}
         </div>
+        
     )
     }
 export default Username;

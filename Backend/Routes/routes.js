@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const messanger = require("../Model/chat");
 const user = require("../Model/user");
+const singlemessanger=require("../Model/singlechat")
 const nodemailer = require("nodemailer");
 const env = require("dotenv");
 const jwt = require("jsonwebtoken");
@@ -71,7 +72,7 @@ app.post("/sign", async (req, res) => {
         email: email,
         password: hash(password),
         token: token,
-        photo: photo,
+        photo: photo
       });
 
       var welcome = {
@@ -83,9 +84,7 @@ app.post("/sign", async (req, res) => {
 
       await transporter.sendMail(welcome);
 
-      res
-        .status(201)
-        .json({ message: "User Created!!", token: token, username: username });
+      res.status(201).json({ message: "User Created!!", token: token, username: username, photo:photo });
     }
   } catch (error) {
     console.log("Error in sign up:", error);
@@ -101,7 +100,7 @@ app.post("/login", async (req, res) => {
     if (!loginvalid.validate(req.body).error) {
       if (check) {
         if (hash(password) === check.password) {
-          res.json({ token: check.token, username: check.name, message: "ok" });
+          res.json({ token: check.token, username: check.name, message: "ok" , photo:check.photo});
         } else {
           res
             .status(200)
@@ -118,7 +117,15 @@ app.post("/login", async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
-
+app.get("/singledata/:roomid",async (req,res)=>{
+  try {
+    const roomdata = await singlemessanger.find({ roomid: req.params.roomid });
+    res.status(200).json(roomdata);
+  } catch (error) {
+    console.error("Error retrieving data:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+})
 app.get("/data/:roomid", async (req, res) => {
   try {
     const roomdata = await messanger.find({ roomid: req.params.roomid });
@@ -133,9 +140,8 @@ app.post("/check", async (req, res) => {
   try {
     const { email } = req.body;
     const check = await user.findOne({ email: email });
-
     if (check) {
-      res.send({ username: check.name, token: check.token, message: "login" });
+      res.send({ username: check.name, token: check.token, message: "login", photo:check.photo });
     } else {
       res.send({ message: "sign" });
     }
@@ -229,7 +235,16 @@ app.post("/otpvalid", async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
-
+app.get("/rooms", async (req,res)=>{
+  try{
+    const rooms=await messanger.find({})
+    res.status(200).json(rooms)
+  }
+  catch(error){
+    console.error("Error retrieving users:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+})
 app.delete("/delete/:id",async(req,res)=>{
   const data=await messanger.findOne({roomid:req.body.roomid})
   console.log(data)
