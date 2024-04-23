@@ -7,6 +7,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketio(server, { cors: { origin: "*" } });
 const messanger = require("./Model/chat");
+const singlemessanger=require("./Model/singlechat")
 const route = require("./Routes/routes");
 const { connect } = require("./db/connect");
 const PORT = process.env.PORT || 8000;
@@ -67,15 +68,15 @@ io.on("connection", (socket) => {
         socket.on("connect_room", async (route) => {
             try {
                 socket.join(route);
-                const check = await messanger.findOne({ roomid: route });
+                const check = await singlemessanger.findOne({ roomid: route });
                 if (check) {
                     console.log("user entering room:", route);
                 } else {
-                    await messanger.create({
+                    await singlemessanger.create({
                         roomid: route,
                         messages: [{
-                            user: user,
-                            message: user + " joined",
+                            user: "chayo",
+                            message:"welcome to" + route,
                             time: Date.now()
                         }]
                     });
@@ -91,7 +92,7 @@ io.on("connection", (socket) => {
                 console.log(filteredmessage)
                 io.to(route1).emit("shows", filteredmessage, user, photo);
                 io.to(route2).emit("shows", filteredmessage, user, photo);
-                await messanger.findOneAndUpdate({ roomid: route1 }, {
+                await singlemessanger.findOneAndUpdate({ roomid: route1 }, {
                     $push: {
                         messages: {
                             user: user,
@@ -100,7 +101,7 @@ io.on("connection", (socket) => {
                         }
                     }
                 });
-                await messanger.findOneAndUpdate({ roomid: route2 }, {
+                await singlemessanger.findOneAndUpdate({ roomid: route2 }, {
                     $push: {
                         messages: {
                             user: user,

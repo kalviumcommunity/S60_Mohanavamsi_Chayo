@@ -51,6 +51,7 @@ function Sigin() {
                         case "User Created!!":
                             document.cookie = `username=${response.data.username}`;
                             document.cookie = `token=${response.data.token}`;
+                            document.cookie=`photo=${response.data.photo}`
                             nav("/");
                     }
                 })

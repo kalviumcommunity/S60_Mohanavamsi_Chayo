@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import Nav, { getCookie } from "./nav";
@@ -10,7 +10,6 @@ function Home() {
     const [searchTerm, setSearchTerm] = useState("");
     const socket = io("https://s60-mohanavamsi-chayo.onrender.com");
     const nav = useNavigate();
-
     useEffect(() => {
         axios.get("https://s60-mohanavamsi-chayo.onrender.com/users")
             .then((res) => {
@@ -19,6 +18,7 @@ function Home() {
             .catch((error) => {
                 console.error("Error fetching users:", error);
             });
+           
     }, []);
 
     function routeCreator() {
@@ -43,16 +43,18 @@ function Home() {
         }
     }
 
+   
     const filteredUsers = users.filter((user) =>
         user.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+  
     return (
         <div className="bg-gray-950 h-screen text-white flex justify-center items-center">
             <div className="flex justify-center absolute top-4">
                 <Nav />
             </div>
-            <div className="overflow-y-scroll absolute left-2 h-screen">
+            <div className="overflow-y-scroll absolute left-2 flex flex-col h-screen">
                 <h1 className="text-5xl mt-8 text-center">Users</h1>
                 <input
                     type="text"
@@ -75,7 +77,6 @@ function Home() {
                             />
                             <div className="flex flex-col">
                                 <h1 className="text-3xl">{user.name}</h1>
-                                <p className="text-sm text-gray-300">{user.bio}</p>
                             </div>
                         </div>
                     ))}
@@ -96,8 +97,10 @@ function Home() {
                 >
                     Chat!
                 </button>
+            </div>          
+               
             </div>
-        </div>
+        
     );
 }
 

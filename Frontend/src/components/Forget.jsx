@@ -3,8 +3,9 @@ import { useState } from "react"
 import { useNavigate } from "react-router"
 
 function Forget(){
-  const [state,setstate]=useState({})
+    const [state,setstate]=useState({})
     const [otpd,setotp]=useState(false)
+    const [load,setload]=useState(false)
     const nav=useNavigate()
     function change(e) {
         const {name,value}=e
@@ -12,29 +13,40 @@ function Forget(){
     }
     function otp() {
       console.log(state)
+      if(Object.keys(state).length != 0){
+      setload(true)
       axios.post("https://s60-mohanavamsi-chayo.onrender.com/otp",state).then(
           (res)=>{
               sessionStorage.setItem("otp",res.data)
               setotp(true)
+              setload(false)
           }
-      )
+      )}
+      else{
+        alert("Please provide email")
+      }
   }
   function reset() {
+    if(Object.keys(state).length==2){
+    setload(true)
       axios.post("https://s60-mohanavamsi-chayo.onrender.com/otpvalid",{...state,otp:sessionStorage.getItem("otp"),userotp:state.otp}).then(
           (res)=>{
               console.log(res.data)
-              if(res.data=="done"){
+              if(res.data=="Done"){
                 nav("/")
             }
-            else if(res.data == "notvalid"){
+            else if(res.data == "Invalid OTP"){
                 alert("wrong otp")
             }
-            else if (res.data=="user not in database"){
+            else if (res.data=="User not in database"){
                 alert("you are not in database")
             }
           }
       )
-      
+    }
+    else{
+        alert("Please fill the data")
+    }
   }
     return(
         <div className=" bg-gray-950 h-screen flex flex-col justify-center items-center">
@@ -45,7 +57,7 @@ function Forget(){
        name="email"
        onChange={(e)=>{change(e.target)}}
        placeholder="Email"/>
-       <p className={ !otpd ?`text-white ml-2` :" hidden"} onClick={otp}>send the otp</p>
+       {! load && (<p className={ !otpd ?`text-white ml-2` :" hidden"} onClick={otp}>send the otp</p>)}
         <input className={otpd ? `bg-slate-900 text-white w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2 focus:ring-offset-gray-800` : "hidden"}
        name="otp"
        onChange={(e)=>{change(e.target)}}
@@ -54,7 +66,18 @@ function Forget(){
        name="password"
        onChange={(e)=>{change(e.target)}}
        placeholder="Password"/>
-       <button 
+       {load && (<div className="w-full gap-x-2 flex justify-center items-center">
+  <div
+    className="w-5 bg-[#d991c2]  h-5 rounded-full animate-bounce"
+  ></div>
+  <div
+    className="w-5  h-5 bg-[#9869b8] rounded-full animate-bounce"
+  ></div>
+  <div
+    className="w-5 h-5  bg-[#6756cc] rounded-full animate-bounce"
+  ></div>
+</div>)}
+     <button 
        onClick={reset}
        className={ otpd ? 
       `cursor-pointer transition-all 

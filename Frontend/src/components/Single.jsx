@@ -25,7 +25,7 @@ function Single(){
         socket.emit("connect_room", roomid.split("&")[0]+roomid.split("&")[1], roomid.split("&")[1]+roomid.split("&")[0])
       }, [])
       useEffect(()=>{
-        axios.get(`https://s60-mohanavamsi-chayo.onrender.com/data/${roomid.split("&").join("")}`).then(
+        axios.get(`https://s60-mohanavamsi-chayo.onrender.com/singledata/${roomid.split("&").join("")}`).then(
           (res)=>{
             console.log(res.data[0])
             setMessages(res.data[0].messages)
@@ -35,11 +35,6 @@ function Single(){
       useEffect(() => {
         scrollToBottom()
       }, [messages])
-    
-    //   socket.on("shows", (message, user, photo) => {
-    //     console.log(message)
-    //     setMessages(prevMessages => [...prevMessages, { user, message, photo }]);
-    // });
      function sendMessage() {
           let room=roomid.split("&")
           let route1=room[0]+room[1]
