@@ -8,11 +8,8 @@ function Home() {
     const [room, setRoom] = useState("");
     const [users, setUsers] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
-    const [rooms,setrooms]=useState([])
-    const [searchRoom,setsearchRoom]=useState("")
     const socket = io("https://s60-mohanavamsi-chayo.onrender.com");
     const nav = useNavigate();
-
     useEffect(() => {
         axios.get("https://s60-mohanavamsi-chayo.onrender.com/users")
             .then((res) => {
@@ -21,11 +18,7 @@ function Home() {
             .catch((error) => {
                 console.error("Error fetching users:", error);
             });
-            axios.get("https://s60-mohanavamsi-chayo.onrender.com/rooms")
-            .then((res)=>{
-                console.log(res.data)
-                setrooms(res.data)
-            })
+           
     }, []);
 
     function routeCreator() {
@@ -50,18 +43,12 @@ function Home() {
         }
     }
 
-    function handleRoomClick(room){
-        nav(`chat/${room}`)
-    }
-
+   
     const filteredUsers = users.filter((user) =>
         user.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const filteredRooms=rooms.filter((room)=>
-        room.roomid.toLowerCase().includes(searchRoom.toLowerCase())
-    )
-
+  
     return (
         <div className="bg-gray-950 h-screen text-white flex justify-center items-center">
             <div className="flex justify-center absolute top-4">
@@ -111,31 +98,9 @@ function Home() {
                     Chat!
                 </button>
             </div>          
-                <div className="overflow-y-scroll absolute right-2 flex flex-col h-screen">
-                <h1 className="text-5xl mt-8 text-center">Rooms</h1>
-                <input
-                    type="text"
-                    placeholder="Search rooms..."
-                    className="m-6 p-2 h-10 rounded-xl focus:bg-black focus:text-white text-black"
-                    value={searchRoom}
-                    onChange={(e) => setsearchRoom(e.target.value)}
-                />
-                <div className="flex flex-col items-center mt-4 p-3">
-                    {filteredRooms.map((room, index) => (
-                        <div
-                            key={index}
-                            className="flex items-center w-80 border border-white shadow-md shadow-white p-2 mt-4 cursor-pointer transition duration-300 ease-in-out hover:bg-white hover:text-black rounded-xl"
-                            onClick={() => handleRoomClick(room.roomid)}
-                        > 
-                            <div className="flex flex-col">
-                                <h1 className="text-3xl">{room.roomid}</h1>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+               
             </div>
         
-            </div>
     );
 }
 
