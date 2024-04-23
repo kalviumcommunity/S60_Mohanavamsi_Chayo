@@ -22,6 +22,7 @@ function Single(){
         };
       }, []);
       useEffect(() => {
+        
         socket.emit("connect_room", roomid.split("&")[0]+roomid.split("&")[1], roomid.split("&")[1]+roomid.split("&")[0])
       }, [])
       useEffect(()=>{
