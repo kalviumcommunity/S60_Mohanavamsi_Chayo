@@ -58,7 +58,7 @@ function Chat() {
           <div key={index} className={`border border-gray-800 m-2 bg-gray-800 ${isCurrentUser(message.user) ? 'ml-2' : 'ml-96'} text-white w-56 relative p-3 rounded-xl shadow-xl`}
           >
             <div className="flex items-center">
-              <img src={message.photo} alt="User" className="h-6 w-6 rounded-full mr-2" />
+              <img src={message.photo} alt="User" className="h-8 w-8 rounded-full mr-2" />
               <h1 className="font-semibold">{message.user}</h1>
             </div>
             <p>{message.message}</p>
