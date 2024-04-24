@@ -66,7 +66,7 @@ function Username(){
                         placeholder="files"
                     />
        <button className=" w-48 mt-3 h-12 border hover:bg-white hover:text-black border-white text-white" onClick={login}>Submit</button>
-       {load && (<div className="w-full gap-x-2 flex justify-center items-center">
+       {load && (<div className="w-full gap-x-2 mt-4 flex justify-center items-center">
   <div
     className="w-5 bg-[#d991c2]  h-5 rounded-full animate-bounce"
   ></div>
