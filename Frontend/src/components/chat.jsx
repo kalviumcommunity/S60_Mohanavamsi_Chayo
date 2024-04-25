@@ -27,7 +27,6 @@ function Chat() {
   useEffect(() => {
     scrollToBottom()
   }, [messages])
-
   socket.on("show", (message, user, photo) => {
     setMessages([...messages, { user: user, message: message, photo: photo }])
   });
@@ -56,6 +55,7 @@ function Chat() {
       <div className="overflow-y-scroll h-5/6 w-6/12 relative bottom-4 bg-black rounded-2xl pt-2 pl-2" ref={chatContainerRef}>
         {messages.map((message, index) => (
           <div key={index} className={`border border-gray-800 m-2 bg-gray-800 ${isCurrentUser(message.user) ? 'ml-2' : 'ml-96'} text-white w-56 relative p-3 rounded-xl shadow-xl`}
+           onDoubleClick={()=>{delete_message(message._id)}}
           >
             <div className="flex items-center">
               <img src={message.photo} alt="User" className="h-8 w-8 rounded-full mr-2" />
