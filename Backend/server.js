@@ -96,7 +96,7 @@ io.on("connection", (socket) => {
                     $push: {
                         messages: {
                             user: user,
-                            message: message,
+                            message: filteredmessage,
                             photo:photo,
                             time: Date.now()
                         }
