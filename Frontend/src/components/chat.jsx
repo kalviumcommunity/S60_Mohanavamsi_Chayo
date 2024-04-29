@@ -100,7 +100,7 @@ function Chat() {
                 <img src={message.photo} alt="User" className="h-8 w-8 rounded-full mr-2" />
                 <h1 className="font-semibold">{message.user}</h1>
               </div>
-              <div className="relative">
+              <div className={isCurrentUser(message.user) ?'relative' : "hidden"}>
                 <FaEllipsisV onClick={() => toggleDropdown(message._id)} className="cursor-pointer" />
                 {showDropdown === message._id && (
                   <div className="absolute left-2 border shadow-inner shadow-black border-white mt-2 w-48  bg-slate-900 rounded-lg  z-10">
