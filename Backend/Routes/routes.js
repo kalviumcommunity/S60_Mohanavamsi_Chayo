@@ -245,25 +245,30 @@ app.get("/rooms", async (req,res)=>{
     res.status(500).json({ message: "Internal Server Error" });
   }
 })
+
 app.delete("/delete/:id/:roomid",async(req,res)=>{
   let data=await messanger.findOne({roomid:req.params.roomid})
   let bata=data.messages.filter((i)=>{return i._id != req.params.id})
   data.messages=bata
 bata=await messanger.findOneAndUpdate({roomid:req.params.roomid},data)
-  res.json(bata)
+console.log(bata.messages)
+res.json(bata.messages)
 })
+
 app.put("/update/:id/:roomid",async(req,res)=>{
   const data=await messanger.findOne({roomid:req.params.roomid})
-  const bata=data.messages.map((i)=>{
+  let bata=data.messages.map((i)=>{
       if (i._id==req.params.id){
           i.message=req.body.message
   }
   return i
 })
 data.messages=bata
-await messanger.findOneAndUpdate({roomid:req.params.roomid},data)
-  res.json(data)
+ bata=await messanger.findOneAndUpdate({roomid:req.params.roomid},data)
+ console.log(bata.messages)
+  res.json(bata.messages)
 })
+
 app.get("/users", async (req, res) => {
   try {
     const users = await user.find({});

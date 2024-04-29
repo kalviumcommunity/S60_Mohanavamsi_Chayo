@@ -54,9 +54,9 @@ function Chat() {
   }
 
   function deleteMessage(messageId) {
-    axios.delete(`http://localhost:8000/delete/${messageId}/${roomid}`)
+    axios.delete(`https://s60-mohanavamsi-chayo.onrender.com/delete/${messageId}/${roomid}`)
       .then(() => {
-        const updatedMessages = messages.filter(message => message._id !== messageId);
+        const updatedMessages = messages.filter((message)=> { return message._id !== messageId});
         setMessages(updatedMessages);
         setShowDropdown(null)
 
@@ -67,9 +67,9 @@ function Chat() {
   }
   function updateMessage(messageId) {
     const updatedMessageContent=prompt("enter to update message")
-    axios.put(`http://localhost:8000/update/${messageId}/${roomid}`, { message: updatedMessageContent })
+    axios.put(`https://s60-mohanavamsi-chayo.onrender.com/update/${messageId}/${roomid}`, { message: updatedMessageContent })
       .then(() => {
-        const updatedMessages = messages.map(message => {
+        const updatedMessages = messages.map((message) => {
           if (message._id === messageId) {
             return { ...message, message: updatedMessageContent };
           }
