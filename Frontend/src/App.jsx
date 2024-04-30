@@ -7,6 +7,7 @@ import Forget from "./components/Forget"
 import Fire from "./components/firebase"
 import Username from "./components/usename"
 import Single from "./components/Single"
+import Video from "./components/video"
 function App() {
   return (
     <>
@@ -19,6 +20,7 @@ function App() {
       <Route path="/firebase" element={<Fire/>}/>
       <Route path="/username" element={<Username/>}/>
       <Route path="/single/:roomid" element={<Single/>}/>
+      <Route path="/video" element={<Video/>}/>
     </Routes>
     </>
   )
