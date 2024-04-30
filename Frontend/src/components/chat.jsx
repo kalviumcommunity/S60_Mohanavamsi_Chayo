@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation, useParams, useNavigate } from "react-router"; 
+import { useParams, useNavigate } from "react-router"; 
 import { io } from "socket.io-client";
 import { getCookie } from "./nav";
 import axios from "axios";
