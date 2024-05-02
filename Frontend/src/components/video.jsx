@@ -1,64 +1,96 @@
-import { useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from 'react';
 import { getCookie } from "./nav";
-import { io } from "socket.io-client";
-function Video(){
-    const [stream, setStream ] = useState()
-    const [audio,setaudio]=useState(false)
-    const [video,setvideo]=useState(false)
-    const localvideo=useRef()
-    const remotevideo=useRef()
-    const socket = io("http://localhost:8000");
-    useEffect(()=>{
-        navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((strem) => {
-			localvideo.current.srcObject = strem
-            console.log(strem.getTracks())
-            socket.emit("remote",strem)
-            setStream(strem)
-		})
-        socket.on("remotevideo",(st)=>{
-            remotevideo.current.srcObjec =st
-        })
-    },[])
-    function audioset(){
-        if (audio){
-            navigator.mediaDevices.getUserMedia({video:true,audio:false}).then((strem)=>{
-                localvideo.current.srcObject = strem
-        })
-        setaudio(false)
-        }
-        else{
-            navigator.mediaDevices.getUserMedia({video:true,audio:true}).then((strem)=>{
-			localvideo.current.srcObject = strem
+import Peer from 'peerjs';
+import { useParams } from 'react-router';
+
+function Video() {
+    const [stream, setStream] = useState();
+    const [peerId, setPeerId] = useState('');
+    const [remotePeerIdValue, setRemotePeerIdValue] = useState('');
+    const peerInstance = useRef(null);
+    const localVideoRef = useRef();
+    const remoteVideoRef = useRef();
+    const [audio, setAudio] = useState(true);
+    const [video, setVideo] = useState(true);
+    const {roomid}=useParams()
+    useEffect(() => {
+        let localStream;
+        navigator.mediaDevices.getUserMedia({ video: video, audio: audio })
+            .then((stream) => {
+                localVideoRef.current.srcObject = stream;
+                localVideoRef.current.muted = true;
+                setStream(stream);
+                localStream = stream;
+                const peer = new Peer();
+                peer.on('open', (id) => {
+                    console.log(id);
+                    setPeerId(id);
+                });
+                peer.on('call', (call) => {
+                    call.answer(stream);
+                    call.on('stream', (remote) => {
+                        remoteVideoRef.current.srcObject = remote;
+                    });
+                });
+                peerInstance.current = peer;
             })
-            setaudio(true)
-        }
+            .catch((error) => {
+                console.error('Failed to get local stream', error);
+            });
+    }, []);
+
+    function call(remotePeerId) {
+        const call = peerInstance.current.call(remotePeerId, stream);
+        call.answer(stream);
+        call.on("stream", (remote) => {
+            remoteVideoRef.current.srcObject = remote;
+        });
     }
-    function videoset(){
-        if (video){
-            navigator.mediaDevices.getUserMedia({video:false,audio:true}).then((strem)=>{
-            localvideo.current.srcObject = strem
-        })
-        setvideo(false)
-        }
-        else{
-            navigator.mediaDevices.getUserMedia({video:true,audio:true}).then((strem)=>{
-			localvideo.current.srcObject = strem
-            })
-            setvideo(true)
+
+    function toggleAudio() {
+        setAudio(!audio);
+        if (stream) {
+            stream.getAudioTracks()[0].enabled = !audio;
         }
     }
 
-    return(
+    function toggleVideo() {
+        setVideo(!video);
+        if (stream) {
+            stream.getVideoTracks()[0].enabled = !video;
+        }
+    }
+
+    return (
         <div className="h-screen bg-gray-950 p-2 flex flex-col justify-center items-center">
-        <div className=" flex">
-            <div className="w-6/12 relative">
-            <video playsInline autoPlay ref={localvideo} className=" rounded-lg w-full"/>
-            <h1 className=" text-white absolute bottom-1 left-2 font-semibold">{getCookie("username")}</h1>
+            <input
+                onChange={(e) => { setRemotePeerIdValue(e.target.value) }}
+                value={remotePeerIdValue}
+                placeholder="Enter Remote Peer ID"
+                className="text-white p-1 mb-2"
+            />
+            <button onClick={() => { call(remotePeerIdValue) }} className='text-white mb-2'>Call</button>
+            <div className="flex flex-wrap w-full">
+                <div className="w-96 relative">
+                    <video playsInline autoPlay ref={localVideoRef} className="rounded-lg w-full" />
+                    <h1 className="text-white absolute bottom-1 left-2 font-semibold">{getCookie("username")}</h1>
+                </div>
+                <div className="w-96 relative">
+                    <video playsInline autoPlay ref={remoteVideoRef} className="rounded-lg w-full" />
+                    <h1 className="text-white absolute bottom-1 left-2 font-semibold">{getCookie("username")}</h1>
+                </div>
+            </div>
+            <div className="flex mt-4">
+                <button className={`text-white mr-2 px-4 py-2 rounded ${audio ? 'bg-blue-500' : 'bg-gray-500'} hover:bg-blue-600`} onClick={toggleAudio}>
+                    {audio ? "Mute Audio" : "Unmute Audio"}
+                </button>
+                <button className={`text-white mr-2 px-4 py-2 rounded ${video ? 'bg-blue-500' : 'bg-gray-500'} hover:bg-blue-600`} onClick={toggleVideo}>
+                    {video ? "Stop Video" : "Start Video"}
+                </button>
+             
             </div>
         </div>
-            <button className=" text-white" onClick={audioset}>Audio</button>
-            <button className=" text-white" onClick={videoset}>Video</button>
-        </div>
-    )
+    );
 }
-export default Video
+
+export default Video;
