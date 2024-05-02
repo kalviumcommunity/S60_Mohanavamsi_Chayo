@@ -135,10 +135,10 @@ io.on("connection", (socket) => {
                 console.log("Error in message:", error);
             }
         });
-        socket.on("remote",(st)=>{
-            console.log(st)
-            io.emit("remotevideo",st)
-        })
+
+        // ------------ video -----------
+
+        
     } catch (error) {
         console.log("Error in connection:", error);
     }
