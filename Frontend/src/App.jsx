@@ -20,7 +20,7 @@ function App() {
       <Route path="/firebase" element={<Fire/>}/>
       <Route path="/username" element={<Username/>}/>
       <Route path="/single/:roomid" element={<Single/>}/>
-      <Route path="/video/:roomid" element={<Video/>}/>
+      <Route path="/video" element={<Video/>}/>
     </Routes>
     </>
   )

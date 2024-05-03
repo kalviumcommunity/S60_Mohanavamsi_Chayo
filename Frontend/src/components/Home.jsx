@@ -22,11 +22,11 @@ function Home() {
     }, []);
 
     function routeCreator() {
-        if (room.trim() !== "") {
+        if (room.trim() !== "" & getCookie("username") ) {
             socket.emit("route", room, getCookie("username") || "anonymous");
             nav(`/chat/${room}`);
         } else {
-            alert("Please enter the room ID.");
+            alert("Please enter the room ID. If not logedin please login");
         }
     }
 

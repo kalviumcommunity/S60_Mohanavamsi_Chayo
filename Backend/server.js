@@ -134,14 +134,48 @@ io.on("connection", (socket) => {
             } catch (error) {
                 console.log("Error in message:", error);
             }
-        });
+        });  
 
-        // ------------ video -----------
-
-        
     } catch (error) {
         console.log("Error in connection:", error);
     }
+    app.delete("/delete/:id/:roomid", async (req, res) => {
+        const roomId = req.params.roomid;
+        const messageId = req.params.id;
+        try {
+           const data= await messanger.findOneAndUpdate(
+                { roomid: roomId },
+                { $pull: { messages: { _id: messageId } } }
+            );
+    
+            socket.to(roomId).emit("delete", data.messages);
+            res.send("done");
+        } catch (error) {
+            console.error("Error deleting message:", error);
+            res.status(500).send("An error occurred while deleting the message.");
+        }
+    });
+    
+      
+    app.put("/update/:id/:roomid", async (req, res) => {
+        const roomId = req.params.roomid;
+        const messageId = req.params.id;
+        const newMessage = req.body.message;
+    
+        try {
+           const data= await messanger.findOneAndUpdate(
+                { roomid: roomId, "messages._id": messageId },
+                { $set: { "messages.$.message": newMessage } }
+            );
+    
+            io.to(roomId).emit("update",data.messages);
+            res.json("done!");
+        } catch (error) {
+            console.error("Error updating message:", error);
+            res.status(500).send("An error occurred while updating the message.");
+        }
+    });
+    
 });
 
 server.listen(PORT, () => {

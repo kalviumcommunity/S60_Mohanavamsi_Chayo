@@ -2,11 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router";
 import { io } from "socket.io-client";
 import { getCookie } from "./nav";
-import { FaVideo } from 'react-icons/fa';
 import axios from "axios";
 
 function Single(){ 
-    
     const socket = io("https://s60-mohanavamsi-chayo.onrender.com");
      const { roomid } = useParams()
     const chatContainerRef = useRef()
@@ -85,9 +83,7 @@ function Single(){
     <button onClick={sendMessage} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg ml-4">
       Send
     </button>
-    <button onClick={()=>{nav(`/video/${roomid}`)}} className="bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded-lg ml-4">
-      <FaVideo className="w-6 h-6" />
-    </button>
+    
   </div>
 </div>
 
