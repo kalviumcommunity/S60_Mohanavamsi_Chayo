@@ -17,7 +17,9 @@ function Nav() {
         <div className=" flex justify-evenly w-96 h-16 items-center absolute  text-xl bg-white bg-opacity-10 border-4 border-white text-white rounded-3xl p-4">
         <div><Link to="/">Home</Link></div>
         <div><Link to="/">About</Link></div>
+        <div className={!getCookie("token") && "hidden"}>
         <div><Link to="/video">Video</Link></div>
+        </div>
 
         <div className={getCookie("token") ? " hidden" : "w-24 flex"}>
             <div>

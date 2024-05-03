@@ -5,7 +5,6 @@ import { getCookie } from "./nav";
 import axios from "axios";
 
 function Single(){ 
-    
     const socket = io("https://s60-mohanavamsi-chayo.onrender.com");
      const { roomid } = useParams()
     const chatContainerRef = useRef()
@@ -59,6 +58,8 @@ function Single(){
       };
 
       return (
+
+// Inside your component
 <div className="h-screen bg-gray-950 p-2 flex flex-col justify-center items-center">
   <div className="overflow-y-scroll h-5/6 w-6/12 relative bottom-4 bg-black rounded-2xl pt-2 pl-2" ref={chatContainerRef}>
     {messages.map((message, index) => (
@@ -82,6 +83,7 @@ function Single(){
     <button onClick={sendMessage} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg ml-4">
       Send
     </button>
+    
   </div>
 </div>
 

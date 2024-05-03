@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { getCookie } from "./nav";
 import Peer from 'peerjs';
-import { FaArrowLeft } from 'react-icons/fa';
 
 import { useParams, useNavigate } from 'react-router';
 
@@ -14,9 +13,8 @@ function Video() {
     const remoteVideoRef = useRef();
     const [audio, setAudio] = useState(true);
     const [video, setVideo] = useState(true);
-    const { roomid } = useParams();
     const nav = useNavigate();
-
+    const name=getCookie("username")
     useEffect(() => {
         let localStream;
         navigator.mediaDevices.getUserMedia({ video: video, audio: audio })
@@ -25,7 +23,7 @@ function Video() {
                 localVideoRef.current.muted = true;
                 setStream(stream);
                 localStream = stream;
-                const peer = new Peer();
+                const peer = new Peer(name);
                 peer.on('open', (id) => {
                     console.log(id);
                     setPeerId(id);
@@ -81,14 +79,14 @@ function Video() {
                 console.error('Unable to copy text: ', error);
             });
     }
-
+    
     return (
         <div className="h-screen bg-gray-950 p-2 flex flex-col justify-center items-center">
             <div className="flex mb-2 items-center">
                 <input
                     onChange={(e) => { setRemotePeerIdValue(e.target.value) }}
                     value={remotePeerIdValue}
-                    placeholder="Enter Remote Peer ID"
+                    placeholder="Enter Username of your friend"
                     className="text-black p-1 mr-2"
                 />
                 <button onClick={() => { call(remotePeerIdValue) }} className='text-white bg-blue-600 px-4 py-1 rounded hover:bg-blue-700'>Call</button>
@@ -106,8 +104,9 @@ function Video() {
                     <video playsInline autoPlay ref={localVideoRef} className="rounded-lg w-full" />
                     <h1 className="text-white absolute bottom-1 left-2 font-semibold">{getCookie("username")}</h1>
                 </div>
-                <div className="w-96 relative">
+                <div className="w-96 m-3 relative">
                     <video playsInline autoPlay ref={remoteVideoRef} className="rounded-lg w-full" />
+                    <h1 className="text-white absolute bottom-1 left-2 font-semibold">{remotePeerIdValue}</h1>
                 </div>
             </div>
             <div className="flex mt-4">
@@ -121,6 +120,7 @@ function Video() {
                     End Call
                 </button>
             </div>
+
         </div>
     );
 }
