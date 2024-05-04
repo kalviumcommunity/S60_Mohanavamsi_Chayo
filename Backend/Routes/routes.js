@@ -16,11 +16,6 @@ const cloudinary = require("cloudinary").v2;
 const cores = require("cors");
 app.use(cores());
 app.use(express.json())
-cloudinary.config({
-  cloud_name: "dus9hgplo",
-  api_key: "394642134156157",
-  api_secret: "vTLVdGZzebmXL6ASL3lxJRpTrgQ",
-});
 
 function hash(password) {
   const hash = crypto.createHash("sha256");
@@ -53,6 +48,7 @@ const transporter = nodemailer.createTransport({
     pass: process.env.PASS,
   },
 });
+
 app.post("/sign", async (req, res) => {
   try {
     const { email, password, username, photo } = req.body;
@@ -180,7 +176,7 @@ app.post("/firebase", async (req, res) => {
       res.json({
         username: username,
         token: jwt.sign(req.body, process.env.JWT),
-        message: "sign",
+        message: "User created",
       });
     }
   } catch (error) {
