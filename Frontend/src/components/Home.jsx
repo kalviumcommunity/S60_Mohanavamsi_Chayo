@@ -22,7 +22,7 @@ function Home() {
     }, []);
 
     function routeCreator() {
-        if (room.trim() !== "" & getCookie("username") ) {
+        if (room.trim() != "" && getCookie("username") ) {
             socket.emit("route", room, getCookie("username") || "anonymous");
             nav(`/chat/${room}`);
         } else {

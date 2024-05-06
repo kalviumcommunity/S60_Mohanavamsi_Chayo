@@ -12,7 +12,6 @@ const fs = require("fs");
 const path = require("path");
 const otpGenerator = require("otp-generator");
 const crypto = require("crypto");
-const cloudinary = require("cloudinary").v2;
 const cores = require("cors");
 app.use(cores());
 app.use(express.json())
@@ -208,7 +207,7 @@ app.post("/otp", async (req, res) => {
   }
 });
 
-app.post("/otpvalid", async (req, res) => {
+app.put("/otpvalid", async (req, res) => {
   try {
     const otp = req.body.userotp;
     const hashedotp = req.body.otp;
