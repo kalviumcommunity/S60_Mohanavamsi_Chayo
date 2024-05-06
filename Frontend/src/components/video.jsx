@@ -16,13 +16,11 @@ function Video() {
     const nav = useNavigate();
     const name=getCookie("username")
     useEffect(() => {
-        let localStream;
         navigator.mediaDevices.getUserMedia({ video: video, audio: audio })
             .then((stream) => {
                 localVideoRef.current.srcObject = stream;
                 localVideoRef.current.muted = true;
                 setStream(stream);
-                localStream = stream;
                 const peer = new Peer(name);
                 peer.on('open', (id) => {
                     console.log(id);
