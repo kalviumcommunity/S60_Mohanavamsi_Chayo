@@ -7,6 +7,7 @@ Chayoo is a real-time chat application that allows users to engage in 1:1 intera
 - **1:1 Interaction:** Users can have private conversations with individuals.
 - **Room Creation:** Users can create chat rooms for group discussions on specific topics.
 - **Real-time Messaging:** Messages are delivered, providing a real-time chatting experience.
+- **Video calling:** Videos are delivered, providing a real-time chatting experience. (with help of peerjs)
 - **User Authentication:** Secure user authentication ensures only authorized users can access the app.
 
 ## Tech Stack

@@ -34,7 +34,7 @@ function Fire() {
                 document.cookie=`photo=${res.data.photo}`
                 nav("/")
               }
-              else{
+              else if (res.data.message=="sign"){
                 nav("/username",{state:{email:user.email,password:user.uid,photo:user.photoURL}})
               }
                 

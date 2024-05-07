@@ -3,8 +3,8 @@ import axios from "axios"
 import { Link, useNavigate } from "react-router-dom"
 import Fire from "./firebase"
 function Sigin() {
-    const [data,setvalue]=useState({})
-    const [error,seterror]=useState({})
+  const [data, setvalue] = useState({email: '', password: ''});
+  const [error,seterror]=useState({})
     const[load,setload]=useState(false)
     const nav=useNavigate()
     function va(e) {

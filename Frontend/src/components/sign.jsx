@@ -5,12 +5,10 @@ import { Link, useNavigate } from "react-router-dom";
 import Fire from "./firebase";
 
 function Sigin() {
-    const [data, setvalue] = useState();
+    const [data, setvalue] = useState({ username: '', email: '', password: '', photo: '' });
     const [error, seterror] = useState({});
     const [load, setload] = useState(false);
     const [valid, setvalid] = useState(false);
-    const [file,setfile]=useState()
-    const [link,setlink]=useState("")
     const nav = useNavigate();
 
     function va(e) {
@@ -21,8 +19,8 @@ function Sigin() {
     }
     function submit() {
         console.log(data);
-        setload(true);
         if (Object.keys(data).length === 4 && valid) {
+        setload(true);
             axios.post("https://s60-mohanavamsi-chayo.onrender.com/sign", data)
                 .then((res) => {
                     const response = res;
@@ -69,10 +67,6 @@ function Sigin() {
     }
     const photo = async (e) => {
         setload(true)
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', 'vamsi');
-        console.log(formData)
         const reader=new FileReader()
         reader.onload =async  function(e) {
             try {

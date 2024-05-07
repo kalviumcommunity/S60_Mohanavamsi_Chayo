@@ -57,17 +57,20 @@ function Chat() {
 
   return (
     <div className="h-screen bg-gray-950 p-2 flex flex-col justify-center items-center">
-      <div className="overflow-y-scroll h-5/6 w-6/12 relative bottom-4 bg-black rounded-2xl pt-2 pl-2" ref={chatContainerRef}>
+      <div className={window.outerWidth>=600 ?`overflow-y-scroll h-5/6 w-6/12 relative bottom-4 bg-black rounded-2xl pt-2 pl-2` :`overflow-y-scroll h-5/6 w-11/12 relative bottom-4 bg-black rounded-2xl pt-2 pl-2`} ref={chatContainerRef}>
         {messages.map((message, index) => (
-          <div key={index} className={`border border-gray-800 m-2 bg-gray-800 ${isCurrentUser(message.user) ? 'ml-2' : 'ml-96'} text-white w-56 relative p-3 rounded-xl shadow-xl`}>
+          <div key={index} className={`flex w-full ${isCurrentUser(message.user) ? ' justify-start' : ' justify-end'} `}>
+          <div  className={window.outerWidth>=600 ?`border border-gray-800 m-2 bg-gray-800  text-white w-60 relative p-3 rounded-xl shadow-xl`:`border border-gray-800 m-2 bg-gray-800  text-white relative p-3 rounded-xl shadow-xl w-6/12`}>
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <img src={message.photo} alt="User" className="h-8 w-8 rounded-full mr-2" />
-                <h1 className="font-semibold">{message.user}</h1>
+                <h1 className={window.outerWidth>=600?"font-semibold text-wrap text-l break-words line-clamp-2":"font-semibold text-sm text-wrap break-words line-clamp-2"}>
+                {message.user}</h1>
               </div>
              
             </div>
             <p>{message.message}</p>
+          </div>
           </div>
         ))}
       </div>

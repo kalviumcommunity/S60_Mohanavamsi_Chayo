@@ -13,14 +13,16 @@ function Username(){
         setuser(e)
     }
     function login(){
-        if (value){
+        if (value && user){
             setload(true)
         axios.post("https://s60-mohanavamsi-chayo.onrender.com/firebase",{...data,username:user,photo:value}).then(
             (res)=>{
-                if(res.data=="username taken"){
+              console.log(res.data)
+                if(res.data=="Username taken"){
                     alert("username taken !!")
+                    setload(false)
                 }
-                else{
+                else if (res.data.message=="User created"){
                 document.cookie=`username=${res.data.username}`
                 document.cookie=`token=${res.data.token}`
                 nav("/")
@@ -29,7 +31,7 @@ function Username(){
         )
     }
     else{
-        alert("wait a min you  need to upload a pic")
+        alert("wait a min we need to upload a pic")
     }
 }
   
@@ -62,8 +64,7 @@ function Username(){
         name="file"
         type="file"
         onChange={(e) => {photo(e);}}
-           
-                        placeholder="files"
+            placeholder="files"
                     />
        <button className=" w-48 mt-3 h-12 border hover:bg-white hover:text-black border-white text-white" onClick={login}>Submit</button>
        {load && (<div className="w-full gap-x-2 mt-4 flex justify-center items-center">
