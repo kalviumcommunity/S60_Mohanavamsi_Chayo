@@ -14,7 +14,8 @@ function Nav() {
         
     }
     return (
-        <div className=" flex justify-evenly w-96 h-16 items-center absolute  text-xl bg-white bg-opacity-10 border-4 border-white text-white rounded-3xl p-4">
+        <div className={window.outerWidth>=600?`flex justify-evenly w-96 h-16 items-center absolute  text-xl bg-white bg-opacity-10 border-4 border-white text-white rounded-3xl p-41`:
+        `flex justify-evenly w-11/12 mt-5 h-16 items-center absolute  text-xl bg-white bg-opacity-10 border-4 border-white text-white rounded-3xl p-41`}>
         <div><Link to="/">Home</Link></div>
         <div><Link to="/">About</Link></div>
         <div className={!getCookie("token") && "hidden"}>

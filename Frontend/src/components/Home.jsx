@@ -47,14 +47,31 @@ function Home() {
     const filteredUsers = users.filter((user) =>
         user.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
-
+console.log(window.innerWidth,window.outerWidth)
   
     return (
-        <div className="bg-gray-950 h-screen text-white flex justify-center items-center">
-            <div className="flex justify-center absolute top-4">
-                <Nav />
+        <div className={window.outerWidth>=600 ? `bg-gray-950 h-screen text-white flex justify-center items-center` : ` flex-col justify-around text-white bg-gray-950 w-screen`}>
+            <div className={window.outerWidth>=600 ?`flex justify-center absolute top-4`:`flex mb-52 justify-center`}>
+                <Nav/>
             </div>
-            <div className="overflow-y-scroll absolute left-2 flex flex-col h-screen">
+            
+            <div className="flex flex-col justify-center items-center">
+                <h1 className="text-5xl">Chayo</h1>
+                <input
+                    placeholder="Create or join a room!"
+                    className="m-6 p-2 h-10 rounded-xl focus:bg-black focus:text-white text-black"
+                    name="route"
+                    value={room}
+                    onChange={handleChange}
+                />
+                <button
+                    className="w-32 p-2 rounded-3xl border border-white hover:bg-white hover:text-black text-white "
+                    onClick={routeCreator}
+                >
+                    Chat!
+                </button>
+            </div> 
+            <div className={window.outerWidth>=600  ? `overflow-y-scroll absolute left-2 flex flex-col h-screen` : `overflow-y-scroll flex flex-col h-screen`}>
                 <h1 className="text-5xl mt-8 text-center">Users</h1>
                 <input
                     type="text"
@@ -81,23 +98,7 @@ function Home() {
                         </div>
                     ))}
                 </div>
-            </div>
-            <div className="flex flex-col justify-center items-center">
-                <h1 className="text-5xl">Chayo</h1>
-                <input
-                    placeholder="Create or join a room!"
-                    className="m-6 p-2 h-10 rounded-xl focus:bg-black focus:text-white text-black"
-                    name="route"
-                    value={room}
-                    onChange={handleChange}
-                />
-                <button
-                    className="w-32 p-2 rounded-3xl border border-white hover:bg-white hover:text-black text-white "
-                    onClick={routeCreator}
-                >
-                    Chat!
-                </button>
-            </div>          
+            </div>         
                
             </div>
         
