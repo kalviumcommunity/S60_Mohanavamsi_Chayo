@@ -3,6 +3,7 @@ import { useLocation, useNavigate, useParams } from "react-router";
 import { io } from "socket.io-client";
 import { getCookie } from "./nav";
 import axios from "axios";
+import { FaArrowLeft } from 'react-icons/fa';
 
 function Single(){ 
     const socket = io("https://s60-mohanavamsi-chayo.onrender.com");
@@ -59,34 +60,39 @@ function Single(){
 
       return (
 
-// Inside your component
-<div className="h-screen bg-gray-950 p-2 flex flex-col justify-center items-center">
-  <div className="overflow-y-scroll h-5/6 w-6/12 relative bottom-4 bg-black rounded-2xl pt-2 pl-2" ref={chatContainerRef}>
-    {messages.map((message, index) => (
-      <div key={index} className={`border border-gray-800 m-2 bg-gray-800 ${isCurrentUser(message.user) ? 'ml-96' : 'ml-2'} text-white w-56 relative p-3 rounded-xl shadow-xl`}>
-        <div className="flex items-center">
-          <img src={message.photo} alt="User" className="h-8 w-8 rounded-full mr-2" />
-          <h1 className="font-semibold">{message.user}</h1>
+        <div className="h-screen bg-gray-950 p-2 flex flex-col justify-center items-center">
+        <div className={window.outerWidth>=600 ?`overflow-y-scroll h-5/6 w-6/12 relative bottom-4 bg-black rounded-2xl pt-2 pl-2` :`overflow-y-scroll h-5/6 w-11/12 relative bottom-4 bg-black rounded-2xl pt-2 pl-2`} ref={chatContainerRef}>
+          {messages.map((message, index) => (
+            <div key={index} className={`flex w-full ${isCurrentUser(message.user) ? ' justify-start' : ' justify-end'} `}>
+            <div  className={window.outerWidth>=600 ?`border border-gray-800 m-2 bg-gray-800  text-white w-60 relative p-3 rounded-xl shadow-xl`:`border border-gray-800 m-2 bg-gray-800  text-white relative p-3 rounded-xl shadow-xl w-6/12`}>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <img src={message.photo} alt="User" className="h-8 w-8 rounded-full mr-2" />
+                  <h1 className={window.outerWidth>=600?"font-semibold text-wrap text-l break-words line-clamp-2":"font-semibold text-sm text-wrap break-words line-clamp-2"}>{message.user}</h1>
+                </div>
+               
+              </div>
+              <p>{message.message}</p>
+            </div>
+            </div>
+          ))}
         </div>
-        <p>{message.message}</p>
+        <div className="fixed bottom-4 flex justify-center w-full">
+          <textarea
+            className="w-96 bg-gray-800 text-white p-2 rounded-lg focus:outline-none focus:ring focus:border-blue-500"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            onKeyDown={(e)=>{enter(e.key)}}
+            placeholder="Type your message..."
+          />
+          <button onClick={sendMessage} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg ml-4">
+            Send
+          </button>
+        </div>
+        <button onClick={() => nav("/")} className="absolute top-4 left-4 rounded-full broder border-white hover:bg-white hover:text-black text-white p-2 flex items-center">
+          <FaArrowLeft className=" size-5" />
+        </button>
       </div>
-    ))}
-  </div>
-  <div className="fixed bottom-4 flex justify-center w-full">
-    <textarea
-      className="w-96 bg-gray-800 text-white p-2 rounded-lg focus:outline-none focus:ring focus:border-blue-500"
-      value={newMessage}
-      onChange={(e) => setNewMessage(e.target.value)}
-      onKeyDown={(e)=>{enter(e.key)}}
-      placeholder="Type your message..."
-    />
-    <button onClick={sendMessage} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg ml-4">
-      Send
-    </button>
-    
-  </div>
-</div>
-
       );
     }
 export default Single
