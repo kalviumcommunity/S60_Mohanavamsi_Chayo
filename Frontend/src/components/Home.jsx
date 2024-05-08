@@ -8,7 +8,7 @@ function Home() {
     const [room, setRoom] = useState("");
     const [users, setUsers] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
-    const socket = io("https://s60-mohanavamsi-chayo.onrender.com");
+    const socket = io("http://localhost:8000");
     const nav = useNavigate();
     useEffect(() => {
         axios.get("https://s60-mohanavamsi-chayo.onrender.com/users")
@@ -23,7 +23,7 @@ function Home() {
 
     function routeCreator() {
         if (room.trim() != "" && getCookie("username") ) {
-            socket.emit("route", room, getCookie("username") || "anonymous");
+            socket.emit("route", room, getCookie("username") || "anonymous",getCookie("photo"));
             nav(`/chat/${room}`);
         } else {
             alert("Please enter the room ID. If not logedin please login");
