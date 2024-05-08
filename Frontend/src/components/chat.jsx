@@ -5,7 +5,7 @@ import { getCookie } from "./nav";
 import axios from "axios";
 import { FaArrowLeft } from 'react-icons/fa';
 
-const socket = io("https://s60-mohanavamsi-chayo.onrender.com/");
+const socket = io("http://localhost:8000");
 
 function Chat() {
   const { roomid } = useParams()
@@ -13,6 +13,7 @@ function Chat() {
   const chatContainerRef = useRef()
   const [messages, setMessages] = useState([])
   const [newMessage, setNewMessage] = useState("")
+  const [users,setusers]=useState([])
 
   useEffect(() => {
     socket.emit("connecting_room", roomid)
@@ -30,7 +31,10 @@ function Chat() {
   useEffect(() => {
     scrollToBottom()
   }, [messages])
-
+socket.on("userList",(list)=>{
+  console.log(list)
+  setusers(list)
+})
   socket.on("show", (message, user, photo) => {
     setMessages([...messages, { user: user, message: message, photo: photo }])
   });
@@ -74,6 +78,24 @@ function Chat() {
           </div>
         ))}
       </div>
+      <div className="flex flex-col absolute left-1 items-center mt-4 p-3 over">
+      <h1 className=" text-white text-5xl">Users in room</h1>
+                    {users.map((user, index) => (
+                        <div
+                            key={index}
+                            className="flex items-center text-white w-80 border border-white shadow-md shadow-white p-2 mt-4 cursor-pointer transition duration-300 ease-in-out hover:bg-white hover:text-black rounded-xl"
+                        >
+                            <img
+                                src={user.photo}
+                                alt={user.name}
+                                className="w-16 h-16 rounded-full mr-4"
+                            />
+                            <div className="flex flex-col">
+                                <h1 className="text-3xl ">{user.user}</h1>
+                            </div>
+                        </div>
+                    ))}
+                </div>
       <div className="fixed bottom-4 flex justify-center w-full">
         <textarea
           className="w-96 bg-gray-800 text-white p-2 rounded-lg focus:outline-none focus:ring focus:border-blue-500"
