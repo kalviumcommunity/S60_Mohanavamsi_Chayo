@@ -8,7 +8,7 @@ function Home() {
     const [room, setRoom] = useState("");
     const [users, setUsers] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
-    const socket = io("http://localhost:8000");
+    const socket = io("https://s60-mohanavamsi-chayo.onrender.com");
     const nav = useNavigate();
     useEffect(() => {
         axios.get("https://s60-mohanavamsi-chayo.onrender.com/users")

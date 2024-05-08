@@ -5,7 +5,7 @@ import { getCookie } from "./nav";
 import axios from "axios";
 import { FaArrowLeft } from 'react-icons/fa';
 
-const socket = io("http://localhost:8000");
+const socket = io("https://s60-mohanavamsi-chayo.onrender.com");
 
 function Chat() {
   const { roomid } = useParams()
@@ -15,9 +15,9 @@ function Chat() {
   const [newMessage, setNewMessage] = useState("")
   const [users,setusers]=useState([])
 
-  useEffect(() => {
-    socket.emit("connecting_room", roomid)
-  }, [])
+  useEffect(() =>{
+    socket.emit("connecting_room", roomid,getCookie("photo"),getCookie("username"))
+  },[])
 
   useEffect(() => {
     axios.get(`https://s60-mohanavamsi-chayo.onrender.com/data/${roomid}`).then(
@@ -31,6 +31,7 @@ function Chat() {
   useEffect(() => {
     scrollToBottom()
   }, [messages])
+
 socket.on("userList",(list)=>{
   console.log(list)
   setusers(list)
@@ -91,7 +92,7 @@ socket.on("userList",(list)=>{
                                 className="w-16 h-16 rounded-full mr-4"
                             />
                             <div className="flex flex-col">
-                                <h1 className="text-3xl ">{user.user}</h1>
+                                <h1 className="text-3xl ">{user.name}</h1>
                             </div>
                         </div>
                     ))}

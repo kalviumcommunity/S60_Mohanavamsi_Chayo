@@ -10,6 +10,7 @@ const messanger = require("./Model/chat");
 const singlemessanger=require("./Model/singlechat")
 const route = require("./Routes/routes");
 const { connect } = require("./db/connect");
+const { object } = require("joi");
 const PORT = process.env.PORT || 8000;
 const filter=new bad({placeHolder:"😇"})
 
@@ -21,12 +22,17 @@ app.get("/", (req, res) => {
 
 app.use(cors());
 
+const roomUsers = {};
+
 io.on("connection", (socket) => {
     try {
         socket.on("route", async (route, user) => {
             try {
                 const check = await messanger.findOne({ roomid: route });
                 if (check) {
+                    if (!roomUsers[route]) {
+                        roomUsers[route] = [];
+                    }
                     console.log("user entering room:", route);
                 } else {
                     await messanger.create({
@@ -37,6 +43,9 @@ io.on("connection", (socket) => {
                             time: Date.now()
                         }]
                     });
+                    // if (!roomUsers[route]) {
+                    //     roomUsers[route] = [];
+                    // }
                     console.log("new room created", route);
                 }
             } catch (error) {
@@ -44,12 +53,13 @@ io.on("connection", (socket) => {
             }
         });
 
-        socket.on("connecting_room", async(route) => {
+        socket.on("connecting_room", async(route,photo,user) => {
+            console.log("dwkbj")
             try {
                 socket.join(route);
-                const check = await messanger.findOne({ roomid: route });
+                const check = await messanger.findOne({ roomid: route })
                 if (check) {
-                    console.log("user entering room:", route);
+                    console.log("user entering room:", route)
                 } else {
                     await messanger.create({
                         roomid: route,
@@ -59,18 +69,27 @@ io.on("connection", (socket) => {
                             time: Date.now()
                         }]
                     });
-                    console.log("new room created", route);
+                    console.log("new room created", route)
                 }
+                console.log(roomUsers)
+                if (!roomUsers[route]){
+                    roomUsers[route]=[]
+                }
+                if (!roomUsers[route].some(u => u.name == user)){
+                    roomUsers[route].push({name: user, photo: photo});
+                    io.to(route).emit("userList", roomUsers[route]);
+                }                
             } catch (error) {
-                console.log("Error in connecting_room:", error);
+                console.log("Error in connecting_room:", error)
             }
         });
+
         socket.on("connect_room", async (route) => {
             try {
                 socket.join(route);
                 const check = await singlemessanger.findOne({ roomid: route });
                 if (check) {
-                    console.log("user entering room:", route);
+                    console.log("user entering room:", route)
                 } else {
                     await singlemessanger.create({
                         roomid: route,
@@ -80,18 +99,19 @@ io.on("connection", (socket) => {
                             time: Date.now()
                         }]
                     });
-                    console.log("new room created", route);
+                    console.log("new room created", route)
                 }
             } catch (error) {
-                console.log("Error in connecting_room:", error);
+                console.log("Error in connecting_room:", error)
             }
         });
+
         socket.on("singleMessage",async (message ,user,route1,route2,photo)=>{
             try {
                 let filteredmessage=filter.clean(message)
                 console.log(filteredmessage)
-                io.to(route1).emit("shows", filteredmessage, user, photo);
-                io.to(route2).emit("shows", filteredmessage, user, photo);
+                io.to(route1).emit("shows", filteredmessage, user, photo)
+                io.to(route2).emit("shows", filteredmessage, user, photo)
                 await singlemessanger.findOneAndUpdate({ roomid: route1 }, {
                     $push: {
                         messages: {
@@ -113,7 +133,7 @@ io.on("connection", (socket) => {
                     }
                 });
             } catch (error) {
-                console.log("Error in message:", error);
+                console.log("Error in message:", error)
             }
         })
         socket.on("message", async (message, route, user, photo) => {
@@ -132,53 +152,52 @@ io.on("connection", (socket) => {
                     }
                 });
             } catch (error) {
-                console.log("Error in message:", error);
+                console.log("Error in message:", error)
             }
         });  
 
     } catch (error) {
-        console.log("Error in connection:", error);
+        console.log("Error in connection:", error)
     }
     app.delete("/delete/:id/:roomid", async (req, res) => {
-        const roomId = req.params.roomid;
-        const messageId = req.params.id;
+        const roomId = req.params.roomid
+        const messageId = req.params.id
         try {
            const data= await messanger.findOneAndUpdate(
                 { roomid: roomId },
                 { $pull: { messages: { _id: messageId } } }
             );
     
-            socket.to(roomId).emit("delete", data.messages);
+            socket.to(roomId).emit("delete", data.messages)
             res.send("done");
         } catch (error) {
-            console.error("Error deleting message:", error);
-            res.status(500).send("An error occurred while deleting the message.");
+            console.error("Error deleting message:", error)
+            res.status(500).send("An error occurred while deleting the message.")
         }
     });
     
       
     app.put("/update/:id/:roomid", async (req, res) => {
-        const roomId = req.params.roomid;
-        const messageId = req.params.id;
-        const newMessage = req.body.message;
+        const roomId = req.params.roomid
+        const messageId = req.params.id
+        const newMessage = req.body.message
     
         try {
            const data= await messanger.findOneAndUpdate(
                 { roomid: roomId, "messages._id": messageId },
                 { $set: { "messages.$.message": newMessage } }
-            );
-    
-            io.to(roomId).emit("update",data.messages);
-            res.json("done!");
+            )
+
+            io.to(roomId).emit("update",data.messages)
+            res.json("done!")
         } catch (error) {
-            console.error("Error updating message:", error);
-            res.status(500).send("An error occurred while updating the message.");
+            console.error("Error updating message:", error)
+            res.status(500).send("An error occurred while updating the message.")
         }
     });
-    
 });
 
 server.listen(PORT, () => {
-    connect();
-    console.log(`server running in ${PORT}`);
+    connect()
+    console.log(`server running in ${PORT}`)
 });
