@@ -11,19 +11,8 @@ function Single(){
     const chatContainerRef = useRef()
     const nav=useNavigate()
     const [messages, setMessages] = useState([{user:"vami"}])
-      const [newMessage, setNewMessage] = useState("")
+    const [newMessage, setNewMessage] = useState("")
       useEffect(() => {
-        socket.on("connection", null);
-        socket.on("shows", (message, user, photo) => {
-          console.log(message)
-          setMessages(prevMessages => [...prevMessages, { user, message, photo }]);
-      });
-        return function cleanup() {
-          socket.removeListener("shows");
-        };
-      }, []);
-      useEffect(() => {
-        
         socket.emit("connect_room", roomid.split("&")[0]+roomid.split("&")[1], roomid.split("&")[1]+roomid.split("&")[0])
       }, [])
       useEffect(()=>{
@@ -37,6 +26,10 @@ function Single(){
       useEffect(() => {
         scrollToBottom()
       }, [messages])
+      socket.on("shows", (message, user, photo) => {
+        console.log(message)
+        setMessages(prevMessages => [...prevMessages, { user, message, photo }]);
+    });
      function sendMessage() {
           let room=roomid.split("&")
           let route1=room[0]+room[1]
@@ -59,7 +52,6 @@ function Single(){
       };
 
       return (
-
         <div className="h-screen bg-gray-950 p-2 flex flex-col justify-center items-center">
         <div className={window.outerWidth>=600 ?`overflow-y-scroll h-5/6 w-6/12 relative bottom-4 bg-black rounded-2xl pt-2 pl-2` :`overflow-y-scroll h-5/6 w-11/12 relative bottom-4 bg-black rounded-2xl pt-2 pl-2`} ref={chatContainerRef}>
           {messages.map((message, index) => (
