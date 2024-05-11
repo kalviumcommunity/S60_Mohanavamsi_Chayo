@@ -241,7 +241,6 @@ app.get("/rooms", async (req,res)=>{
   }
 })
 
-
 app.get("/users", async (req, res) => {
   try {
     const users = await user.find({});

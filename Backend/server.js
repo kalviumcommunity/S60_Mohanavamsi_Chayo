@@ -23,16 +23,17 @@ app.get("/", (req, res) => {
 app.use(cors());
 
 const roomUsers = {};
-
+function hash(password) {
+    const hash = crypto.createHash("sha256");
+    hash.update(password);
+    return hash.digest("hex");
+  }
 io.on("connection", (socket) => {
     try {
-        socket.on("route", async (route, user) => {
+        socket.on("route", async (route, user,password) => {
             try {
                 const check = await messanger.findOne({ roomid: route });
                 if (check) {
-                    if (!roomUsers[route]) {
-                        roomUsers[route] = [];
-                    }
                     console.log("user entering room:", route);
                 } else {
                     await messanger.create({
@@ -41,7 +42,8 @@ io.on("connection", (socket) => {
                             user: user,
                             message: user + " joined",
                             time: Date.now()
-                        }]
+                        }],
+                        password:hash(password)
                     });
                     // if (!roomUsers[route]) {
                     //     roomUsers[route] = [];
