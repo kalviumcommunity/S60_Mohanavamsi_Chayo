@@ -6,6 +6,8 @@ import axios from "axios";
 
 function Home() {
     const [room, setRoom] = useState("");
+    const [password,setpassword]=useState("")
+    const [rooms, setRooms] = useState("");
     const [users, setUsers] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const socket = io("https://s60-mohanavamsi-chayo.onrender.com");
@@ -18,21 +20,49 @@ function Home() {
             .catch((error) => {
                 console.error("Error fetching users:", error);
             });
+        axios.get("https://s60-mohanavamsi-chayo.onrender.com/rooms")
+        .then((res)=>{
+            console.log(res.data)
+            setRooms(res.data)
+        })
+        .catch((error)=>{
+            console.error(error)
+        })
            
     }, []);
 
     function routeCreator() {
+        if (rooms.some((i)=>{return i.roomid==room})){
+            alert("hey this room already exist if your one memeber in this room means join")
+        }
+        else{
+        if (room.trim() != "" && getCookie("username")) {
+            axios.get(`https://s60-mohanavamsi-chayo.onrender.com/data/${room}`).then((res)=>{
+                if (res.data.password==password){
+                    socket.emit("route", room, getCookie("username") || "anonymous",getCookie("photo"));
+                    nav(`/chat/${room}`);
+                }
+                else{
+                    alert("wrong password")
+                }
+            })
+           
+        } else {
+            alert("Please enter the room ID. If not logedin please login");
+        }}
+    }
+
+    function handleChange(e) {
+        const { value } = e.target;
+        setRoom(value);
+    }
+    function join(){
         if (room.trim() != "" && getCookie("username") ) {
             socket.emit("route", room, getCookie("username") || "anonymous",getCookie("photo"));
             nav(`/chat/${room}`);
         } else {
             alert("Please enter the room ID. If not logedin please login");
         }
-    }
-
-    function handleChange(e) {
-        const { value } = e.target;
-        setRoom(value);
     }
 
     function handleUserClick(name) {
@@ -64,12 +94,23 @@ console.log(window.innerWidth,window.outerWidth)
                     value={room}
                     onChange={handleChange}
                 />
+                 <input
+                    placeholder="Password"
+                    className="m-6 p-2 h-10 rounded-xl focus:bg-black focus:text-white text-black"
+                    name="password"
+                    value={password}
+                    onChange={(e)=>{setpassword(e.target.value)}}
+                />
                 <button
                     className="w-32 p-2 rounded-3xl border border-white hover:bg-white hover:text-black text-white "
                     onClick={routeCreator}
                 >
-                    Chat!
+                    create!
                 </button>
+                <button
+                className="w-32 p-2 rounded-3xl border border-white hover:bg-white hover:text-black text-white "
+                onClick={join}
+                >join</button>
             </div> 
             <div className={window.outerWidth>=600  ? `overflow-y-scroll absolute left-2 flex flex-col h-screen` : `overflow-y-scroll flex flex-col h-screen`}>
                 <h1 className="text-5xl mt-8 text-center">Users</h1>

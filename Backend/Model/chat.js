@@ -9,7 +9,8 @@ const schema=mongoose.Schema({
             photo:String,
             user_id:String
         }
-    ]
+    ],
+    password:String
 })
 const model=mongoose.model("messanger",schema)
 module.exports=model
