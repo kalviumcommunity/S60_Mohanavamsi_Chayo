@@ -10,10 +10,9 @@ const messanger = require("./Model/chat");
 const singlemessanger=require("./Model/singlechat")
 const route = require("./Routes/routes");
 const { connect } = require("./db/connect");
-const { object } = require("joi");
 const PORT = process.env.PORT || 8000;
 const filter=new bad({placeHolder:"😇"})
-
+  
 app.use("/", route);
 
 app.get("/", (req, res) => {
@@ -26,23 +25,22 @@ const roomUsers = {};
 
 io.on("connection", (socket) => {
     try {
-        socket.on("route", async (route, user) => {
+        socket.on("route", async (route, user,password) => {
             try {
                 const check = await messanger.findOne({ roomid: route });
                 if (check) {
-                    if (!roomUsers[route]) {
-                        roomUsers[route] = [];
-                    }
                     console.log("user entering room:", route);
                 } else {
-                    await messanger.create({
+                   let u= await messanger.create({
                         roomid: route,
                         messages: [{
                             user: user,
                             message: user + " joined",
                             time: Date.now()
-                        }]
+                        }],
+                        password:password
                     });
+                    console.log(u)
                     // if (!roomUsers[route]) {
                     //     roomUsers[route] = [];
                     // }
