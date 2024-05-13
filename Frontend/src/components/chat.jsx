@@ -6,12 +6,11 @@ import axios from "axios";
 import { FaArrowLeft } from 'react-icons/fa';
 
 const socket = io("https://s60-mohanavamsi-chayo.onrender.com");
-
 function Chat() {
   const { roomid } = useParams()
   const navigate = useNavigate(); 
   const chatContainerRef = useRef()
-  const [messages, setMessages] = useState([])
+  const [messages, setMessages] = useState()
   const [newMessage, setNewMessage] = useState("")
   const [users,setusers]=useState([])
   const [typing,settyping]=useState("")
@@ -72,7 +71,7 @@ socket.on("userList",(list)=>{
   const isCurrentUser = (username) => {
     return username === getCookie("username");
   };
-
+console.log(messages)
   return (
     <div className="h-screen bg-gray-950 p-2 flex flex-col justify-center items-center">
       <div className={window.outerWidth>=600 ?`overflow-y-scroll h-5/6 w-6/12 relative bottom-4 bg-black rounded-2xl pt-2 pl-2` :`overflow-y-scroll h-5/6 w-11/12 relative bottom-4 bg-black rounded-2xl pt-2 pl-2`} ref={chatContainerRef}>
@@ -87,7 +86,7 @@ socket.on("userList",(list)=>{
               </div>
              
             </div>
-            <p>{message.message}</p>
+            {message.type=="photo" ? <img src="https://static.vecteezy.com/vite/assets/photo-masthead-375-b8ae1548.webp"/> :<p>{message.message}</p>}
           </div>
           </div>
         ))}

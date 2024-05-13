@@ -123,7 +123,7 @@ io.on("connection", (socket) => {
                 console.log("Error in message:", error)
             }
         })
-        socket.on("message", async (message, route, user, photo) => {
+        socket.on("message", async (message, route, user, photo, type) => {
             try {
                 let filteredmessage=filter.clean(message)
                 console.log(message);
@@ -135,7 +135,8 @@ io.on("connection", (socket) => {
                             user: user,
                             message: filteredmessage,
                             photo:photo,
-                            time: Date.now()
+                            time: Date.now(),
+                            type:type
                         }
                     }
                 });

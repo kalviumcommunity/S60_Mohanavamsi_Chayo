@@ -5,6 +5,7 @@ const schema=mongoose.Schema({
         {
             user:String,
             message:String,
+            type:{type:String,default:"text"},
             time:Date,
             photo:String,
             user_id:String
