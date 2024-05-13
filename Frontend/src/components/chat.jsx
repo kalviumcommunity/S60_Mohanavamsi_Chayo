@@ -5,7 +5,7 @@ import { getCookie } from "./nav";
 import axios from "axios";
 import { FaArrowLeft } from 'react-icons/fa';
 
-const socket = io("http://localhost:8000");
+const socket = io("https://s60-mohanavamsi-chayo.onrender.com");
 
 function Chat() {
   const { roomid } = useParams()
