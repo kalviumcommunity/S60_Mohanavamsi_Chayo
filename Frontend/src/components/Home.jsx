@@ -10,7 +10,7 @@ function Home() {
     const [rooms, setRooms] = useState("");
     const [users, setUsers] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
-    const socket = io("https://s60-mohanavamsi-chayo.onrender.com");
+    const socket = io("http://localhost:8000");
     const nav = useNavigate();
     useEffect(() => {
         axios.get("https://s60-mohanavamsi-chayo.onrender.com/users")
@@ -37,16 +37,8 @@ function Home() {
         }
         else{
         if (room.trim() != "" && getCookie("username")) {
-            axios.get(`https://s60-mohanavamsi-chayo.onrender.com/data/${room}`).then((res)=>{
-                if (res.data.password==password){
-                    socket.emit("route", room, getCookie("username") || "anonymous",getCookie("photo"));
-                    nav(`/chat/${room}`);
-                }
-                else{
-                    alert("wrong password")
-                }
-            })
-           
+            socket.emit("route", room, getCookie("username"),password);
+            nav(`/chat/${room}`);
         } else {
             alert("Please enter the room ID. If not logedin please login");
         }}
@@ -58,8 +50,14 @@ function Home() {
     }
     function join(){
         if (room.trim() != "" && getCookie("username") ) {
-            socket.emit("route", room, getCookie("username") || "anonymous",getCookie("photo"));
-            nav(`/chat/${room}`);
+            axios.get(`https://s60-mohanavamsi-chayo.onrender.com/data/${room}`).then((res)=>{
+                if (res.data[0].password==password){
+                    nav(`/chat/${room}`);
+                }
+                else{
+                    alert("wrong password")
+                }
+            })
         } else {
             alert("Please enter the room ID. If not logedin please login");
         }
@@ -89,7 +87,7 @@ console.log(window.innerWidth,window.outerWidth)
                 <h1 className="text-5xl">Chayo</h1>
                 <input
                     placeholder="Create or join a room!"
-                    className="m-6 p-2 h-10 rounded-xl focus:bg-black focus:text-white text-black"
+                    className="mt-6 p-2 h-10 rounded-xl focus:bg-black focus:text-white text-black"
                     name="route"
                     value={room}
                     onChange={handleChange}
@@ -101,8 +99,9 @@ console.log(window.innerWidth,window.outerWidth)
                     value={password}
                     onChange={(e)=>{setpassword(e.target.value)}}
                 />
+                <div className=" flex justify-evenly">
                 <button
-                    className="w-32 p-2 rounded-3xl border border-white hover:bg-white hover:text-black text-white "
+                    className="w-32 p-2 mr-1 rounded-3xl border border-white hover:bg-white hover:text-black text-white "
                     onClick={routeCreator}
                 >
                     create!
@@ -111,6 +110,7 @@ console.log(window.innerWidth,window.outerWidth)
                 className="w-32 p-2 rounded-3xl border border-white hover:bg-white hover:text-black text-white "
                 onClick={join}
                 >join</button>
+                </div>
             </div> 
             <div className={window.outerWidth>=600  ? `overflow-y-scroll absolute left-2 flex flex-col h-screen` : `overflow-y-scroll flex flex-col h-screen`}>
                 <h1 className="text-5xl mt-8 text-center">Users</h1>
