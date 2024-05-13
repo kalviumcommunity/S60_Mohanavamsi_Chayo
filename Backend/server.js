@@ -194,14 +194,11 @@ io.on("connection", (socket) => {
     });
     socket.on("disconnect", () => {
         try {
-            const room = Object.keys(socket.rooms).find(room => room !== socket.id);
-
-            if (room) {
                 if (roomUsers[room]) {
                     roomUsers[room] = roomUsers[room].filter(u => u.name !== user);
                     io.to(room).emit("userList", roomUsers[room]);
                 }
-            }
+            
         } catch (error) {
             console.log("Error on disconnect:", error);
         }
