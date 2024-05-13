@@ -192,6 +192,17 @@ io.on("connection", (socket) => {
             res.status(500).send("An error occurred while updating the message.")
         }
     });
+    socket.on("disconnect", () => {
+        try {
+                if (roomUsers[room]) {
+                    roomUsers[room] = roomUsers[room].filter(u => u.name !== user);
+                    io.to(room).emit("userList", roomUsers[room]);
+                }
+            
+        } catch (error) {
+            console.log("Error on disconnect:", error);
+        }
+    });
 });
 
 server.listen(PORT, () => {
