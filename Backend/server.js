@@ -127,7 +127,7 @@ io.on("connection", (socket) => {
             try {
                 let filteredmessage=filter.clean(message)
                 console.log(message);
-                io.to(route).emit("show", filteredmessage, user, photo);
+                io.to(route).emit("show", filteredmessage, user, photo, type);
                 io.to(route).emit("typeing","no_one")
                 await messanger.findOneAndUpdate({ roomid: route }, {
                     $push: {
