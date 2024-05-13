@@ -5,7 +5,7 @@ import { getCookie } from "./nav";
 import axios from "axios";
 import { FaArrowLeft } from 'react-icons/fa';
 
-const socket = io("https://s60-mohanavamsi-chayo.onrender.com");
+const socket = io("http://localhost:8000");
 
 function Chat() {
   const { roomid } = useParams()
@@ -14,6 +14,7 @@ function Chat() {
   const [messages, setMessages] = useState([])
   const [newMessage, setNewMessage] = useState("")
   const [users,setusers]=useState([])
+  const [typing,settyping]=useState("")
 
   useEffect(() =>{
     socket.emit("connecting_room", roomid,getCookie("photo"),getCookie("username"))
@@ -39,7 +40,15 @@ socket.on("userList",(list)=>{
   socket.on("show", (message, user, photo) => {
     setMessages([...messages, { user: user, message: message, photo: photo }])
   });
-
+  socket.on("typeing",(user)=>{
+    console.log(user)
+    if (user!="no_one"){
+      settyping(`${user} is typing...`)
+    }
+    else{
+      settyping("")
+    }
+  })
   function sendMessage() {
     if (newMessage.trim() !== "") {
       socket.emit("message", newMessage, roomid, getCookie("username"), getCookie("photo"))
@@ -52,7 +61,11 @@ socket.on("userList",(list)=>{
       sendMessage()
     }
   }
-
+  function Message(e){
+    const {value}=e
+    socket.emit("typing",getCookie("username"),roomid)
+    setNewMessage(value)
+  }
   function scrollToBottom(){
     chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
   }
@@ -78,8 +91,9 @@ socket.on("userList",(list)=>{
           </div>
           </div>
         ))}
+      <h1 className={` text-white text-md relative ${window.outerWidth>=600 ?" bottom-2": "bottom-3"}`}>{typing}</h1>
       </div>
-      <div className="flex flex-col absolute left-1 items-center mt-4 p-3 over">
+      <div className={window.outerWidth>=600 ? "flex flex-col absolute left-1 items-center mt-4 p-3 over": " hidden"}>
       <h1 className=" text-white text-5xl">Users in room</h1>
                     {users.map((user, index) => (
                         <div
@@ -96,12 +110,13 @@ socket.on("userList",(list)=>{
                             </div>
                         </div>
                     ))}
+                    
                 </div>
       <div className="fixed bottom-4 flex justify-center w-full">
         <textarea
           className="w-96 bg-gray-800 text-white p-2 rounded-lg focus:outline-none focus:ring focus:border-blue-500"
           value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
+          onChange={(e) => Message(e.target)}
           onKeyDown={(e)=>{enter(e.key)}}
           placeholder="Type your message..."
         />

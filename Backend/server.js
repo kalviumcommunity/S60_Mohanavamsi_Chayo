@@ -41,9 +41,7 @@ io.on("connection", (socket) => {
                         password:password
                     });
                     console.log(u)
-                    // if (!roomUsers[route]) {
-                    //     roomUsers[route] = [];
-                    // }
+               
                     console.log("new room created", route);
                 }
             } catch (error) {
@@ -54,20 +52,6 @@ io.on("connection", (socket) => {
         socket.on("connecting_room", async(route,photo,user) => {
             try {
                 socket.join(route);
-                const check = await messanger.findOne({ roomid: route })
-                if (check) {
-                    console.log("user entering room:", route)
-                } else {
-                    await messanger.create({
-                        roomid: route,
-                        messages: [{
-                            user: user,
-                            message: user + " joined",
-                            time: Date.now()
-                        }]
-                    });
-                    console.log("new room created", route)
-                }
                 console.log(roomUsers)
                 if (!roomUsers[route]){
                     roomUsers[route]=[]
@@ -75,7 +59,10 @@ io.on("connection", (socket) => {
                 if (!roomUsers[route].some(u => u.name == user)){
                     roomUsers[route].push({name: user, photo: photo});
                     io.to(route).emit("userList", roomUsers[route]);
-                }                
+                }
+                else{
+                io.to(route).emit("userList", roomUsers[route]);
+                }
             } catch (error) {
                 console.log("Error in connecting_room:", error)
             }
@@ -102,7 +89,10 @@ io.on("connection", (socket) => {
                 console.log("Error in connecting_room:", error)
             }
         });
-
+        socket.on("typing",(user,route)=>{
+            console.log(user,route)
+            io.to(route).emit("typeing",user)
+        })
         socket.on("singleMessage",async (message ,user,route1,route2,photo)=>{
             try {
                 let filteredmessage=filter.clean(message)
@@ -138,6 +128,7 @@ io.on("connection", (socket) => {
                 let filteredmessage=filter.clean(message)
                 console.log(message);
                 io.to(route).emit("show", filteredmessage, user, photo);
+                io.to(route).emit("typeing","no_one")
                 await messanger.findOneAndUpdate({ roomid: route }, {
                     $push: {
                         messages: {
@@ -194,11 +185,14 @@ io.on("connection", (socket) => {
     });
     socket.on("disconnect", () => {
         try {
+            const room = Object.keys(socket.rooms).find(room => room !== socket.id);
+            if (room) {
                 if (roomUsers[room]) {
                     roomUsers[room] = roomUsers[room].filter(u => u.name !== user);
+                    // Emit updated user list to all clients in the room
                     io.to(room).emit("userList", roomUsers[room]);
                 }
-            
+            }
         } catch (error) {
             console.log("Error on disconnect:", error);
         }
