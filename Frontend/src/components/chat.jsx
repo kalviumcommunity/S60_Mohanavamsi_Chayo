@@ -7,7 +7,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { HiLocationMarker } from "react-icons/hi";
 import { LuImagePlus } from "react-icons/lu";
 
-const socket = io("http://localhost:8000");
+const socket = io("https://s60-mohanavamsi-chayo.onrender.com");
 function Chat() {
   const { roomid } = useParams()
   const navigate = useNavigate(); 
@@ -156,8 +156,8 @@ socket.on("userList",(list)=>{
         <button onClick={sendMessage} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg ml-4">
           Send
         </button>
-        <button className=" bg-gray-400 hover:bg-gray-300 m-3 rounded-full size-10 flex justify-center items-center" onClick={()=>{settype("photo")}}><LuImagePlus className=" size-6"/></button>
-        <button className=" bg-gray-400 hover:bg-gray-300  rounded-full size-10 flex justify-center items-center" onClick={locatin}><HiLocationMarker className=" size-7"/></button>
+        <button className=" bg-gray-400 hover:bg-gray-500 m-3 rounded-full size-10 flex justify-center items-center" onClick={()=>{settype("photo")}}><LuImagePlus className=" size-6"/></button>
+        <button className=" bg-gray-400 hover:bg-gray-500  rounded-full size-10 flex justify-center items-center" onClick={locatin}><HiLocationMarker className=" size-7"/></button>
       </div>
       <button onClick={() => navigate("/")} className="absolute top-4 left-4 rounded-full broder border-white hover:bg-white hover:text-black text-white p-2 flex items-center">
         <FaArrowLeft className=" size-5" />
