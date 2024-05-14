@@ -125,10 +125,12 @@ io.on("connection", (socket) => {
         })
         socket.on("message", async (message, route, user, photo, type) => {
             try {
+                if (type=="text"){
                 let filteredmessage=filter.clean(message)
                 console.log(message);
                 io.to(route).emit("show", filteredmessage, user, photo, type);
                 io.to(route).emit("typeing","no_one")
+
                 await messanger.findOneAndUpdate({ roomid: route }, {
                     $push: {
                         messages: {
@@ -140,6 +142,24 @@ io.on("connection", (socket) => {
                         }
                     }
                 });
+                }
+                else{
+                    console.log(message)
+                    io.to(route).emit("show", message, user, photo, type)
+                    await messanger.findOneAndUpdate({ roomid: route }, {
+                        $push: {
+                            messages: {
+                                user: user,
+                                message: message,
+                                photo:photo,
+                                time: Date.now(),
+                                type:type
+                            }
+                        }
+                    });
+                }
+                io.to(route).emit("typeing","no_one")
+               
             } catch (error) {
                 console.log("Error in message:", error)
             }

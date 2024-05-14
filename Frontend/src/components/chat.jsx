@@ -4,16 +4,20 @@ import { io } from "socket.io-client";
 import { getCookie } from "./nav";
 import axios from "axios";
 import { FaArrowLeft } from 'react-icons/fa';
+import { HiLocationMarker } from "react-icons/hi";
+import { LuImagePlus } from "react-icons/lu";
 
-const socket = io("https://s60-mohanavamsi-chayo.onrender.com");
+const socket = io("http://localhost:8000");
 function Chat() {
   const { roomid } = useParams()
   const navigate = useNavigate(); 
   const chatContainerRef = useRef()
-  const [messages, setMessages] = useState()
+  const [messages, setMessages] = useState([])
   const [newMessage, setNewMessage] = useState("")
   const [users,setusers]=useState([])
   const [typing,settyping]=useState("")
+  const [type,settype]=useState("text")
+  const [value,setvalue]=useState("")
 
   useEffect(() =>{
     socket.emit("connecting_room", roomid,getCookie("photo"),getCookie("username"))
@@ -36,8 +40,9 @@ socket.on("userList",(list)=>{
   console.log(list)
   setusers(list)
 })
-  socket.on("show", (message, user, photo) => {
-    setMessages([...messages, { user: user, message: message, photo: photo }])
+  socket.on("show", (message, user, photo, type) => {
+    console.log(type)
+    setMessages([...messages, { user: user, message: message, photo: photo,type:type}])
   });
   socket.on("typeing",(user)=>{
     console.log(user)
@@ -48,9 +53,27 @@ socket.on("userList",(list)=>{
       settyping("")
     }
   })
+  const photo = async (e) => {
+    const reader=new FileReader()
+    reader.onload =async function(e) {
+        try {
+            const response = await axios.post('https://api.cloudinary.com/v1_1/dus9hgplo/image/upload', {file:e.target.result,upload_preset:"vh0llv8b"});
+            console.log('File uploaded successfully:', response.data);
+            setvalue(response.data.secure_url)
+          } catch (error) {
+            console.error('Error uploading photo:', error);
+          }
+    }
+    reader.readAsDataURL(e.target.files[0]);
+    
+  };
   function sendMessage() {
+    if (type=="photo" && value){
+      socket.emit("message", value, roomid, getCookie("username"), getCookie("photo"),"photo")
+      settype("text")
+    }
     if (newMessage.trim() !== "") {
-      socket.emit("message", newMessage, roomid, getCookie("username"), getCookie("photo"))
+      socket.emit("message", newMessage, roomid, getCookie("username"), getCookie("photo"),"text")
       setNewMessage("")
     }
   }
@@ -59,6 +82,14 @@ socket.on("userList",(list)=>{
     if (e==="Enter"){
       sendMessage()
     }
+  }
+
+  function locatin(){
+    console.log("hi")
+    navigator.geolocation.getCurrentPosition((pos)=>{
+      console.log(pos.coords)
+      socket.emit("message",`https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`, roomid, getCookie("username"), getCookie("photo"),"loc")
+    })
   }
   function Message(e){
     const {value}=e
@@ -71,7 +102,7 @@ socket.on("userList",(list)=>{
   const isCurrentUser = (username) => {
     return username === getCookie("username");
   };
-console.log(messages)
+// console.log(messages)
   return (
     <div className="h-screen bg-gray-950 p-2 flex flex-col justify-center items-center">
       <div className={window.outerWidth>=600 ?`overflow-y-scroll h-5/6 w-6/12 relative bottom-4 bg-black rounded-2xl pt-2 pl-2` :`overflow-y-scroll h-5/6 w-11/12 relative bottom-4 bg-black rounded-2xl pt-2 pl-2`} ref={chatContainerRef}>
@@ -84,9 +115,8 @@ console.log(messages)
                 <h1 className={window.outerWidth>=600?"font-semibold text-wrap text-l break-words line-clamp-2":"font-semibold text-sm text-wrap break-words line-clamp-2"}>
                 {message.user}</h1>
               </div>
-             
             </div>
-            {message.type=="photo" ? <img src="https://static.vecteezy.com/vite/assets/photo-masthead-375-b8ae1548.webp"/> :<p>{message.message}</p>}
+            {message.type=="photo" ? <img src={message.message} className=" rounded-xl"/> : message.type=="loc" ? <a href={message.message} target="_blank"><button className=" bg-blue-700 p-3 rounded-lg ml-4">Hey i am here 👋</button></a> : <p>{message.message}</p>}
           </div>
           </div>
         ))}
@@ -111,17 +141,23 @@ console.log(messages)
                     ))}
                     
                 </div>
-      <div className="fixed bottom-4 flex justify-center w-full">
-        <textarea
+      <div className="fixed bottom-4 flex justify-center items-center w-full">
+      {type=="text"? <textarea
           className="w-96 bg-gray-800 text-white p-2 rounded-lg focus:outline-none focus:ring focus:border-blue-500"
           value={newMessage}
           onChange={(e) => Message(e.target)}
           onKeyDown={(e)=>{enter(e.key)}}
           placeholder="Type your message..."
-        />
+        />: <div className=" flex justify-between  items-center h-7">
+        <input type="file" placeholder="upload from local" className=" bg-gray-800 p-2 text-white" onChange={photo}/>
+        <p className=" text-white ">or</p>
+        <input placeholder="paste link" className="bg-gray-800 p-2 text-white" onChange={(e)=>{setvalue(e.target.value)}}/></div>}
+       
         <button onClick={sendMessage} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg ml-4">
           Send
         </button>
+        <button className=" bg-gray-400 hover:bg-gray-300 m-3 rounded-full size-10 flex justify-center items-center" onClick={()=>{settype("photo")}}><LuImagePlus className=" size-6"/></button>
+        <button className=" bg-gray-400 hover:bg-gray-300  rounded-full size-10 flex justify-center items-center" onClick={locatin}><HiLocationMarker className=" size-7"/></button>
       </div>
       <button onClick={() => navigate("/")} className="absolute top-4 left-4 rounded-full broder border-white hover:bg-white hover:text-black text-white p-2 flex items-center">
         <FaArrowLeft className=" size-5" />
