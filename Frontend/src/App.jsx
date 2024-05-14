@@ -1,4 +1,4 @@
-import {Route, Routes} from "react-router-dom"
+import {Route, Router, Routes} from "react-router-dom"
 import Home from "./components/Home"
 import Chat from "./components/chat"
 import Sigin from "./components/sign"
@@ -11,7 +11,7 @@ import Video from "./components/video"
 function App() {
   return (
     <>
-    <Routes>
+    <Router>    <Routes>
       <Route path="/" element={<Home/>}/> {/* Home */}
       <Route path="/chat/:roomid" element={<Chat/>}/>{/* Chat */}
       <Route path="/sign" element={<Sigin/>}/>{/* Sign */}
@@ -22,6 +22,7 @@ function App() {
       <Route path="/single/:roomid" element={<Single/>}/>
       <Route path="/video" element={<Video/>}/>
     </Routes>
+    </Router>
     </>
   )
 }
