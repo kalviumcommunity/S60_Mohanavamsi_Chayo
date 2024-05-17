@@ -233,7 +233,30 @@ app.post("/otp", async (req, res) => {
   }
 });
 
+// PUT
 
+app.put("/otpvalid", async (req, res) => {
+  try {
+    const otp = req.body.userotp;
+    const hashedotp = req.body.otp;
 
+    if (hash(otp) === hashedotp) {
+      const update = await user.findOneAndUpdate(
+        { email: req.body.email },
+        { password: hash(req.body.password) }
+      );
+      if (!update) {
+        res.send("User not in database");
+      } else {
+        res.send("Done");
+      }
+    } else {
+      res.send("Invalid OTP");
+    }
+  } catch (error) {
+    console.error("Error validating OTP:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
 
 module.exports = app;
