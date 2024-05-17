@@ -78,7 +78,7 @@ function Home() {
 console.log(window.innerWidth,window.outerWidth)
   
     return (
-        <div className={window.outerWidth>=600 ? `bg-gray-950 h-screen text-white flex justify-center items-center` : ` flex-col justify-around text-white bg-gray-950 w-screen`}>
+        <div className={window.outerWidth>=600 ? `bg-gray-950 selection:bg-white selection:text-black h-screen text-white flex justify-center items-center` : ` flex-col justify-around text-white bg-gray-950 w-screen`}>
             <div className={window.outerWidth>=600 ?`flex justify-center absolute top-4`:`flex mb-52 justify-center`}>
                 <Nav/>
             </div>

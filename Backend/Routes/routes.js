@@ -112,24 +112,6 @@ app.post("/login", async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
-app.get("/singledata/:roomid",async (req,res)=>{
-  try {
-    const roomdata = await singlemessanger.find({ roomid: req.params.roomid });
-    res.status(200).json(roomdata);
-  } catch (error) {
-    console.error("Error retrieving data:", error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-})
-app.get("/data/:roomid", async (req, res) => {
-  try {
-    const roomdata = await messanger.find({ roomid: req.params.roomid });
-    res.status(200).json(roomdata);
-  } catch (error) {
-    console.error("Error retrieving data:", error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-});
 
 app.post("/check", async (req, res) => {
   try {
@@ -241,14 +223,6 @@ app.get("/rooms", async (req,res)=>{
   }
 })
 
-app.get("/users", async (req, res) => {
-  try {
-    const users = await user.find({});
-    res.status(200).json(users);
-  } catch (error) {
-    console.error("Error retrieving users:", error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-});
+
 
 module.exports = app;
