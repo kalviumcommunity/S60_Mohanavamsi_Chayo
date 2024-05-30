@@ -59,7 +59,7 @@ Once the server is running, you can access the Chayoo app in your browser.
 
 ## Deploys
 
-- Frontend: https://chayoo.netlify.app
+- Frontend: [Chayo](https://chayoo.vercel.app/)
 -  Backend: https://s60-mohanavamsi-chayo.onrender.com
 
 ## Contributing
