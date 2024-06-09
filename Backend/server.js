@@ -95,6 +95,8 @@ io.on("connection", (socket) => {
         })
         socket.on("singleMessage",async (message ,user,route1,route2,photo,type)=>{
             try {
+                console.log(type,"ERgre")
+                if (type=="text"){
                 let filteredmessage=filter.clean(message)
                 console.log(filteredmessage)
                 io.to(route1).emit("shows", filteredmessage, user, photo,type)
@@ -121,6 +123,37 @@ io.on("connection", (socket) => {
                         }
                     }
                 });
+            }
+            else{
+                console.log("not",type)
+                io.to(route1).emit("shows", message, user, photo,type)
+                io.to(route2).emit("shows", message, user, photo,type)
+                await singlemessanger.findOneAndUpdate({ roomid: route1 }, {
+                    $push: {
+                        messages: {
+                            user: user,
+                            message: message,
+                            photo:photo,
+                            time: Date.now(),
+                            type:type
+                        }
+                    }
+                });
+                console.log("ewf")
+                await singlemessanger.findOneAndUpdate({ roomid: route2 }, {
+                    $push: {
+                        messages: {
+                            user: user,
+                            message: message,
+                            photo:photo,
+                            time: Date.now(),
+                            type:type
+                        }
+                    }
+                });
+                console.log("vdsf")
+
+            }
             } catch (error) {
                 console.log("Error in message:", error)
             }

@@ -7,7 +7,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { HiLocationMarker } from "react-icons/hi";
 import { LuImagePlus } from "react-icons/lu";
 function Single(){ 
-    const socket = io("http://localhost:8000");
+    const socket = io("https://s60-mohanavamsi-chayo.onrender.com");
      const { roomid } = useParams()
     const chatContainerRef = useRef()
     const nav=useNavigate()
@@ -15,6 +15,9 @@ function Single(){
     const [newMessage, setNewMessage] = useState("")
     const [type,settype]=useState("text")
     const [value,setvalue]=useState("")
+    let room=roomid.split("&")
+    let route1=room[0]+room[1]
+    let route2=room[1]+room[0]
       useEffect(() => {
         socket.emit("connect_room", roomid.split("&")[0]+roomid.split("&")[1], roomid.split("&")[1]+roomid.split("&")[0])
       }, [])
@@ -29,16 +32,15 @@ function Single(){
       useEffect(() => {
         scrollToBottom()
       }, [messages])
-      socket.on("shows", (message, user, photo) => {
+      socket.on("shows", (message, user, photo, type) => {
         console.log(message)
-        setMessages(prevMessages => [...prevMessages, { user, message, photo }]);
+        setMessages(prevMessages => [...prevMessages, { user, message, photo,type }]);
     });
      function sendMessage() {
-       let room=roomid.split("&")
-       let route1=room[0]+room[1]
-       let route2=room[1]+room[0]
+     
       if (type=="photo" && value){
-        socket.emit("singleMessage", value, route1,route2, getCookie("username"), getCookie("photo"),"photo")
+        console.log("E")
+        socket.emit("singleMessage", value,  getCookie("username"),route1,route2, getCookie("photo"),"photo")
         settype("text")
       }
       if (newMessage.trim() !== "") {
@@ -64,14 +66,19 @@ function Single(){
           console.log("hi")
           navigator.geolocation.getCurrentPosition((pos)=>{
             console.log(pos.coords)
-            socket.emit("message",`https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`, roomid, getCookie("username"), getCookie("photo"),"loc")
+            socket.emit("singleMessage",`https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`,getCookie("username"),route1,route2,getCookie("photo"),"loc")
           })
+        }
+        function Message(e){
+          const {value}=e
+          setNewMessage(value)
         }
     function enter(e){
       if (e==="Enter"){
         sendMessage()
       }
     }
+
       function scrollToBottom(){
         chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
       }
