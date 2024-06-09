@@ -12,7 +12,7 @@ const route = require("./Routes/routes");
 const { connect } = require("./db/connect");
 const PORT = process.env.PORT || 8000;
 const filter=new bad({placeHolder:"😇"})
-  
+const users = require("./Model/user");
 app.use("/", route);
 
 app.get("/", (req, res) => {
@@ -68,9 +68,16 @@ io.on("connection", (socket) => {
             }
         });
 
-        socket.on("connect_room", async (route) => {
+        socket.on("connect_room", async (route,route2,other,useer) => {
             try {
                 socket.join(route);
+                const check1=await users.findOne({name:useer})
+                check1.online=route2
+                console.log(check1.unreadMessages)
+                if (check1.unreadMessages){
+                check1.unreadMessages= check1.unreadMessages.filter((i)=>{return i!=other})
+                }
+                await check1.save()
                 const check = await singlemessanger.findOne({ roomid: route });
                 if (check) {
                     console.log("user entering room:", route)
@@ -93,9 +100,16 @@ io.on("connection", (socket) => {
             console.log(user,route)
             io.to(route).emit("typeing",user)
         })
-        socket.on("singleMessage",async (message ,user,route1,route2,photo)=>{
+        socket.on("singleMessage",async (message ,user,other,route1,route2,photo)=>{
             try {
                 let filteredmessage=filter.clean(message)
+                const check1=await users.findOne({name:other})
+                console.log(check1,route2)
+                if (check1.online!=route2){
+                    check1.unreadMessages.push(user)
+                    console.log(check1.unreadMessages)
+                    await check1.save()
+                }
                 console.log(filteredmessage)
                 io.to(route1).emit("shows", filteredmessage, user, photo)
                 io.to(route2).emit("shows", filteredmessage, user, photo)
@@ -122,6 +136,11 @@ io.on("connection", (socket) => {
             } catch (error) {
                 console.log("Error in message:", error)
             }
+            socket.on("disconnect",async()=>{
+                const check1=await users.findOne({name:user})
+                check1.online="false"
+                await check1.save()
+            })
         })
         socket.on("message", async (message, route, user, photo, type) => {
             try {
@@ -168,55 +187,8 @@ io.on("connection", (socket) => {
     } catch (error) {
         console.log("Error in connection:", error)
     }
-    app.delete("/delete/:id/:roomid", async (req, res) => {
-        const roomId = req.params.roomid
-        const messageId = req.params.id
-        try {
-           const data= await messanger.findOneAndUpdate(
-                { roomid: roomId },
-                { $pull: { messages: { _id: messageId } } }
-            );
-    
-            socket.to(roomId).emit("delete", data.messages)
-            res.send("done");
-        } catch (error) {
-            console.error("Error deleting message:", error)
-            res.status(500).send("An error occurred while deleting the message.")
-        }
-    });
-    
-      
-    app.put("/update/:id/:roomid", async (req, res) => {
-        const roomId = req.params.roomid
-        const messageId = req.params.id
-        const newMessage = req.body.message
-    
-        try {
-           const data= await messanger.findOneAndUpdate(
-                { roomid: roomId, "messages._id": messageId },
-                { $set: { "messages.$.message": newMessage } }
-            )
-
-            io.to(roomId).emit("update",data.messages)
-            res.json("done!")
-        } catch (error) {
-            console.error("Error updating message:", error)
-            res.status(500).send("An error occurred while updating the message.")
-        }
-    });
     socket.on("disconnect", () => {
-        try {
-            const room = Object.keys(socket.rooms).find(room => room !== socket.id);
-            if (room) {
-                if (roomUsers[room]) {
-                    roomUsers[room] = roomUsers[room].filter(u => u.name !== user);
-                    // Emit updated user list to all clients in the room
-                    io.to(room).emit("userList", roomUsers[room]);
-                }
-            }
-        } catch (error) {
-            console.log("Error on disconnect:", error);
-        }
+       
     });
 });
 

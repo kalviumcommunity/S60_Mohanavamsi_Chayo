@@ -1,19 +1,20 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { io } from "socket.io-client";
 import { getCookie } from "./nav";
 import axios from "axios";
 import { FaArrowLeft } from 'react-icons/fa';
+const socket = io("http://localhost:8000");
 
 function Single(){ 
-    const socket = io("https://s60-mohanavamsi-chayo.onrender.com");
      const { roomid } = useParams()
     const chatContainerRef = useRef()
     const nav=useNavigate()
     const [messages, setMessages] = useState([{user:"vami"}])
     const [newMessage, setNewMessage] = useState("")
       useEffect(() => {
-        socket.emit("connect_room", roomid.split("&")[0]+roomid.split("&")[1], roomid.split("&")[1]+roomid.split("&")[0])
+        console.log(roomid)
+        socket.emit("connect_room", roomid.split("&")[0]+roomid.split("&")[1], roomid.split("&")[1]+roomid.split("&")[0],roomid.split("&")[1],getCookie("username"))
       }, [])
       useEffect(()=>{
         axios.get(`https://s60-mohanavamsi-chayo.onrender.com/singledata/${roomid.split("&").join("")}`).then(
@@ -34,7 +35,7 @@ function Single(){
           let room=roomid.split("&")
           let route1=room[0]+room[1]
           let route2=room[1]+room[0]
-          socket.emit("singleMessage",newMessage ,getCookie("username"),route1,route2,getCookie("photo"))
+          socket.emit("singleMessage",newMessage ,getCookie("username"),roomid.split("&")[1],route1,route2,getCookie("photo"))
           setNewMessage("")
         }
       
