@@ -93,19 +93,20 @@ io.on("connection", (socket) => {
             console.log(user,route)
             io.to(route).emit("typeing",user)
         })
-        socket.on("singleMessage",async (message ,user,route1,route2,photo)=>{
+        socket.on("singleMessage",async (message ,user,route1,route2,photo,type)=>{
             try {
                 let filteredmessage=filter.clean(message)
                 console.log(filteredmessage)
-                io.to(route1).emit("shows", filteredmessage, user, photo)
-                io.to(route2).emit("shows", filteredmessage, user, photo)
+                io.to(route1).emit("shows", filteredmessage, user, photo,type)
+                io.to(route2).emit("shows", filteredmessage, user, photo,type)
                 await singlemessanger.findOneAndUpdate({ roomid: route1 }, {
                     $push: {
                         messages: {
                             user: user,
                             message: filteredmessage,
                             photo:photo,
-                            time: Date.now()
+                            time: Date.now(),
+                            type:type
                         }
                     }
                 });
@@ -115,7 +116,8 @@ io.on("connection", (socket) => {
                             user: user,
                             message: filteredmessage,
                             photo:photo,
-                            time: Date.now()
+                            time: Date.now(),
+                            type:type
                         }
                     }
                 });
