@@ -103,16 +103,9 @@ io.on("connection", (socket) => {
         socket.on("singleMessage",async (message ,user,other,route1,route2,photo)=>{
             try {
                 let filteredmessage=filter.clean(message)
-                const check1=await users.findOne({name:other})
-                console.log(check1,route2)
-                if (check1.online!=route2){
-                    check1.unreadMessages.push(user)
-                    console.log(check1.unreadMessages)
-                    await check1.save()
-                }
-                console.log(filteredmessage)
                 io.to(route1).emit("shows", filteredmessage, user, photo)
                 io.to(route2).emit("shows", filteredmessage, user, photo)
+                console.log(filteredmessage)
                 await singlemessanger.findOneAndUpdate({ roomid: route1 }, {
                     $push: {
                         messages: {
@@ -133,6 +126,13 @@ io.on("connection", (socket) => {
                         }
                     }
                 });
+                const check1=await users.findOne({name:other})
+                console.log(check1,route2)
+                if (check1.online!=route1){
+                    check1.unreadMessages.push(user)
+                    console.log(check1.unreadMessages)
+                    await check1.save()
+                }
             } catch (error) {
                 console.log("Error in message:", error)
             }
