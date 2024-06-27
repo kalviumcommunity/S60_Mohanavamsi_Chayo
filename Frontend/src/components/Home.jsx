@@ -13,14 +13,14 @@ function Home() {
     const socket = io("https://s60-mohanavamsi-chayo.onrender.com");
     const nav = useNavigate();
     useEffect(() => {
-        axios.get("https://s60-mohanavamsi-chayo.onrender.com/users")
+        axios.get("https://s60-mohanavamsi-chayo.onrender.com/users",{headers:{"authorization":getCookie("token")}})
             .then((res) => {
                 setUsers(res.data);
             })
             .catch((error) => {
                 console.error("Error fetching users:", error);
             });
-        axios.get("https://s60-mohanavamsi-chayo.onrender.com/rooms")
+        axios.get("https://s60-mohanavamsi-chayo.onrender.com/rooms",{headers:{"authorization":getCookie("token")}})
         .then((res)=>{
             console.log(res.data)
             setRooms(res.data)
@@ -50,7 +50,7 @@ function Home() {
     }
     function join(){
         if (room.trim() != "" && getCookie("username") ) {
-            axios.get(`https://s60-mohanavamsi-chayo.onrender.com/data/${room}`).then((res)=>{
+            axios.get(`https://s60-mohanavamsi-chayo.onrender.com/rooms/${room}`,{headers:{"authorization":getCookie("token")}}).then((res)=>{
                 if (res.data[0].password==password){
                     nav(`/chat/${room}`);
                 }
