@@ -24,7 +24,7 @@ function Chat() {
   },[])
 
   useEffect(() => {
-    axios.get(`https://s60-mohanavamsi-chayo.onrender.com/data/${roomid}`).then(
+    axios.get(`https://s60-mohanavamsi-chayo.onrender.com/data/${roomid}`,{headers:{"authorization":getCookie("token")}}).then(
       (res)=>{
         // console.log(res.data[0].messages)
         setMessages(res.data[0].messages)
