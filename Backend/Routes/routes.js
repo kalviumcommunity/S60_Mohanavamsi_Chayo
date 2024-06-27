@@ -83,7 +83,7 @@ app.get("/data/:roomid", verifyToken, async (req, res) => {
   }
 });
 
-app.get("/users", verifyToken, async (req, res) => {
+app.get("/users", async (req, res) => {
   try {
     const users = await user.find({}); 
     res.status(200).json(users);
