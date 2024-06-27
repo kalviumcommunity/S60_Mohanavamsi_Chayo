@@ -50,7 +50,7 @@ function Home() {
     }
     function join(){
         if (room.trim() != "" && getCookie("username") ) {
-            axios.get(`https://s60-mohanavamsi-chayo.onrender.com/rooms/${room}`,{headers:{"authorization":getCookie("token")}}).then((res)=>{
+            axios.get(`https://s60-mohanavamsi-chayo.onrender.com/data/${room}`,{headers:{"authorization":getCookie("token")}}).then((res)=>{
                 if (res.data[0].password==password){
                     nav(`/chat/${room}`);
                 }
