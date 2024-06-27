@@ -93,7 +93,7 @@ app.get("/users", verifyToken, async (req, res) => {
   }
 });
 
-app.get("/rooms", verifyToken, async (req, res) => {
+app.get("/rooms", async (req, res) => {
   try {
     const rooms = await messanger.find({});
     res.status(200).json(rooms);
