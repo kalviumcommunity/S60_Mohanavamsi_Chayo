@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 import { io } from "socket.io-client";
 import { getCookie } from "./nav";
 import axios from "axios";
 import { FaArrowLeft } from 'react-icons/fa';
 import { HiLocationMarker } from "react-icons/hi";
 import { LuImagePlus } from "react-icons/lu";
-const socket = io("http://localhost:8000");
+const socket = io("https://s60-mohanavamsi-chayo.onrender.com");
 function Single(){ 
-     const { roomid } = useParams()
+    const { roomid } = useParams()
     const chatContainerRef = useRef()
     const nav=useNavigate()
     const [messages, setMessages] = useState([{user:"vami"}])
@@ -19,16 +19,8 @@ function Single(){
     let route1=room[0]+room[1]
     let route2=room[1]+room[0]
       useEffect(() => {
-        console.log(roomid)
-        socket.emit("connect_room", roomid.split("&")[0]+roomid.split("&")[1], roomid.split("&")[1]+roomid.split("&")[0],roomid.split("&")[1],getCookie("username"))
-        socket.on("shows", (message, user, photo) => {
-          console.log(message)
-          setMessages(prevMessages => [...prevMessages, { user, message, photo }]);
-      });
-      return ()=>{
-        socket.disconnect()
-      }
-      },[])
+        socket.emit("connect_room", roomid.split("&")[0]+roomid.split("&")[1], roomid.split("&")[1]+roomid.split("&")[0])
+      }, [])
       useEffect(()=>{
         axios.get(`https://s60-mohanavamsi-chayo.onrender.com/singledata/${roomid.split("&").join("")}`,{headers:{"authorization":getCookie("token")}}).then(
           (res)=>{
@@ -40,12 +32,6 @@ function Single(){
       useEffect(() => {
         scrollToBottom()
       }, [messages])
-     
-     function sendMessage() {
-          let room=roomid.split("&")
-          let route1=room[0]+room[1]
-          let route2=room[1]+room[0]
-          socket.emit("singleMessage",newMessage ,getCookie("username"),roomid.split("&")[0],route1,route2,getCookie("photo"))
       socket.on("shows", (message, user, photo, type) => {
         console.log(message)
         setMessages(prevMessages => [...prevMessages, { user, message, photo,type }]);
