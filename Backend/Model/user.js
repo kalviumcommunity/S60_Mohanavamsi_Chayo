@@ -4,7 +4,9 @@ const schema=mongoose.Schema({
     password:String,
     email:String,
     token:String,
-    photo:String
+    photo:String,
+unreadMessages:[String],
+online: { type: String, default: "false" }
 })
 const model=mongoose.model("user",schema)
 module.exports=model
