@@ -176,7 +176,12 @@ app.post("/check", async (req, res) => {
     const { email } = req.body;
     const check = await user.findOne({ email: email });
     if (check) {
-      res.send({ username: check.name, message: "login", photo: check.photo });
+      const token = jwt.sign(
+        { id: check._id, email: check.email, username: check.name },
+        process.env.JWT,
+        { expiresIn: '24h' }
+      );
+      res.json({ token: token, username: check.name, message: "login", photo: check.photo });
     } else {
       res.send({ message: "sign" });
     }
@@ -220,6 +225,7 @@ app.post("/firebase", async (req, res) => {
         username: username,
         token: token,
         message: "User created",
+        photo:photo
       });
     }
   } catch (error) {
