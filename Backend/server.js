@@ -100,19 +100,23 @@ io.on("connection", (socket) => {
             console.log(user,route)
             io.to(route).emit("typeing",user)
         })
-        socket.on("singleMessage",async (message ,user,other,route1,route2,photo)=>{
+        socket.on("singleMessage",async (message ,user,route1,route2,photo,type)=>{
             try {
+                console.log(type,"ERgre")
+                if (type=="text"){
                 let filteredmessage=filter.clean(message)
-                io.to(route1).emit("shows", filteredmessage, user, photo)
-                io.to(route2).emit("shows", filteredmessage, user, photo)
+
                 console.log(filteredmessage)
+                io.to(route1).emit("shows", filteredmessage, user, photo,type)
+                io.to(route2).emit("shows", filteredmessage, user, photo,type)
                 await singlemessanger.findOneAndUpdate({ roomid: route1 }, {
                     $push: {
                         messages: {
                             user: user,
                             message: filteredmessage,
                             photo:photo,
-                            time: Date.now()
+                            time: Date.now(),
+                            type:type
                         }
                     }
                 });
@@ -122,7 +126,24 @@ io.on("connection", (socket) => {
                             user: user,
                             message: filteredmessage,
                             photo:photo,
-                            time: Date.now()
+                            time: Date.now(),
+                            type:type
+                        }
+                    }
+                });
+            }
+            else{
+                console.log("not",type)
+                io.to(route1).emit("shows", message, user, photo,type)
+                io.to(route2).emit("shows", message, user, photo,type)
+                await singlemessanger.findOneAndUpdate({ roomid: route1 }, {
+                    $push: {
+                        messages: {
+                            user: user,
+                            message: message,
+                            photo:photo,
+                            time: Date.now(),
+                            type:type
                         }
                     }
                 });
@@ -133,6 +154,21 @@ io.on("connection", (socket) => {
                     console.log(check1.unreadMessages)
                     await check1.save()
                 }
+                console.log("ewf")
+                await singlemessanger.findOneAndUpdate({ roomid: route2 }, {
+                    $push: {
+                        messages: {
+                            user: user,
+                            message: message,
+                            photo:photo,
+                            time: Date.now(),
+                            type:type
+                        }
+                    }
+                });
+                console.log("vdsf")
+
+            }
             } catch (error) {
                 console.log("Error in message:", error)
             }

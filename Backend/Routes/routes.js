@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const messanger = require("../Model/chat");
 const user = require("../Model/user");
-const singlemessanger=require("../Model/singlechat")
+const singlemessanger = require("../Model/singlechat");
 const nodemailer = require("nodemailer");
 const env = require("dotenv");
 const jwt = require("jsonwebtoken");
@@ -12,9 +12,10 @@ const fs = require("fs");
 const path = require("path");
 const otpGenerator = require("otp-generator");
 const crypto = require("crypto");
-const cores = require("cors");
-app.use(cores());
-app.use(express.json())
+
+env.config();
+app.use(express.json());
+app.use(cors({ origin: "*" }));
 
 function hash(password) {
   const hash = crypto.createHash("sha256");
@@ -36,10 +37,6 @@ const loginvalid = Joi.object({
   password: Joi.string().required(),
 });
 
-env.config();
-app.use(express.json());
-app.use(cors({origin:"*"}));
-
 const transporter = nodemailer.createTransport({
   service: "outlook",
   auth: {
@@ -48,9 +45,25 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// GET-Apis's
+// Middleware to verify JWT
+function verifyToken(req, res, next) {
+  const token = req.headers['authorization'];
+  if (!token) {
+    return res.status(403).json({ message: 'No token provided' });
+  }
+  
+  jwt.verify(token, process.env.JWT, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ message: 'Invalid token' });
+    }
+    console.log(decoded)
+    next();
+  });
+}
 
-app.get("/singledata/:roomid",async (req,res)=>{
+// GET-APIs
+
+app.get("/singledata/:roomid", verifyToken, async (req, res) => {
   try {
     const roomdata = await singlemessanger.find({ roomid: req.params.roomid });
     res.status(200).json(roomdata);
@@ -58,9 +71,9 @@ app.get("/singledata/:roomid",async (req,res)=>{
     console.error("Error retrieving data:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
-})
+});
 
-app.get("/data/:roomid", async (req, res) => {
+app.get("/data/:roomid", verifyToken, async (req, res) => {
   try {
     const roomdata = await messanger.find({ roomid: req.params.roomid });
     res.status(200).json(roomdata);
@@ -72,25 +85,25 @@ app.get("/data/:roomid", async (req, res) => {
 
 app.get("/users", async (req, res) => {
   try {
-    const users = await user.find({});
+    const users = await user.find({}); 
     res.status(200).json(users);
   } catch (error) {
     console.error("Error retrieving users:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
-})
+});
 
-app.get("/rooms", async (req,res)=>{
-  try{
-    const rooms=await messanger.find({})
-    res.status(200).json(rooms)
-  } catch(error){
-    console.error("Error retrieving users:", error);
+app.get("/rooms", async (req, res) => {
+  try {
+    const rooms = await messanger.find({});
+    res.status(200).json(rooms);
+  } catch (error) {
+    console.error("Error retrieving rooms:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
-})
+});
 
-// POST-Api's
+// POST-APIs
 
 app.post("/sign", async (req, res) => {
   try {
@@ -99,18 +112,16 @@ app.post("/sign", async (req, res) => {
     const check2 = await user.findOne({ name: username });
 
     if (check) {
-      res.json({ message: "User in database please login." });
+      res.status(400).json({ message: "User in database, please login." });
     } else if (check2) {
-      res.json({ message: "Username already taken." });
+      res.status(400).json({ message: "Username already taken." });
     } else if (signvalid.validate(req.body).error) {
-      res.json({ message: signvalid.validate(req.body).error.message });
+      res.status(400).json({ message: signvalid.validate(req.body).error.message });
     } else {
-      const token = jwt.sign(req.body, process.env.JWT);
       await user.create({
         name: username,
         email: email,
         password: hash(password),
-        token: token,
         photo: photo
       });
 
@@ -123,7 +134,7 @@ app.post("/sign", async (req, res) => {
 
       await transporter.sendMail(welcome);
 
-      res.status(201).json({ message: "User Created!!", token: token, username: username, photo:photo });
+      res.status(201).json({ message: "User Created!!", username: username, photo: photo });
     }
   } catch (error) {
     console.log("Error in sign up:", error);
@@ -139,17 +150,20 @@ app.post("/login", async (req, res) => {
     if (!loginvalid.validate(req.body).error) {
       if (check) {
         if (hash(password) === check.password) {
-          res.json({ token: check.token, username: check.name, message: "ok" , photo:check.photo});
+          const token = jwt.sign(
+            { id: check._id, email: check.email, username: check.name },
+            process.env.JWT,
+            { expiresIn: '24h' }
+          );
+          res.json({ token: token, username: check.name, message: "ok", photo: check.photo });
         } else {
-          res
-            .status(200)
-            .json({ message: "Password is wrong", d: check.password });
+          res.status(400).json({ message: "Password is wrong" });
         }
       } else {
-        res.json({ message: "User not in database" });
+        res.status(404).json({ message: "User not in database" });
       }
     } else {
-      res.json({ message: loginvalid.validate(req.body).error.message });
+      res.status(400).json({ message: loginvalid.validate(req.body).error.message });
     }
   } catch (error) {
     console.error("Error in login:", error);
@@ -162,7 +176,7 @@ app.post("/check", async (req, res) => {
     const { email } = req.body;
     const check = await user.findOne({ email: email });
     if (check) {
-      res.send({ username: check.name, token: check.token, message: "login", photo:check.photo });
+      res.send({ username: check.name, message: "login", photo: check.photo });
     } else {
       res.send({ message: "sign" });
     }
@@ -178,14 +192,12 @@ app.post("/firebase", async (req, res) => {
     const check = await user.findOne({ name: username });
 
     if (check) {
-      res.send("Username taken");
+      res.status(400).send("Username taken");
     } else {
-      const token = jwt.sign(req.body, process.env.JWT);
       await user.create({
         name: username,
         email: email,
         password: hash(password),
-        token: token,
         photo: photo,
       });
 
@@ -198,9 +210,15 @@ app.post("/firebase", async (req, res) => {
 
       await transporter.sendMail(welcome);
 
+      const token = jwt.sign(
+        { id: user._id, email: email, username: username },
+        process.env.JWT,
+        { expiresIn: '24h' }
+      );
+
       res.json({
         username: username,
-        token: jwt.sign(req.body, process.env.JWT),
+        token: token,
         message: "User created",
       });
     }
@@ -246,12 +264,12 @@ app.put("/otpvalid", async (req, res) => {
         { password: hash(req.body.password) }
       );
       if (!update) {
-        res.send("User not in database");
+        res.status(404).send("User not in database");
       } else {
-        res.send("Done");
+        res.send("Password updated successfully");
       }
     } else {
-      res.send("Invalid OTP");
+      res.status(400).send("Invalid OTP");
     }
   } catch (error) {
     console.error("Error validating OTP:", error);
