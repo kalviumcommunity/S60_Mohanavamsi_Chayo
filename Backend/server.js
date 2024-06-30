@@ -245,7 +245,6 @@ io.on("connection", (socket) => {
             if (room) {
                 if (roomUsers[room]) {
                     roomUsers[room] = roomUsers[room].filter(u => u.name !== user);
-                    // Emit updated user list to all clients in the room
                     io.to(room).emit("userList", roomUsers[room]);
                 }
             }
