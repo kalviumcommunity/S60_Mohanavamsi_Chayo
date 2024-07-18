@@ -50,6 +50,7 @@ io.on("connection", (socket) => {
         });
 
         socket.on("connecting_room", async(route,photo,user) => {
+            console.log(route)
             try {
                 socket.join(route);
                 console.log(roomUsers)
@@ -160,6 +161,7 @@ io.on("connection", (socket) => {
         })
         socket.on("message", async (message, route, user, photo, type) => {
             try {
+                console.log(message)
                 if (type=="text"){
                 let filteredmessage=filter.clean(message)
                 console.log(message);
