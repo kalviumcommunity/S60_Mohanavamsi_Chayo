@@ -157,7 +157,8 @@ app.post("/login", async (req, res) => {
           );
           res.json({ token: token, username: check.name, message: "ok", photo: check.photo });
         } else {
-          res.status(400).json({ message: "Password is wrong" });
+
+          res.status(401).json({ message: "Password is wrong" });
         }
       } else {
         res.status(404).json({ message: "User not in database" });
@@ -225,7 +226,6 @@ app.post("/firebase", async (req, res) => {
         username: username,
         token: token,
         message: "User created",
-        photo:photo
       });
     }
   } catch (error) {
