@@ -96,7 +96,6 @@ io.on("connection", (socket) => {
         })
         socket.on("singleMessage",async (message ,user,route1,route2,photo,type)=>{
             try {
-                console.log(type,"ERgre")
                 if (type=="text"){
                 let filteredmessage=filter.clean(message)
                 console.log(filteredmessage)
