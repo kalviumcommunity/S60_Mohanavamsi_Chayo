@@ -69,25 +69,41 @@ io.on("connection", (socket) => {
             }
         });
 
-        socket.on("connect_room", async (route) => {
+        socket.on("connect_room", async (route, route2) => {
             try {
                 socket.join(route);
                 const check = await singlemessanger.findOne({ roomid: route });
+                const check2 = await singlemessanger.findOne({ roomid: route2 });
                 if (check) {
-                    console.log("user entering room:", route)
+                    console.log("User entering room:", route);
                 } else {
                     await singlemessanger.create({
                         roomid: route,
                         messages: [{
                             user: "chayo",
-                            message:"welcome to" + route,
+                            message: "Welcome to " + route,
                             time: Date.now()
                         }]
                     });
-                    console.log("new room created", route)
+                    console.log("New room created:", route);
                 }
+        
+                if (check2) {
+                    console.log("User entering second room:", route2);
+                } else {
+                    await singlemessanger.create({
+                        roomid: route2,
+                        messages: [{
+                            user: "chayo",
+                            message: "Welcome to " + route2,
+                            time: Date.now()
+                        }]
+                    });
+                    console.log("New second room created:", route2);
+                }
+        
             } catch (error) {
-                console.log("Error in connecting_room:", error)
+                console.error("Error in connecting_room:", error);
             }
         });
         socket.on("typing",(user,route)=>{
