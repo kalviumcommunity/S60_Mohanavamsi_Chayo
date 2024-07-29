@@ -1,4 +1,6 @@
 const mongoose=require("mongoose")
+const dit=require("dotenv")
+dit.config()
 const schema=mongoose.Schema({
     roomid:String,
     messages:[

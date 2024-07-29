@@ -198,7 +198,7 @@ app.post("/firebase", async (req, res) => {
     const check = await user.findOne({ name: username });
 
     if (check) {
-      res.status(400).send("Username taken");
+      res.send("Username taken");
     } else {
       await user.create({
         name: username,

@@ -72,8 +72,10 @@ io.on("connection", (socket) => {
         socket.on("connect_room", async (route, route2) => {
             try {
                 socket.join(route);
+        
                 const check = await singlemessanger.findOne({ roomid: route });
                 const check2 = await singlemessanger.findOne({ roomid: route2 });
+        
                 if (check) {
                     console.log("User entering room:", route);
                 } else {
