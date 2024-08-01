@@ -152,9 +152,7 @@ app.post("/login", async (req, res) => {
         if (hash(password) === check.password) {
           const token = jwt.sign(
             { id: check._id, email: check.email, username: check.name },
-            process.env.JWT,
-            { expiresIn: '24h' }
-          );
+            process.env.JWT          );
           res.json({ token: token, username: check.name, message: "ok", photo: check.photo });
         } else {
 
@@ -218,8 +216,7 @@ app.post("/firebase", async (req, res) => {
 
       const token = jwt.sign(
         { id: user._id, email: email, username: username },
-        process.env.JWT,
-        { expiresIn: '24h' }
+        process.env.JWT
       );
 
       res.json({

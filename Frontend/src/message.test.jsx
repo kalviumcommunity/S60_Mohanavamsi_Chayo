@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-describe('Login Route', () => {
+describe('Login Route testing!!', () => {
     test('should return a token for valid credentials', async () => {
         const response = await axios.post('http://localhost:8000/login', {
             email: 'mohanavamsi14@gmail.com',
@@ -13,9 +13,9 @@ describe('Login Route', () => {
 
     test('should return 401 for invalid credentials', async () => {
         try {
-            await axios.post('http://localhost:8000/login', {
+            const response = await axios.post('http://localhost:8000/login', {
                 email: 'mohanavamsi14@gmail.com',
-                password: 'wrongpass'
+                password: 'Vamsi061!'
             });
         } catch (error) {
             expect(error.response.status).toBe(401);

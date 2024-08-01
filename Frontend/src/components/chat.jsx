@@ -103,7 +103,7 @@ socket.on("userList",(list)=>{
   };
 // console.log(messages)
   return (
-    <div className="h-screen selection:bg-white selection:text-black bg-gray-950 p-2 flex flex-col justify-center items-center">
+    <div className="h-screen  selection:bg-white selection:text-black bg-gray-950 p-2 flex flex-col justify-center items-center">
       <div className={window.outerWidth>=600 ?`overflow-y-scroll h-5/6 w-6/12 relative bottom-4 bg-black rounded-2xl pt-2 pl-2` :`overflow-y-scroll h-5/6 w-11/12 relative bottom-4 bg-black rounded-2xl pt-2 pl-2`} ref={chatContainerRef}>
         {messages.map((message, index) => (
           <div key={index} className={`flex w-full ${isCurrentUser(message.user) ? ' justify-start' : ' justify-end'} `}>
