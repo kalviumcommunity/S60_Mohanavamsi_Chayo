@@ -18,7 +18,7 @@ function Sigin() {
         console.log(data)
         console.log((Object.keys(data)))
         if (Object.keys(data).length==2){
-        axios.post("https://s60-mohanavamsi-chayo.onrender.com/login",data).then(
+        axios.post("https://qwty3g6kfx.ap-south-1.awsapprunner.com/login",data).then(
             (res)=>{
               setload(true)
                 const response=res

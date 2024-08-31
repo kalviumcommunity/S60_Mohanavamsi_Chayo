@@ -21,7 +21,7 @@ function Sigin() {
         console.log(data);
         if (Object.keys(data).length === 4 && valid) {
         setload(true);
-            axios.post("https://s60-mohanavamsi-chayo.onrender.com/sign", data)
+            axios.post("https://qwty3g6kfx.ap-south-1.awsapprunner.com/sign", data)
                 .then((res) => {
                     const response = res;
                     console.log(response);

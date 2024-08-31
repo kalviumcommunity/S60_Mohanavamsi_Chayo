@@ -25,7 +25,7 @@ function Fire() {
     signInWithPopup(auth, provider)
       .then((result) => {
         const user = result.user;
-        axios.post("https://s60-mohanavamsi-chayo.onrender.com/check",{email:user.email}).then(
+        axios.post("https://qwty3g6kfx.ap-south-1.awsapprunner.com/check",{email:user.email}).then(
             (res)=>{
               console.log(res)
               if(res.data.message=="login"){

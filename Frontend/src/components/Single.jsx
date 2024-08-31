@@ -6,7 +6,7 @@ import axios from "axios";
 import { FaArrowLeft } from 'react-icons/fa';
 import { HiLocationMarker } from "react-icons/hi";
 import { LuImagePlus } from "react-icons/lu";
-const socket = io("https://s60-mohanavamsi-chayo.onrender.com");
+const socket = io("https://qwty3g6kfx.ap-south-1.awsapprunner.com");
 function Single(){ 
     const { roomid } = useParams()
     const chatContainerRef = useRef()
@@ -22,7 +22,7 @@ function Single(){
         socket.emit("connect_room", roomid.split("&")[0]+roomid.split("&")[1], roomid.split("&")[1]+roomid.split("&")[0])
       }, [])
       useEffect(()=>{
-        axios.get(`https://s60-mohanavamsi-chayo.onrender.com/singledata/${roomid.split("&").join("")}`,{headers:{"authorization":getCookie("token")}}).then(
+        axios.get(`https://qwty3g6kfx.ap-south-1.awsapprunner.com/singledata/${roomid.split("&").join("")}`,{headers:{"authorization":getCookie("token")}}).then(
           (res)=>{
             console.log(res.data[0])
             setMessages(res.data[0].messages)
@@ -34,8 +34,8 @@ function Single(){
       }, [messages])
       socket.on("shows", (message, user, photo, type) => {
         console.log(message)
-        setMessages(prevMessages => [...prevMessages, { user, message, photo,type }]);
-    });
+        setMessages([...messages, { user: user, message: message, photo: photo,type:type}])
+      });
      function sendMessage() {
      
       if (type=="photo" && value){

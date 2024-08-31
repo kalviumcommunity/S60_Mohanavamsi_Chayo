@@ -2,7 +2,7 @@ import axios from 'axios';
 
 describe('Login Route testing!!', () => {
     test('should return a token for valid credentials', async () => {
-        const response = await axios.post('http://localhost:8000/login', {
+        const response = await axios.post('https://qwty3g6kfx.ap-south-1.awsapprunner.com/login', {
             email: 'mohanavamsi14@gmail.com',
             password: 'Vamsi0614!'
         });
@@ -13,7 +13,7 @@ describe('Login Route testing!!', () => {
 
     test('should return 401 for invalid credentials', async () => {
         try {
-            const response = await axios.post('http://localhost:8000/login', {
+            const response = await axios.post('https://qwty3g6kfx.ap-south-1.awsapprunner.com/login', {
                 email: 'mohanavamsi14@gmail.com',
                 password: 'Vamsi061!'
             });
@@ -25,7 +25,7 @@ describe('Login Route testing!!', () => {
 
     test('should return 404 for user not in database', async () => {
         try {
-            await axios.post('http://localhost:8000/login', {
+            await axios.post('https://qwty3g6kfx.ap-south-1.awsapprunner.com/login', {
                 email: 'm@gmail.com',
                 password: 'wrongpass'
             });
