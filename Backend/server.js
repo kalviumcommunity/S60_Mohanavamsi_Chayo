@@ -19,7 +19,7 @@ app.get("/", (req, res) => {
     res.send("Welcome to chayo");
 });
 
-app.use(cors({origin:"https://chayoo.vercel.app"}));
+app.use(cors());
 
 const roomUsers = {};
 
