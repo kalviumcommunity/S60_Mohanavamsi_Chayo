@@ -15,7 +15,7 @@ function Username(){
     function login(){
         if (value && user){
             setload(true)
-        axios.post("https://qwty3g6kfx.ap-south-1.awsapprunner.com/firebase",{...data,username:user,photo:value}).then(
+        axios.post("https://s60-mohanavamsi-chayo.onrender.com/firebase",{...data,username:user,photo:value}).then(
             (res)=>{
               console.log(res.data)
                 if(res.data=="Username taken"){

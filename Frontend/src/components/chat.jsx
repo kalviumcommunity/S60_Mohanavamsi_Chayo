@@ -6,7 +6,7 @@ import axios from "axios";
 import { FaArrowLeft } from 'react-icons/fa';
 import { HiLocationMarker } from "react-icons/hi";
 import { LuImagePlus } from "react-icons/lu";
-const socket = io("https://qwty3g6kfx.ap-south-1.awsapprunner.com");
+const socket = io("https://s60-mohanavamsi-chayo.onrender.com");
 function Chat() {
   const { roomid } = useParams()
   const navigate = useNavigate(); 
@@ -23,7 +23,7 @@ function Chat() {
   },[])
 
   useEffect(() => {
-    axios.get(`https://qwty3g6kfx.ap-south-1.awsapprunner.com/data/${roomid}`,{headers:{"authorization":getCookie("token")}}).then(
+    axios.get(`https://s60-mohanavamsi-chayo.onrender.com/data/${roomid}`,{headers:{"authorization":getCookie("token")}}).then(
       (res)=>{
         // console.log(res.data[0].messages)
         setMessages(res.data[0].messages)
