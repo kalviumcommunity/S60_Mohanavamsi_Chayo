@@ -3,6 +3,7 @@ import axios from "axios";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Link, useNavigate } from "react-router-dom";
 import Fire from "./firebase";
+import { toast, ToastContainer } from "react-toastify";
 
 function Sigin() {
     const [data, setvalue] = useState({ username: '', email: '', password: '', photo: '' });
@@ -19,42 +20,24 @@ function Sigin() {
     }
     function submit() {
         console.log(data);
-        if (Object.keys(data).length === 4 && valid) {
+        if (Object.keys(data).length==4 && valid) {
         setload(true);
-            axios.post("https://s60-mohanavamsi-chayo.onrender.com/sign", data)
+            axios.post("https://s60-mohanavamsi-chayo-2ovy.onrender.com/sign", data)
                 .then((res) => {
                     const response = res;
                     console.log(response);
-                    switch (response.data.message) {
-                        case "\"email\" must be a valid email":
-                            seterror({ ...error, email: "give the mail properly" });
-                            setload(false)
-                            break;
-                        case "User in database please login.":
-                            seterror({ ...error, login: "you are already in having an account please login" });
-                            setload(false)
-                            break;
-                        case "Username already taken.":
-                            seterror({ ...error, login: "username already taken choice other" });
-                           setload(false)
-                            break;
-                        case '"password" is not allowed to be empty':
-                            seterror({ ...error, password: "give the password" });
-                            setload(false)
-                            break;
-                        case '"name" is not allowed to be empty':
-                            seterror({ ...error, name: "enter the name" });
-                           setload(false)
-                            break;
-                        case "User Created!!":
-                            document.cookie = `username=${response.data.username}`;
-                            document.cookie = `token=${response.data.token}`;
-                            document.cookie=`photo=${response.data.photo}`
-                            nav("/");
+                    if (response.data.message=="User Created!!"){
+                        document.cookie = `username=${response.data.username}`;
+                        document.cookie = `token=${response.data.token}`;
+                        document.cookie=`photo=${response.data.photo}`
+                        nav("/");
                     }
+                
                 })
                 .catch((e) => {
                     console.log(e);
+                    toast(e.response.data.message,{theme:"dark",closeOnClick:true})
+                    setload(false)
                 });
         } else {
             alert("hey please check all again! and submit");
@@ -163,6 +146,7 @@ function Sigin() {
                     </Link>
                 </div>
             </div>
+            <ToastContainer/>
         </div>
     );
 }

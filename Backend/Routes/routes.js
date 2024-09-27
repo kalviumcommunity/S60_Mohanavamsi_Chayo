@@ -153,7 +153,7 @@ app.post("/login", async (req, res) => {
           const token = jwt.sign(
             { id: check._id, email: check.email, username: check.name },
             process.env.JWT          );
-          res.json({ token: token, username: check.name, message: "ok", photo: check.photo });
+          res.status(200).json({ token: token, username: check.name, message: "ok", photo: check.photo });
         } else {
 
           res.status(401).json({ message: "Password is wrong" });

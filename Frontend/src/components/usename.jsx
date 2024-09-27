@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useState } from "react";
 import { useLocation,useNavigate } from "react-router";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Username(){
     const data=useLocation().state
@@ -12,14 +14,15 @@ function Username(){
         console.log(e)
         setuser(e)
     }
+    
     function login(){
         if (value && user){
             setload(true)
-        axios.post("https://s60-mohanavamsi-chayo.onrender.com/firebase",{...data,username:user,photo:value}).then(
+        axios.post("https://s60-mohanavamsi-chayo-2ovy.onrender.com/firebase",{...data,username:user,photo:value}).then(
             (res)=>{
               console.log(res.data)
                 if(res.data=="Username taken"){
-                    alert("username taken !!")
+                  toast(res.data,{closeOnClick:true,theme:"dark"})
                     setload(false)
                 }
                 else if (res.data.message=="User created"){
@@ -79,6 +82,7 @@ function Username(){
   ></div>
 </div>
 )}
+<ToastContainer/>
         </div>
         
     )

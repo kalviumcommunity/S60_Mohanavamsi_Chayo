@@ -15,7 +15,7 @@ function Forget(){
       console.log(state)
       if(Object.keys(state).length != 0){
       setload(true)
-      axios.post("https://s60-mohanavamsi-chayo.onrender.com/otp",state).then(
+      axios.post("https://s60-mohanavamsi-chayo-2ovy.onrender.com/otp",state).then(
           (res)=>{
               sessionStorage.setItem("otp",res.data)
               setotp(true)
@@ -29,7 +29,7 @@ function Forget(){
   function reset() {
     if(Object.keys(state).length==3){
     setload(true)
-      axios.put("https://s60-mohanavamsi-chayo.onrender.com/otpvalid",{...state,otp:sessionStorage.getItem("otp"),userotp:state.otp}).then(
+      axios.put("https://s60-mohanavamsi-chayo-2ovy.onrender.com/otpvalid",{...state,otp:sessionStorage.getItem("otp"),userotp:state.otp}).then(
           (res)=>{
               console.log(res.data)
               if(res.data=="Done"){

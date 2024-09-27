@@ -2,7 +2,8 @@ import { useState } from "react"
 import axios from "axios"
 import { Link, useNavigate } from "react-router-dom"
 import Fire from "./firebase"
-function Sigin() {
+import { toast, ToastContainer } from "react-toastify";
+function Login() {
   const [data, setvalue] = useState({email: '', password: ''});
   const [error,seterror]=useState({})
     const[load,setload]=useState(false)
@@ -18,44 +19,23 @@ function Sigin() {
         console.log(data)
         console.log((Object.keys(data)))
         if (Object.keys(data).length==2){
-        axios.post("https://s60-mohanavamsi-chayo.onrender.com/login",data).then(
+        axios.post("https://s60-mohanavamsi-chayo-2ovy.onrender.com/login",data).then(
             (res)=>{
               setload(true)
                 const response=res
                 console.log(response)
-                switch (response.data.message){
-                    case "\"email\" must be a valid email":
-                        seterror({...error,email:"give the mail proprerly"})
-                        setload(false)
-                        break
-                    case "User not in database":
-                        seterror({...error,login:"you are not  having an account please sign"})
-                        setload(false)
-
-                        break
-                    case '"password" is not allowed to be empty':
-                        seterror({...error,password:"give the password"})
-                        setload(false)
-
-                        break
-                    case "Password is wrong":
-                      seterror({...error,password:"password is wrong"})
-                      setload(false)
-
-                      break
-                    case '"name" is not allowed to be empty':
-                        seterror({...error,name:"enter the name"})  
-                        setload(false)
-
-                        break 
-                    case "ok":
-                        document.cookie=`username=${response.data.username}`
+                if (response.data.message=="ok"){
+                  document.cookie=`username=${response.data.username}`
                         document.cookie=`token=${response.data.token}`
                         document.cookie=`photo=${response.data.photo}`
                         nav("/")
                 }
+                 
             }
-        ).catch((e)=>{console.log(e)})
+        ).catch((e)=>{
+          setload(false)
+          toast(e.response.data.message,{theme:"dark"})
+          console.log(e)})
         }
         else{
             alert("hey please check all again! and submit")
@@ -99,10 +79,11 @@ function Sigin() {
     className="w-5 h-5  bg-[#6756cc] rounded-full animate-bounce"
   ></div>
 </div>)}
-   <Link className=" text-purple-600 text-center" to={"/sign"}>not  having an account ? sigin!</Link>
+   <Link className=" text-purple-600 text-center" to={"/sign"}>not having an account ? sigin!</Link>
      </div>
    </div>
+   <ToastContainer/>
    </div>
     )
 }
-export default Sigin;
+export default Login;
