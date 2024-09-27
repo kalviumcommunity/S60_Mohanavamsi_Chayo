@@ -1,4 +1,6 @@
 import {Link} from "react-router-dom"
+import AccountDetails from "./Modal"
+import { ModalHover } from "react-modal-hover"
 export  function getCookie(name) {
     let cookieArray = document.cookie.split('; ')
     let cookie = cookieArray.find((row) => row.startsWith(name + '='))
@@ -31,8 +33,10 @@ function Nav() {
             </div>
         </div>
         <div className={!getCookie("token") && "hidden"}>
-            <button onClick={delcookies}>Logout</button>
+            
+            <AccountDetails />
         </div>
+        
     </div>
     )
 }
