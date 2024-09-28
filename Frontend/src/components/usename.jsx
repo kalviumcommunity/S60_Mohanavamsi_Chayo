@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useState } from "react";
 import { useLocation,useNavigate } from "react-router";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Username(){
     const data=useLocation().state
@@ -20,11 +22,12 @@ function Username(){
             (res)=>{
               console.log(res.data)
                 if(res.data=="Username taken"){
+                  toast(res.data,{closeOnClick:true,theme:"dark"})
                     setload(false)
                 }
                 else if (res.data.message=="User created"){
-                document.cookie=`username=${res.data.username}`
-                document.cookie=`token=${res.data.token}`
+                document.cookie=⁠ username=${res.data.username} ⁠
+                document.cookie=⁠ token=${res.data.token} ⁠
                 nav("/")
                 }
             }
@@ -43,7 +46,7 @@ function Username(){
                 const response = await axios.post('https://api.cloudinary.com/v1_1/dus9hgplo/image/upload', {file:e.target.result,upload_preset:"vh0llv8b"});
                 console.log('File uploaded successfully:', response.data);
                 setload(false)
-                document.cookie=`photo=${response.data.secure_url}`
+                document.cookie=⁠ photo=${response.data.secure_url} ⁠
                 setvalue(response.data.secure_url)
               } catch (error) {
                 console.error('Error uploading photo:', error);
@@ -79,6 +82,7 @@ function Username(){
   ></div>
 </div>
 )}
+<ToastContainer/>
         </div>
         
     )
