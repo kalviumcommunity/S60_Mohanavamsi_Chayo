@@ -12,12 +12,15 @@ const fs = require("fs");
 const path = require("path");
 const otpGenerator = require("otp-generator");
 const crypto = require("crypto");
+const Razorpay = require("razorpay");
 
 env.config();
 app.use(express.json());
 app.use(cors({ origin: "*" }));
-
-function hash(password) {
+var instance = new Razorpay({
+  key_id: 'rzp_test_EzUsahd1tsDo2l',
+  key_secret: 'pe9tcaS6mMkWQPrEDUK9lF0L',
+});function hash(password) {
   const hash = crypto.createHash("sha256");
   hash.update(password);
   return hash.digest("hex");
@@ -46,6 +49,7 @@ const transporter = nodemailer.createTransport({
 });
 
 // Middleware to verify JWT
+
 function verifyToken(req, res, next) {
   const token = req.headers['authorization'];
   if (!token) {
@@ -189,7 +193,18 @@ app.post("/check", async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
-
+app.post('/createOrder', async (req, res) => {
+  const options = {
+      amount: 1000, 
+      currency: 'INR'
+  };
+  try {
+      const order = await instance.orders.create(options);
+      res.json(order);
+  } catch (error) {
+      res.status(500).send(error);
+  }
+});
 app.post("/firebase", async (req, res) => {
   try {
     const { username, password, email, photo } = req.body;
