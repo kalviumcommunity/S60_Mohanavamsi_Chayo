@@ -8,6 +8,7 @@ import Fire from "./components/firebase";
 import Username from "./components/usename";
 import Single from "./components/Single";
 import Video from "./components/video";
+import "./App.css"
 function App() {
   return (
     <>
