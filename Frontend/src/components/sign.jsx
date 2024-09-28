@@ -3,7 +3,6 @@ import axios from "axios";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Link, useNavigate } from "react-router-dom";
 import Fire from "./firebase";
-import { toast, ToastContainer } from "react-toastify";
 
 function Sigin() {
     const [data, setvalue] = useState({ username: '', email: '', password: '', photo: '' });
@@ -36,7 +35,6 @@ function Sigin() {
                 })
                 .catch((e) => {
                     console.log(e);
-                    toast(e.response.data.message,{theme:"dark",closeOnClick:true})
                     setload(false)
                 });
         } else {
@@ -146,7 +144,6 @@ function Sigin() {
                     </Link>
                 </div>
             </div>
-            <ToastContainer/>
         </div>
     );
 }

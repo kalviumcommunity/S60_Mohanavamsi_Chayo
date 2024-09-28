@@ -2,7 +2,6 @@ import { useState } from "react"
 import axios from "axios"
 import { Link, useNavigate } from "react-router-dom"
 import Fire from "./firebase"
-import { toast, ToastContainer } from "react-toastify";
 function Login() {
   const [data, setvalue] = useState({email: '', password: ''});
   const [error,seterror]=useState({})
@@ -34,7 +33,6 @@ function Login() {
             }
         ).catch((e)=>{
           setload(false)
-          toast(e.response.data.message,{theme:"dark"})
           console.log(e)})
         }
         else{
@@ -82,7 +80,6 @@ function Login() {
    <Link className=" text-purple-600 text-center" to={"/sign"}>not having an account ? sigin!</Link>
      </div>
    </div>
-   <ToastContainer/>
    </div>
     )
 }
