@@ -25,9 +25,9 @@ function Login() {
                 const response=res
                 console.log(response)
                 if (response.data.message=="ok"){
-                  document.cookie=`username=${response.data.username}`
-                        document.cookie=`token=${response.data.token}`
-                        document.cookie=`photo=${response.data.photo}`
+                  document.cookie=⁠ username=${response.data.username} ⁠
+                        document.cookie=⁠ token=${response.data.token} ⁠
+                        document.cookie=⁠ photo=${response.data.photo} ⁠
                         nav("/")
                 }
                  
