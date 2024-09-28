@@ -5,6 +5,7 @@ import Sigin from "./components/sign";
 import Login from "./components/Login";
 import Forget from "./components/Forget";
 import Fire from "./components/firebase";
+import "./App.css"
 import Username from "./components/usename";
 import Single from "./components/Single";
 import Video from "./components/video";
