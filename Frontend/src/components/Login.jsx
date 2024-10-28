@@ -19,7 +19,7 @@ function Login() {
         console.log(data)
         console.log((Object.keys(data)))
         if (Object.keys(data).length==2){
-        axios.post("https://s60-mohanavamsi-chayo-2ovy.onrender.com/login",data).then(
+        axios.post("https://s60-mohanavamsi-chayo-ra7t.onrender.com/login",data).then(
             (res)=>{
               setload(true)
                 const response=res
