@@ -10,13 +10,13 @@ function Home() {
   const [rooms, setRooms] = useState([]);
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const socket = io("https://s60-mohanavamsi-chayo-2ovy.onrender.com");
+  const socket = io("https://s60-mohanavamsi-chayo-ra7t.onrender.com");
   const nav = useNavigate();
 
   useEffect(() => {
     // Fetch users
     axios
-      .get("https://s60-mohanavamsi-chayo-2ovy.onrender.com/users", {
+      .get("https://s60-mohanavamsi-chayo-ra7t.onrender.com/users", {
         headers: { authorization: getCookie("token") },
       })
       .then((res) => {
@@ -28,7 +28,7 @@ function Home() {
 
     // Fetch rooms
     axios
-      .get("https://s60-mohanavamsi-chayo-2ovy.onrender.com/rooms", {
+      .get("https://s60-mohanavamsi-chayo-ra7t.onrender.com/rooms", {
         headers: { authorization: getCookie("token") },
       })
       .then((res) => {
@@ -43,7 +43,7 @@ function Home() {
   const handlePayment = async () => {
     try {
       const orderResponse = await axios.post(
-        "http://localhost:8000/createOrder",
+        "https://s60-mohanavamsi-chayo-ra7t.onrender.com/createOrder",
       );
 
       const { amount, id: order_id, currency } = orderResponse.data;
@@ -100,7 +100,7 @@ function Home() {
     if (room.trim() !== "" && getCookie("username")) {
       axios
         .get(
-          `https://s60-mohanavamsi-chayo-2ovy.onrender.com/data/${room}`,
+          `https://s60-mohanavamsi-chayo-ra7t.onrender.com/data/${room}`,
           { headers: { authorization: getCookie("token") } }
         )
         .then((res) => {
