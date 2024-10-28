@@ -6,7 +6,7 @@ import axios from "axios";
 import { FaArrowLeft } from 'react-icons/fa';
 import { HiLocationMarker } from "react-icons/hi";
 import { LuImagePlus } from "react-icons/lu";
-const socket = io("https://s60-mohanavamsi-chayo-2ovy.onrender.com");
+const socket = io("https://s60-mohanavamsi-chayo-ra7t.onrender.com");
 function Single(){ 
     const { roomid } = useParams()
     const chatContainerRef = useRef()
