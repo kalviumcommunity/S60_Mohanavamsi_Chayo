@@ -23,7 +23,7 @@ function Chat() {
   },[])
 
   useEffect(() => {
-    axios.get(`https://s60-mohanavamsi-chayo-2ovy.onrender.com/data/${roomid}`,{headers:{"authorization":getCookie("token")}}).then(
+    axios.get(`https://s60-mohanavamsi-chayo-ra7t.onrender.com/data/${roomid}`,{headers:{"authorization":getCookie("token")}}).then(
       (res)=>{
         // console.log(res.data[0].messages)
         setMessages(res.data[0].messages)
