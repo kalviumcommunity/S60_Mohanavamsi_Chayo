@@ -12,7 +12,6 @@ const route = require("./Routes/routes");
 const { connect } = require("./db/connect");
 const PORT = process.env.PORT || 8000;
 const filter=new bad({placeHolder:"😇"})
-  
 app.use("/", route);
 
 app.get("/", (req, res) => {

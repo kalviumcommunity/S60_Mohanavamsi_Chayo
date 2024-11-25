@@ -60,7 +60,7 @@ Once the server is running, you can access the Chayoo app in your browser.
 ## Deploys
 
 - Frontend: [Chayo](https://chayoo.vercel.app/)
--  Backend: https://s60-mohanavamsi-chayo-2ovy.onrender.com
+-  Backend: https://s60-mohanavamsi-chayo-ra7t.onrender.com
 
 ## Contributing
 

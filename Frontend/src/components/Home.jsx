@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import Nav, { getCookie } from "./nav";
 import axios from "axios";
+import api from "./Api";
 
 function Home() {
   const [room, setRoom] = useState("");
@@ -10,13 +11,13 @@ function Home() {
   const [rooms, setRooms] = useState([]);
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const socket = io("https://s60-mohanavamsi-chayo-ra7t.onrender.com");
+  const socket = io(api);
   const nav = useNavigate();
 
   useEffect(() => {
     // Fetch users
     axios
-      .get("https://s60-mohanavamsi-chayo-ra7t.onrender.com/users", {
+      .get(`${api}/users`, {
         headers: { authorization: getCookie("token") },
       })
       .then((res) => {
@@ -28,7 +29,7 @@ function Home() {
 
     // Fetch rooms
     axios
-      .get("https://s60-mohanavamsi-chayo-ra7t.onrender.com/rooms", {
+      .get(`${api}/rooms`, {
         headers: { authorization: getCookie("token") },
       })
       .then((res) => {
@@ -43,7 +44,7 @@ function Home() {
   const handlePayment = async () => {
     try {
       const orderResponse = await axios.post(
-        "https://s60-mohanavamsi-chayo-ra7t.onrender.com/createOrder",
+        `${api}/createOrder`,
       );
 
       const { amount, id: order_id, currency } = orderResponse.data;
@@ -100,7 +101,7 @@ function Home() {
     if (room.trim() !== "" && getCookie("username")) {
       axios
         .get(
-          `https://s60-mohanavamsi-chayo-ra7t.onrender.com/data/${room}`,
+          `${api}/data/${room}`,
           { headers: { authorization: getCookie("token") } }
         )
         .then((res) => {

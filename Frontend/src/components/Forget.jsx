@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useState } from "react"
 import { useNavigate } from "react-router"
-
+import api from "./Api"
 function Forget(){
     const [state,setstate]=useState({})
     const [otpd,setotp]=useState(false)
@@ -15,7 +15,7 @@ function Forget(){
       console.log(state)
       if(Object.keys(state).length != 0){
       setload(true)
-      axios.post("https://s60-mohanavamsi-chayo-ra7t.onrender.com/otp",state).then(
+      axios.post(`${api}/otp`,state).then(
           (res)=>{
               sessionStorage.setItem("otp",res.data)
               setotp(true)
@@ -29,10 +29,10 @@ function Forget(){
   function reset() {
     if(Object.keys(state).length==3){
     setload(true)
-      axios.put("https://s60-mohanavamsi-chayo-ra7t.onrender.com/otpvalid",{...state,otp:sessionStorage.getItem("otp"),userotp:state.otp}).then(
+      axios.put(`${api}/otpvalid`,{...state,otp:sessionStorage.getItem("otp"),userotp:state.otp}).then(
           (res)=>{
               console.log(res.data)
-              if(res.data=="Done"){
+              if(res.data=="Password updated successfully"){
                 nav("/")
             }
             else if(res.data == "Invalid OTP"){

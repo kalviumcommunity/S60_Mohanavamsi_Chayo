@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useLocation,useNavigate } from "react-router";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import api from "./Api"
 function Username(){
     const data=useLocation().state
     const [user,setuser]=useState("")
@@ -18,7 +18,7 @@ function Username(){
     function login(){
         if (value && user){
             setload(true)
-        axios.post("https://s60-mohanavamsi-chayo-ra7t.onrender.com/firebase",{...data,username:user,photo:value}).then(
+        axios.post(`${api}/firebase`,{...data,username:user,photo:value}).then(
             (res)=>{
               console.log(res.data)
                 if(res.data=="Username taken"){

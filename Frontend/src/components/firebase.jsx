@@ -4,7 +4,7 @@ import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
 import axios from "axios";
 import { useNavigate } from "react-router";
-
+import api from "./Api";
 const firebaseConfig = {
   apiKey: "AIzaSyCKQZ1eeauSlM79nNPSdvRm2WbYOx1kpiE",
   authDomain: "chayo-e1d53.firebaseapp.com",
@@ -25,7 +25,7 @@ function Fire() {
     signInWithPopup(auth, provider)
       .then((result) => {
         const user = result.user;
-        axios.post("https://s60-mohanavamsi-chayo-ra7t.onrender.com/check",{email:user.email}).then(
+        axios.post(`${api}/check`,{email:user.email}).then(
             (res)=>{
               console.log(res)
               if(res.data.message=="login"){

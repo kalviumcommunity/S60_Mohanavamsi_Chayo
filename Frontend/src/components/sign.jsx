@@ -4,7 +4,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { Link, useNavigate } from "react-router-dom";
 import Fire from "./firebase";
 import { toast, ToastContainer } from "react-toastify";
-
+import api from "./Api";
 function Sigin() {
     const [data, setvalue] = useState({ username: '', email: '', password: '', photo: '' });
     const [error, seterror] = useState({});
@@ -22,7 +22,7 @@ function Sigin() {
         console.log(data);
         if (Object.keys(data).length==4 && valid) {
         setload(true);
-            axios.post("https://s60-mohanavamsi-chayo-ra7t.onrender.com/sign", data)
+            axios.post(`${api}/sign`, data)
                 .then((res) => {
                     const response = res;
                     console.log(response);

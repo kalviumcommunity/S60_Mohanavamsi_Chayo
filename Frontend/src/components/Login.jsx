@@ -3,6 +3,7 @@ import axios from "axios"
 import { Link, useNavigate } from "react-router-dom"
 import Fire from "./firebase"
 import { toast, ToastContainer } from "react-toastify";
+import api from "./Api";
 function Login() {
   const [data, setvalue] = useState({email: '', password: ''});
   const [error,seterror]=useState({})
@@ -19,7 +20,7 @@ function Login() {
         console.log(data)
         console.log((Object.keys(data)))
         if (Object.keys(data).length==2){
-        axios.post("https://s60-mohanavamsi-chayo-ra7t.onrender.com/login",data).then(
+        axios.post(`${api}/login`,data).then(
             (res)=>{
               setload(true)
                 const response=res

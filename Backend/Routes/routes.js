@@ -41,14 +41,13 @@ const loginvalid = Joi.object({
 });
 
 const transporter = nodemailer.createTransport({
-  service: "outlook",
+  service: "gmail",
   auth: {
-    user: "mohanavamsi16@outlook.com",
+    user: process.env.MAIL,
     pass: process.env.PASS,
   },
 });
 
-// Middleware to verify JWT
 
 function verifyToken(req, res, next) {
   const token = req.headers['authorization'];
@@ -254,7 +253,7 @@ app.post("/otp", async (req, res) => {
       lowerCaseAlphabets: false,
     });
     var mailOptions = {
-      from: "mohanavamsi16@outlook.com",
+      from: process.env.MAIL,
       to: req.body.email,
       subject: "Your otp " + otp,
       html:
