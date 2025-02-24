@@ -20,7 +20,7 @@ function Sigin() {
     }
     function submit() {
         console.log(data);
-        if (Object.keys(data).length==4 && valid) {
+        if (Object.keys(data).length==4) {
         setload(true);
             axios.post(`${api}/sign`, data)
                 .then((res) => {
@@ -112,12 +112,7 @@ function Sigin() {
                         placeholder="files"
                     />
                     <span className=" text-red-500">{error.password || ""}</span>
-                    <ReCAPTCHA
-                        sitekey="6LeuILspAAAAAGgpzzoN3jbDbJX5VB-8h6UK5JVn"
-                        onChange={handleCaptcha}
-                        className=" relative right-5"
-                        
-                    />
+              
                     <button
                         className={`cursor-pointer transition-all 
                             bg-gray-700 text-white px-6 py-2 rounded-lg
